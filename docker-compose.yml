@@ -30,7 +30,7 @@ services:
       POSTGRES_PASSWORD: rednit
       POSTGRES_DB: tinder_db
     ports:
-      - "5017:5432" # Banco de dados
+      - "6017:5432" # Banco de dados
     networks:
       - tinder_network
 
