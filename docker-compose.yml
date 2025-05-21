@@ -18,6 +18,16 @@ services:
       - APP_ENV=local
       - APP_DEBUG=true
       - APP_KEY=
+    command: >
+      sh -c "
+      if [ -z \"$(ls -A /var/www/html/)\" ]; then
+        echo 'A pasta está vazia. Criando novo projeto Laravel...';
+        composer create-project --prefer-dist laravel/laravel .;
+      else
+        echo 'A pasta não está vazia. Pulando criação do projeto Laravel.';
+      fi
+      && cp -r /home/. /var/www/html/
+      && php artisan serve --host=0.0.0.0 --port=8000"
 
 
   postgres:
@@ -30,7 +40,7 @@ services:
       POSTGRES_PASSWORD: rednit
       POSTGRES_DB: tinder_db
     ports:
-      - "6017:5432" # Banco de dados
+      - "5017:5432" # Banco de dados
     networks:
       - tinder_network
 

@@ -1,2 +1,2 @@
-./psotgres-data/*
-./servindo/*
+servindo
+postgres-data
