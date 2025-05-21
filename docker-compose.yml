@@ -3,15 +3,15 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: exemplo-app
+    container_name: tinder-app
     working_dir: /var/www/html
     volumes:
       - ./servindo:/var/www/html
       - ./brutos:/home
     ports:
-      - "6001:8000"
+      - "5007:8000"
     networks:
-      - exemplo_network
+      - tinder_network
     depends_on:
       - postgres
     environment:
@@ -26,18 +26,21 @@ services:
 
   postgres:
     image: postgres:15
-    container_name: exemplo-postgres
+    container_name: tinder-postgres
     volumes:
       - ./postgres-data:/var/lib/postgresql/data
     environment:
-      POSTGRES_USER: exemplo
-      POSTGRES_PASSWORD: exemplo
-      POSTGRES_DB: exemplo_db
+      POSTGRES_USER: tinder
+      POSTGRES_PASSWORD: rednit
+      POSTGRES_DB: tinder_db
     ports:
-      - "6002:5432" # Banco de dados
+      - "5017:5432" # Banco de dados
     networks:
-      - exemplo_network
+      - tinder_network
+
+
+
 
 networks:
-  exemplo_network:
+  tinder_network:
     driver: bridge
