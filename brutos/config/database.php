@@ -111,6 +111,31 @@ return [
             // 'encrypt' => env('DB_ENCRYPT', 'yes'),
             // 'trust_server_certificate' => env('DB_TRUST_SERVER_CERTIFICATE', 'false'),
         ],
+         'controle_pessoal' => [
+             'driver' => 'pgsql',
+             'host'     => env('PERSONAL_DB_HOST', '172.32.1.81'),
+             'port'     => env('PERSONAL_DB_PORT', '5432'),
+             'database' => env('PERSONAL_DB_DATABASE', 'paco'),
+             'username' => env('PERSONAL_DB_USERNAME', 'dev_admin'),
+             'password' => env('PERSONAL_DB_PASSWORD', 'k8m02PQ9Sm9EDaOO'),
+             'charset' => 'utf8',
+             'prefix' => '',
+             'schema' => 'public',
+             'sslmode' => 'prefer',
+         ],
+         //pgsql
+         'pgsql' => [
+               'driver' => 'pgsql',
+             'host'     => env('DB_HOST', 'tinder-postgres'),
+             'port'     => env('DB_PORT', '5017'),
+             'database' => env('DB_DATABASE', 'tinder_db'),
+             'username' => env('DB_USERNAME', 'tinder'),
+             'password' => env('DB_PASSWORD', 'rednit'),
+             'charset' => 'utf8',
+             'prefix' => '',
+             'schema' => 'public',
+             'sslmode' => 'prefer',
+         ],
 
     ],
 
