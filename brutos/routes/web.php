@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\AuthController;
+
+
 
 Route::middleware(['web'])
     ->prefix(ltrim(env('PREFIX', ''), '/') . '/')
@@ -27,6 +30,30 @@ Route::middleware(['web'])
             }
         });
 
+// Testa conexão com banco secundário (controle_pessoal) + leitura da tabela
+Route::get('/teste-tb_usuario', function () {
+    try {
+        $resultado = DB::connection('controle_pessoal')
+            ->table('tb_usuario') // Aspas duplas para respeitar o case da tabela
+            ->select('matricula', 'ic_ativo') // seleciona campos simples
+            ->limit(1)
+            ->get();
+
+        return response()->json([
+            'status' => 'Conexão e leitura da tabela tb_usuario bem-sucedida!',
+            'amostra' => $resultado
+        ]);
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => 'Erro ao acessar a tabela tb_usuario',
+            'mensagem' => $e->getMessage()
+        ], 500);
+    }
+});
+
+
+
+
         // Testa conexão com banco secundário (controle_pessoal)
         Route::get('/teste-controle', function () {
             try {
@@ -42,6 +69,11 @@ Route::middleware(['web'])
                 ], 500);
             }
         });
+        
+        Route::get('/login', function () {
+            return view('login');
+        });
+        Route::post('/login', [AuthController::class, 'login']);
 
     });
 
