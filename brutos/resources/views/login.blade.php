@@ -318,7 +318,7 @@
     }
 </style>
 
-<div id="logo"><img src="{{ asset('img/logo.png') }}" alt="Logo" /></div>
+<div id="logo"><img src="../img/logo.png" alt="Logo" /></div>
 
 <div class="container" id="container">
     <div class="form-container sign-up">
