@@ -6,8 +6,7 @@ services:
     container_name: tinder-app
     working_dir: /var/www/html
     volumes:
-      - ./servindo:/var/www/html
-      - ./brutos:/home
+      - ./brutos:/var/www/html
     ports:
       - "5007:8000"
     networks:
