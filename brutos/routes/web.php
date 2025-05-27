@@ -30,26 +30,26 @@ Route::middleware(['web'])
             }
         });
 
-// Testa conexão com banco secundário (controle_pessoal) + leitura da tabela
-Route::get('/teste-tb_usuario', function () {
-    try {
-        $resultado = DB::connection('controle_pessoal')
-            ->table('tb_usuario') // Aspas duplas para respeitar o case da tabela
-            ->select('matricula', 'ic_ativo') // seleciona campos simples
-            ->limit(1)
-            ->get();
-
-        return response()->json([
-            'status' => 'Conexão e leitura da tabela tb_usuario bem-sucedida!',
-            'amostra' => $resultado
-        ]);
-    } catch (\Exception $e) {
-        return response()->json([
-            'status' => 'Erro ao acessar a tabela tb_usuario',
-            'mensagem' => $e->getMessage()
-        ], 500);
-    }
-});
+        // Testa conexão com banco secundário (controle_pessoal) + leitura da tabela
+        Route::get('/teste-tb_usuario', function () {
+            try {
+                $resultado = DB::connection('controle_pessoal')
+                    ->table('tb_usuario') // Aspas duplas para respeitar o case da tabela
+                    ->select('matricula', 'ic_ativo') // seleciona campos simples
+                    ->limit(1)
+                    ->get();
+        
+                return response()->json([
+                    'status' => 'Conexão e leitura da tabela tb_usuario bem-sucedida!',
+                    'amostra' => $resultado
+                ]);
+            } catch (\Exception $e) {
+                return response()->json([
+                    'status' => 'Erro ao acessar a tabela tb_usuario',
+                    'mensagem' => $e->getMessage()
+                ], 500);
+            }
+        });
 
 
 
@@ -69,6 +69,21 @@ Route::get('/teste-tb_usuario', function () {
                 ], 500);
             }
         });
+
+     Route::get('/teste-paco', function () {
+       try {
+        $resultado = DB::connection('paco')->select('SELECT NOW()');
+        return response()->json([
+            'status' => 'Conexão com banco paco bem-sucedida!',
+            'hora_atual' => $resultado[0]->now ?? 'sem retorno'
+        ]);
+       } catch (\Exception $e) {
+        return response()->json([
+            'status' => 'Erro na conexão com banco paco',
+            'mensagem' => $e->getMessage()
+        ], 500);
+        } 
+      });
         
         Route::get('/login', function () {
             return view('login');

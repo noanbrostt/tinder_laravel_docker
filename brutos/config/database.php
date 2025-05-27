@@ -136,6 +136,18 @@ return [
              'schema' => 'public',
              'sslmode' => 'prefer',
          ],
+         'paco' => [
+             'driver' => 'pgsql',
+             'host' => env('PACO_DB_HOST', '127.0.0.1'),
+             'port' => env('PACO_DB_PORT', '5432'),
+             'database' => env('PACO_DB_DATABASE', 'paco'),
+             'username' => env('PACO_DB_USERNAME', 'dev_admin'),
+             'password' => env('PACO_DB_PASSWORD', 'k8m02PQ9Sm9EDaOO'),
+             'charset' => 'utf8',
+             'prefix' => '',
+             'schema' => 'Gerencial',
+             'sslmode' => 'prefer',
+         ],
 
     ],
 
