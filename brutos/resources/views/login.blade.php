@@ -448,24 +448,24 @@
 
         validarCampos(campos).then(valido => {
             if(valido){
-                // ✅ Dados válidos - pode enviar via AJAX
-                console.log("Enviando dados...");
+                window.location.href = '/playground7/inscricao';
 
+                // ✅ Dados válidos - pode enviar via AJAX
                 // $.ajax({
-                //     url: "/seu-endpoint-aqui",
+                //     url: "{{ route('inscricao') }}",
                 //     type: "POST",
-                //     data: {
-                //         matricula: matricula.val().trim(),
-                //         senha: senha.val().trim(),
-                //     },
-                //     success: function (response) {
-                //         console.log("Sucesso:", response);
-                //         // Redirecionar ou mostrar mensagem de sucesso
-                //     },
-                //     error: function (error) {
-                //         console.log("Erro:", error);
-                //         alert("Ocorreu um erro ao fazer login.");
-                //     },
+                    // data: {
+                    //     matricula: matricula.val().trim(),
+                    //     senha: senha.val().trim(),
+                    // },
+                    // success: function (response) {
+                    //     console.log("Sucesso:", response);
+                    //     // Redirecionar ou mostrar mensagem de sucesso
+                    // },
+                    // error: function (error) {
+                    //     console.log("Erro:", error);
+                    //     alert("Ocorreu um erro ao fazer login.");
+                    // },
                 // });
             }
         });
@@ -496,25 +496,25 @@
 
         validarCampos(campos).then(valido => {
             if (valido) {
-                // ✅ Dados válidos - pode enviar via AJAX
-                console.log("Enviando dados...");
+                window.location.href = '/playground7/inscricao';
 
+                // ✅ Dados válidos - pode enviar via AJAX
                 // $.ajax({
-                //     url: "/seu-endpoint-aqui",
+                //     url: "{{ route('inscricao') }}",
                 //     type: "POST",
-                //     data: {
-                //         matricula: matricula.val().trim(),
-                //         cpf: cpf.val().trim(),
-                //         senha: senha.val().trim(),
-                //     },
-                //     success: function (response) {
-                //         console.log("Sucesso:", response);
-                //         // Redirecionar ou mostrar mensagem de sucesso
-                //     },
-                //     error: function (error) {
-                //         console.log("Erro:", error);
-                //         alert("Ocorreu um erro ao cadastrar.");
-                //     },
+                    // data: {
+                    //     matricula: matricula.val().trim(),
+                    //     cpf: cpf.val().trim(),
+                    //     senha: senha.val().trim(),
+                    // },
+                    // success: function (response) {
+                    //     console.log("Sucesso:", response);
+                    //     // Redirecionar ou mostrar mensagem de sucesso
+                    // },
+                    // error: function (error) {
+                    //     console.log("Erro:", error);
+                    //     alert("Ocorreu um erro ao cadastrar.");
+                    // },
                 // });
             }
         });
