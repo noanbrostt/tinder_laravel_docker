@@ -23,7 +23,7 @@
         <script src="{{ asset('js/hammer.min.js') }}"></script>
         <script src="{{ asset('js/app.js') }}"></script>
 
-        <link rel="icon" type="image/x-icon" href="{{ asset('img/favicon.jpg') }}">
+        <link rel="icon" type="image/x-icon" href="img/favicon.jpg">
         <title>@yield('title', 'Plansul')</title>
     </head>
 
