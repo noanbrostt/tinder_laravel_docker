@@ -7,21 +7,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
 
 use App\Models\User;
 use App\Models\View_Colaborador;
 
 
 
-use function PHPUnit\Framework\isEmpty;
+// use function PHPUnit\Framework\isEmpty;
 
-class AuthController extends Controller
-{
+class AuthController extends Controller {
 
 
     /**
@@ -31,6 +31,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
+        // O método middleware() é herdado da classe base Controller do Laravel.
         // $this->middleware('auth:api', ['except' => ['login', 'reset']]);
     }
     /**
@@ -38,43 +39,59 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-public function login(Request $request)
-{
-    $matricula = $request->input('loginMatricula');
-    $senhaInput = $request->input('loginPassword');
 
-    if (!$matricula || !$senhaInput) {
-        return response()->json(['error' => 'Credenciais ausentes'], 400);
+    public function login(Request $request){
+
+
+      $matricula = $request->input('loginMatricula');
+      $senhaInput = $request->input('loginPassword');
+
+      if (is_null($matricula) || is_null($senhaInput)) {
+          return response()->json(['error' => 'Senha ou Login não informados'], 404);
+      }
+
+      $usuario = \DB::connection('paco')
+          ->table('Gerencial.Tb_Usuarios')
+          ->where('Mt_Usuario', $matricula)
+          ->first();
+
+      if (!$usuario) {
+          return response()->json(['error' => 'Usuário não encontrado'], 404);
+      }
+
+      $senhaValidacao = \DB::connection('paco')
+          ->table('Gerencial.Tb_Usuarios')
+          ->where('Sn_Usuario', $usuario->Sn_Usuario)
+          ->first();
+      
+      if (!$senhaValidacao) {
+          return response()->json(['error' => 'Senha ou Usuário errados'], 401);
+      }
+
+      $dados = null;
+      if ($senhaValidacao && $usuario) {
+          $dados = \DB::connection('controle_pessoal')
+              ->table('sc_bases.tb_empregados')
+              ->where('matricula', $matricula)
+              ->first();
+      }
+
+      if ($senhaValidacao && $usuario) {
+          // 🔐 Armazena na sessão
+          session([
+              'matricula' => $matricula,
+              'senha_digitada' => $senhaInput,
+              'hash_armazenado' => $usuario->Sn_Usuario,
+              'dados' => $dados
+          ]);
+
+          return response()->json([
+              'message' => 'Login bem-sucedido e dados armazenados na sessão.'
+          ], 200);
+      }
     }
 
-    // Criptografa senha com md5 (igual ao banco)
-    $senhaCriptografada = md5($senhaInput);
 
-    // Busca usuário manualmente
-    $usuario = \DB::connection('controle_pessoal')
-        ->table('tb_usuario')
-        ->where('matricula', $matricula)
-        ->where('senha', $senhaCriptografada)
-        ->where('ic_ativo', 1)
-        ->first();
-
-    if (!$usuario) {
-        return response()->json(['error' => 'Usuário ou senha incorretos'], 401);
-    }
-
-    // Opcional: força reset se senha for padrão
-    if ($senhaInput === 'plansul123') {
-        return response()->json(['error' => 'Reset Password'], 403);
-    }
-
-    // Gera token manualmente com claims personalizados (se estiver usando JWT)
-    $token = auth()->login(new \App\Models\User([
-        'matricula' => $usuario->matricula,
-        'senha' => $usuario->senha
-    ]));
-
-    return $this->respondWithToken($token);
-}
 
 
     /**
@@ -177,4 +194,3 @@ public function login(Request $request)
 
 
 }
-
