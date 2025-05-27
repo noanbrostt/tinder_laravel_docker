@@ -1,0 +1,526 @@
+@extends('main')
+
+@section('title', 'Login')
+
+@section('conteudo')
+
+<!-- Inspirações: AsmrProg-YT -> https://www.youtube.com/watch?v=PlpM2LJWu-s -->
+
+<style>
+    body {
+        background-color: #c9d6ff;
+        background-image: url('/img/bg-login.jpg');
+        background-position-x: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        height: 100vh;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+
+    #logo {
+        width: 145px;
+        position: absolute;
+        top: 10px;
+        left: 10px;
+
+        img {
+            width: 100%;
+        }
+    }
+
+    .container {
+        background-color: transparent;
+        backdrop-filter: blur(10px);
+        border-radius: 30px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
+        position: relative;
+        overflow: hidden;
+        width: 768px;
+        max-width: 98%;
+        min-height: 480px;
+        margin-inline: auto;
+
+        p {
+            font-size: 14px;
+            line-height: 20px;
+            letter-spacing: 0.3px;
+            margin: 20px 0;
+        }
+
+        span {
+            font-size: 12px;
+        }
+
+        a {
+            color: var(--contrast-secondary);
+            font-size: 13px;
+            text-decoration: none;
+            margin: 15px 0 10px;
+        }
+
+        button {
+            color: var(--contrast-secondary);
+            border: 1px solid var(--contrast-secondary);
+            font-size: 12px;
+            padding: 10px 45px;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        .form {
+            color: var(--contrast-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 0 190px;
+            margin-inline: -150px;
+            height: 100%;
+
+            h1 {
+                margin-bottom: 15px;
+            }
+        }
+
+        input {
+            background-color: #eee;
+            border: none;
+            margin: 8px 0;
+            padding: 10px 15px;
+            font-size: 13px;
+            border-radius: 8px;
+            width: 100%;
+            outline: none;
+        }
+    }
+
+    .container.active {
+        .sign-in {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+
+        .sign-up {
+            transform: translateX(100%);
+            opacity: 1;
+            z-index: 5;
+            animation: move 0.6s;
+        }
+    }
+
+    .form-container {
+        position: absolute;
+        top: 0;
+        height: 100%;
+        transition: all 0.6s ease-in-out;
+    }
+
+    .sign-in {
+        left: 0;
+        width: 50%;
+        z-index: 2;
+    }
+
+    .sign-up {
+        left: 0;
+        width: 50%;
+        opacity: 0;
+        z-index: 1;
+    }
+
+    @keyframes move {
+
+        0%,
+        49.99% {
+            opacity: 0;
+            z-index: 1;
+        }
+
+        50%,
+        100% {
+            opacity: 1;
+            z-index: 5;
+        }
+    }
+
+    .toggle-container {
+        position: absolute;
+        top: 0;
+        left: 50%;
+        width: 50%;
+        height: 100%;
+        overflow: hidden;
+        transition: all 0.6s ease-in-out;
+        border-radius: 150px 0 0 100px;
+        z-index: 10;
+
+        button {
+            border: 1px solid var(--contrast-secondary);
+        }
+    }
+
+    .container.active .toggle-container {
+        transform: translateX(-100%);
+        border-radius: 0 150px 100px 0;
+    }
+
+    .toggle {
+        background-color: var(--bg-blue);
+        color: var(--contrast-secondary);
+        height: 100%;
+        position: relative;
+        left: -100%;
+        height: 100%;
+        width: 200%;
+        transform: translateX(0);
+        transition: all 0.6s ease-in-out;
+    }
+
+    .container.active .toggle {
+        transform: translateX(50%);
+    }
+
+    .toggle-panel {
+        position: absolute;
+        width: 50%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        padding: 0 30px;
+        text-align: center;
+        transform: translateX(0);
+        transition: all 0.6s ease-in-out;
+
+        h1 {
+            margin-bottom: 0px;
+        }
+    }
+
+    .toggle-left {
+        transform: translateX(-200%);
+    }
+
+    .container.active .toggle-left {
+        transform: translateX(0);
+    }
+
+    .toggle-right {
+        right: 0;
+        transform: translateX(0);
+    }
+
+    .container.active .toggle-right {
+        transform: translateX(200%);
+    }
+
+    .toggle-password {
+        position: relative;
+        top: -35px;
+        right: 10px;
+        height: 0;
+        font-size: 17px;
+        color: var(--bg-blue);
+        cursor: pointer;
+        align-self: self-end;
+    }
+
+    .fa-eye-slash {
+        right: 9px;
+    }
+
+    /* Responsive */
+
+    @media only screen and (max-width: 600px) {
+        .container {
+            button {
+                padding: 6px 15px;
+            }
+
+            .form-container {
+
+                &.sign-in,
+                &.sign-up {
+                    top: 6%;
+                    width: 100%;
+                }
+            }
+
+            .toggle-container {
+                left: 0;
+                width: 100%;
+                height: 20%;
+                border-radius: 0px 0px 50px 50px;
+
+                .toggle-panel {
+                    flex-direction: row;
+                    flex-wrap: wrap;
+                    gap: 10px;
+                    padding-block: 10px;
+
+                    h1 {
+                        font-size: 20px;
+                    }
+
+                    p {
+                        display: none;
+                    }
+
+                    button {
+                        margin-top: 0px;
+                    }
+                }
+
+                .toggle-left {
+                    transform: translateX(100%) translateY(200%);
+                }
+
+                .toggle-right {
+                    transform: translateX(0%) translateY(0%);
+                }
+            }
+
+            &.active {
+                .sign-in {
+                    top: -6%;
+                    transform: translateY(-0%);
+                }
+
+                .sign-up {
+                    top: -6%;
+                    transform: translateY(0%);
+                }
+
+                .toggle-container {
+                    transform: translateY(400%);
+                    border-radius: 50px 50px 0px 0px;
+                    bottom: 0;
+
+                    .toggle-left {
+                        transform: translateY(0%);
+                    }
+
+                    .toggle-right {
+                        transform: translateX(-100%) translateY(-200%);
+                    }
+                }
+            }
+        }
+    }
+</style>
+
+<div id="logo"><img src="{{ asset('img/logo.png') }}" alt="Logo" /></div>
+
+<div class="container" id="container">
+    <div class="form-container sign-up">
+        <div class="form">
+            <h1>Criar Conta</h1>
+            <input type="text" placeholder="Matrícula Plansul" class="input_matricula" />
+            <input type="text" placeholder="CPF" class="input_cpf" />
+            <span class="d-contents">
+                <input type="password" class="password" placeholder="Nova Senha" />
+                <i class="fa-solid fa-eye toggle-password"></i>
+            </span>
+            <button class="btn btn-primary" id="register_form">
+                Cadastrar-se
+            </button>
+        </div>
+    </div>
+    <div class="form-container sign-in">
+        <div class="form">
+            <h1>Entrar</h1>
+            <input type="text" placeholder="Matrícula Plansul" class="input_matricula" />
+            <span class="d-contents">
+                <input type="password" class="password" placeholder="Senha do Paco" />
+                <i class="fa-solid fa-eye toggle-password"></i>
+            </span>
+            <span class="c-pointer" data-toggle="modal" data-target="#exampleModalCenter">Esqueceu sua senha?</span>
+            <button class="btn btn-primary" id="login_form">Entrar</button>
+        </div>
+    </div>
+    <div class="toggle-container">
+        <div class="toggle">
+            <div class="toggle-panel toggle-left">
+                <h1>Já É De Casa?</h1>
+                <p>Insira sua matrícula e senha</p>
+                <button class="hidden btn btn-primary" id="login">
+                    Entrar
+                </button>
+            </div>
+            <div class="toggle-panel toggle-right">
+                <h1>Primeira Vez?</h1>
+                <p>Crie uma senha para entrar</p>
+                <button class="hidden btn btn-primary" id="register">
+                    Cadastrar-se
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Esqueci Minha Senha -->
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">
+                    Recuperação de senha
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    Caso seja seu primeiro acesso ou tenha esquecido sua senha,
+                    clique em "Cadastrar-se" e crie uma nova senha.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">
+                    Fechar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Animação tela de login/register
+    $("#register").on("click", function() {
+        $("#container").addClass("active");
+    });
+
+    $("#login").on("click", function() {
+        $("#container").removeClass("active");
+    });
+    //
+
+    // Show password eye
+    $(".toggle-password").on("click", function() {
+        if ($(this).hasClass("fa-eye")) {
+            $(".toggle-password")
+                .removeClass("fa-eye")
+                .addClass("fa-eye-slash");
+            $(".password").attr("type", "text");
+        } else {
+            $(".toggle-password")
+                .removeClass("fa-eye-slash")
+                .addClass("fa-eye");
+            $(".password").attr("type", "password");
+        }
+    });
+    //
+
+    // Input Masks
+    $(".input_matricula").mask("000000");
+    $(".input_cpf").mask("000.000.000-00");
+    //
+
+    $("#login_form").on("click", function(e) {
+        e.preventDefault();
+
+        let matricula = $(".sign-in .input_matricula");
+        let senha = $(".sign-in .password");
+
+        const campos = [
+            {
+                element: matricula,
+                length: 6,
+                message: "A matrícula deve ter 6 números.",
+            },
+            {
+                element: senha,
+                length: 1,
+                message: "A senha está vazia.",
+            },
+        ];
+
+        validarCampos(campos).then(valido => {
+            if(valido){
+                window.location.href = '/playground7/inscricao';
+
+                // ✅ Dados válidos - pode enviar via AJAX
+                // $.ajax({
+                //     url: "{{ route('inscricao') }}",
+                //     type: "POST",
+                    // data: {
+                    //     matricula: matricula.val().trim(),
+                    //     senha: senha.val().trim(),
+                    // },
+                    // success: function (response) {
+                    //     console.log("Sucesso:", response);
+                    //     // Redirecionar ou mostrar mensagem de sucesso
+                    // },
+                    // error: function (error) {
+                    //     console.log("Erro:", error);
+                    //     alert("Ocorreu um erro ao fazer login.");
+                    // },
+                // });
+            }
+        });
+    });
+
+    $("#register_form").on("click", function(e) {
+        let matricula = $(".sign-up .input_matricula");
+        let cpf = $(".sign-up .input_cpf");
+        let senha = $(".sign-up .password");
+
+        const campos = [
+            {
+                element: matricula,
+                length: 6,
+                message: "A matrícula deve ter 6 números.",
+            },
+            {
+                element: cpf,
+                length: 14, // Máscara aplicada no CPF
+                message: "O CPF deve ter 11 números.",
+            },
+            {
+                element: senha,
+                length: 1,
+                message: "A senha está vazia.",
+            },
+        ];
+
+        validarCampos(campos).then(valido => {
+            if (valido) {
+                window.location.href = '/playground7/inscricao';
+
+                // ✅ Dados válidos - pode enviar via AJAX
+                // $.ajax({
+                //     url: "{{ route('inscricao') }}",
+                //     type: "POST",
+                    // data: {
+                    //     matricula: matricula.val().trim(),
+                    //     cpf: cpf.val().trim(),
+                    //     senha: senha.val().trim(),
+                    // },
+                    // success: function (response) {
+                    //     console.log("Sucesso:", response);
+                    //     // Redirecionar ou mostrar mensagem de sucesso
+                    // },
+                    // error: function (error) {
+                    //     console.log("Erro:", error);
+                    //     alert("Ocorreu um erro ao cadastrar.");
+                    // },
+                // });
+            }
+        });
+
+
+    });
+</script>
+
+@endsection

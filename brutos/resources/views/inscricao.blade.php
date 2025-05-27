@@ -1,0 +1,396 @@
+@extends('main')
+
+@section('title', 'Inscrição Tinder')
+
+@section('conteudo')
+
+<style>
+    body {
+        background: var(--contrast-secondary);
+        font-family: "Segoe UI", sans-serif;
+        margin: 0;
+        padding: 20px;
+    }
+
+    .container {
+        max-width: 500px;
+        margin: auto;
+        background: white;
+        padding: 24px;
+        border-radius: 16px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+        text-align: center;
+        color: var(--bg-blue-light);
+        font-weight: bolder;
+    }
+
+    label {
+        display: block;
+        margin-block: 20px 6px;
+        margin-left: 2px;
+        font-weight: 600;
+    }
+
+    input[type="file"] {
+        display: none;
+    }
+
+    .upload-area {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 9/16;
+        background-color: #f0f0f0;
+        border: 2px dashed #ccc;
+        border-radius: 12px;
+        overflow: hidden;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .upload-area img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    .upload-text {
+        color: #888;
+        text-align: center;
+    }
+
+    select,
+    textarea {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        font-size: 15px;
+        resize: none;
+    }
+
+    .char-count {
+        text-align: right;
+        font-size: 13px;
+        color: #666;
+        margin-top: -8px;
+        margin-bottom: 10px;
+    }
+
+    button {
+        width: 100%;
+        background-color: var(--bg-blue-light);
+        color: white;
+        padding: 12px;
+        border: none;
+        border-radius: 10px;
+        font-weight: bold;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background 0.3s;
+    }
+
+    button:hover {
+        background-color: var(--bg-blue);
+    }
+
+    /* Modal */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 9999;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        justify-content: center;
+        align-items: center;
+    }
+
+    .modal-content {
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        max-width: 90%;
+        max-height: 100%;
+        overflow: auto;
+    }
+
+    .modal-content h3 {
+        margin-top: 0;
+        text-align: center;
+        color: var(--bg-blue-light);
+    }
+
+    .cropper-container {
+        max-width: 100%;
+    }
+
+    #cropImage {
+        max-width: 100%;
+        max-height: 70vh;
+        width: auto;
+        height: auto;
+    }
+
+    .modal-buttons {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    .modal-buttons button {
+        flex: 1;
+    }
+
+    .cropper-crop-box {
+        height: 100% !important;
+    }
+
+    @media (max-width: 500px) {
+        h2 {
+            font-size: 22px;
+        }
+    }
+</style>
+
+<div class="container">
+    <h2>Inscrição no Tinder</h2>
+    <form id="formInscricao">
+        <!-- Upload Foto -->
+        <label for="fotoInput">Foto em pé <small>(9:16)</small></label>
+        <div class="upload-area" id="uploadArea">
+            <span class="upload-text">Clique para enviar foto</span>
+            <input type="file" id="fotoInput" accept="image/*" />
+        </div>
+
+        <!-- Intenção -->
+        <label for="intencao">Intenção</label>
+        <select id="intencao">
+            <option value="">Selecione</option>
+            <option value="Amizade">Amizade</option>
+            <option value="Namoro">Namoro</option>
+            <option value="Outros">Outros ( ͡° ͜ʖ ͡°)</option>
+        </select>
+
+        <!-- sobre -->
+        <label for="sobre">Sobre você <small>(máx. 240)</small></label>
+        <textarea
+            id="sobre"
+            rows="4"
+            maxlength="240"
+            placeholder="Digite algo sobre você..."></textarea>
+        <div class="char-count"><span id="contador">0</span>/240</div>
+
+        <button type="submit">Enviar Inscrição</button>
+    </form>
+</div>
+
+<!-- Modal -->
+<div class="modal" id="modalCrop">
+    <div class="modal-content">
+        <h3>Recorte sua foto</h3>
+        <div>
+            <img
+                id="cropImage"
+                style="max-width: 100%; display: block" />
+        </div>
+        <div class="modal-buttons">
+            <button id="cancelCrop">Cancelar</button>
+            <button id="confirmCrop">Recortar</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const fotoInput = document.getElementById("fotoInput");
+    const uploadArea = document.getElementById("uploadArea");
+    const sobre = document.getElementById("sobre");
+    const contador = document.getElementById("contador");
+
+    const modalCrop = document.getElementById("modalCrop");
+    const cropImage = document.getElementById("cropImage");
+    const cancelCrop = document.getElementById("cancelCrop");
+    const confirmCrop = document.getElementById("confirmCrop");
+
+    let cropper = null;
+    let croppedBlob = null;
+
+    uploadArea.addEventListener("click", () => {
+        fotoInput.click();
+    });
+
+    fotoInput.addEventListener("change", (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const url = URL.createObjectURL(file);
+            cropImage.src = url;
+            modalCrop.style.display = "flex";
+
+            if (cropper) {
+                cropper.destroy();
+            }
+
+            cropImage.onload = () => {
+                cropper = new Cropper(cropImage, {
+                    aspectRatio: 9 / 16,
+                    viewMode: 1, // viewMode 1 garante que a grade nunca saia do contêiner
+                    dragMode: "move", // <--- DESCOMENTE E USE ISSO!
+                    cropBoxMovable: false, // <--- Adicione ou garanta que isso seja false
+                    cropBoxResizable: false, // <--- Adicione ou garanta que isso seja false
+                    toggleDragModeOnDblclick: false, // Opcional: para evitar que mude o dragMode
+                    background: false,
+                    autoCropArea: 1, // Isso garante que a área de corte ocupe todo o espaço disponível inicialmente
+                });
+            };
+
+            fotoInput.value = "";
+        }
+    });
+
+    cancelCrop.addEventListener("click", () => {
+        modalCrop.style.display = "none";
+        if (cropper) {
+            cropper.destroy();
+            cropper = null;
+        }
+        fotoInput.value = "";
+    });
+
+    confirmCrop.addEventListener("click", () => {
+        if (cropper) {
+            const canvas = cropper.getCroppedCanvas({
+                width: 720,
+                height: 1280,
+            });
+
+            compressImage(canvas, 2000, (blob) => {
+                // 2000 = tamanho máximo em KB
+                croppedBlob = blob;
+
+                const url = URL.createObjectURL(blob);
+                uploadArea.innerHTML = `<img src="${url}" alt="Foto Recortada"/>`;
+
+                modalCrop.style.display = "none";
+                cropper.destroy();
+                cropper = null;
+
+                uploadArea.classList.remove("input-error");
+            });
+        }
+    });
+
+    sobre.addEventListener("input", () => {
+        contador.textContent = sobre.value.length;
+    });
+
+    document
+        .getElementById("formInscricao")
+        .addEventListener("submit", (e) => {
+            e.preventDefault();
+
+            const intencao = document.getElementById("intencao").value;
+            const sobreTexto = sobre.value.trim();
+
+            const campos = [{
+                    element: $("#intencao"),
+                    type: "required",
+                    message: "Selecione uma intenção.",
+                },
+                {
+                    element: $("#sobre"),
+                    type: "required",
+                    message: "Escreva algo sobre você.",
+                },
+                {
+                    element: $("#uploadArea"),
+                    type: "custom",
+                    isValid: !!croppedBlob,
+                    message: "Envie uma foto.",
+                },
+            ];
+
+            if (!validarCampos(campos)) {
+                return;
+            }
+
+            const fotoCortada = new File([croppedBlob], "foto.jpg", {
+                type: "image/jpeg",
+            });
+
+            const formData = new FormData();
+            formData.append("foto", fotoCortada);
+            formData.append("intencao", intencao);
+            formData.append("sobre", sobreTexto);
+
+            $.ajax({
+                url: "/seu-endpoint", // 🔥 Seu endpoint
+                type: "POST",
+                data: formData,
+                contentType: false,
+                processData: false,
+                beforeSend: function() {
+                    Swal.fire({
+                        title: "Enviando...",
+                        text: "Por favor, aguarde",
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        },
+                    });
+                },
+                success: function(response) {
+                    Swal.close(); // 🔥 Fecha o loading
+                    console.log(response);
+                    Toast.fire({
+                        icon: "success",
+                        title: "Enviado com sucesso!",
+                        position: "top",
+                    });
+                    // Ou faça qualquer outra ação aqui
+                },
+                error: function(xhr, status, error) {
+                    Swal.close(); // 🔥 Fecha o loading mesmo se der erro
+                    console.error("Erro na requisição:", error);
+                    Toast.fire({
+                        icon: "error",
+                        title: "Ocorreu um erro ao enviar!",
+                        position: "top",
+                    });
+                },
+            });
+
+            // console.log('Formulário pronto para envio!', formData);
+            alert("Formulário enviado com sucesso!");
+        });
+
+    function compressImage(canvas, maxSizeKB, callback, quality = 0.9) {
+        canvas.toBlob(
+            (blob) => {
+                const sizeKB = blob.size / 1024;
+
+                if (sizeKB > maxSizeKB && quality > 0.1) {
+                    // Reduz qualidade e tenta novamente
+                    compressImage(
+                        canvas,
+                        maxSizeKB,
+                        callback,
+                        quality - 0.05
+                    );
+                } else {
+                    callback(blob);
+                }
+            },
+            "image/jpeg",
+            quality
+        );
+    }
+</script>
+@endsection
