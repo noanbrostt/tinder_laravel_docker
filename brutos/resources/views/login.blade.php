@@ -448,7 +448,7 @@
 
         validarCampos(campos).then(valido => {
             if(valido){
-                window.location.href = '/playground7/inscricao';
+                // window.location.href = '/playground7/inscricao';
 
                 // ✅ Dados válidos - pode enviar via AJAX
                 $.ajax({
@@ -460,9 +460,14 @@
                     },
                     success: function (response) {
                         console.log("Sucesso:", response);
+                        // Redirecionar ou mostrar mensagem de sucesso
                     },
                     error: function (error) {
                         console.log("Erro:", error);
+                        Toast.fire({
+                            icon: "error",
+                            title: "Erro ao fazer login",
+                        });
                     },
                 });
             }
