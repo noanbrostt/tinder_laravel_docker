@@ -5,6 +5,9 @@
 
     RewriteEngine On
 
+    # Define a base para a subpasta
+    RewriteBase /playground7/
+
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
