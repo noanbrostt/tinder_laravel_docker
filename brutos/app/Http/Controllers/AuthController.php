@@ -10,6 +10,7 @@ namespace App\Http\Controllers;
  use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
@@ -42,53 +43,55 @@ class AuthController extends Controller {
 
     public function login(Request $request){
 
+        $matricula = $request->input('loginMatricula');
+        $senha = $request->input('loginPassword');
+    
+        if (is_null($matricula) || is_null($senha)) {
+            return response()->json(['error' => 'Matrícula e senha são obrigatórias.'], 400);
+        }
+    
+        $response = Http::post('http://172.32.1.73:9910/login', [
+            'matricula' => $matricula,
+            'senha' => $senha,
+            'api_key' => 'DVtLwuTJv83QWGPzJKPEi'
+        ]);
+        
+        // Mesmo que a API responda com erro, captura o conteúdo
+        $data = $response->json(); 
+        
+        if ($response->status() !== 200) {
+            return response()->json([
+                'error' => 'Erro retornado pela API externa.',
+                'api_status' => $response->status(),
+                'api_response' => $data
+            ], $response->status());
+        }
+        
+        if (!isset($data['status']) || $data['status'] !== 'success') {
+            return response()->json([
+                'error' => $data['message'] ?? 'Credenciais inválidas.',
+                'api_response' => $data
+            ], 401);
+        }
 
-      $matricula = $request->input('loginMatricula');
-      $senhaInput = $request->input('loginPassword');
-
-      if (is_null($matricula) || is_null($senhaInput)) {
-          return response()->json(['error' => 'Senha ou Login não informados'], 404);
-      }
-
-      $usuario = \DB::connection('paco')
-          ->table('Gerencial.Tb_Usuarios')
-          ->where('Mt_Usuario', $matricula)
-          ->first();
-
-      if (!$usuario) {
-          return response()->json(['error' => 'Usuário não encontrado'], 404);
-      }
-
-      $senhaValidacao = \DB::connection('paco')
-          ->table('Gerencial.Tb_Usuarios')
-          ->where('Sn_Usuario', $usuario->Sn_Usuario)
-          ->first();
-      
-      if (!$senhaValidacao) {
-          return response()->json(['error' => 'Senha ou Usuário errados'], 401);
-      }
-
-      $dados = null;
-      if ($senhaValidacao && $usuario) {
-          $dados = \DB::connection('controle_pessoal')
-              ->table('sc_bases.tb_empregados')
-              ->where('matricula', $matricula)
-              ->first();
-      }
-
-      if ($senhaValidacao && $usuario) {
-          // 🔐 Armazena na sessão
-          session([
-              'matricula' => $matricula,
-              'senha_digitada' => $senhaInput,
-              'hash_armazenado' => $usuario->Sn_Usuario,
-              'dados' => $dados
-          ]);
-
-          return response()->json([
-              'message' => 'Login bem-sucedido e dados armazenados na sessão.'
-          ], 200);
-      }
+    
+        // Busca dados adicionais no banco local
+        $dados = \DB::connection('controle_pessoal')
+            ->table('sc_bases.tb_empregados')
+            ->where('matricula', $matricula)
+            ->first();
+    
+        // Armazena na sessão
+        session([
+            'matricula' => $matricula,
+            'dados' => $dados,
+            'resposta_api' => $data // opcional: guarda a resposta da API
+        ]);
+    
+        return response()->json([
+            'message' => 'Login autorizado pela API e dados carregados.',
+            'dados' => $dados
+        ], 200);
     }
 
 
