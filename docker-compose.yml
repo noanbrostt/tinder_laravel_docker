@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   app:
     build:
@@ -6,29 +8,24 @@ services:
     container_name: tinder-app
     working_dir: /var/www/html
     volumes:
-      - ./servindo:/var/www/html
-      - ./brutos:/home
-    ports:
-      - "5007:8000"
+      - ./brutos:/var/www/html
     networks:
       - tinder_network
     depends_on:
       - postgres
-    environment:
-      - APP_ENV=local
-      - APP_DEBUG=true
-      - APP_KEY=
-    command: >
-      sh -c "
-      if [ -z \"$(ls -A /var/www/html/)\" ]; then
-        echo 'A pasta está vazia. Criando novo projeto Laravel...';
-        composer create-project --prefer-dist laravel/laravel .;
-      else
-        echo 'A pasta não está vazia. Pulando criação do projeto Laravel.';
-      fi
-      && cp -r /home/. /var/www/html/
-      && php artisan serve --host=0.0.0.0 --port=8000"
 
+  nginx:
+    image: nginx:stable
+    container_name: tinder-nginx
+    ports:
+      - "5007:80"
+    volumes:
+      - ./brutos:/var/www/html
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - tinder_network
+    depends_on:
+      - app
 
   postgres:
     image: postgres:15
@@ -40,12 +37,9 @@ services:
       POSTGRES_PASSWORD: rednit
       POSTGRES_DB: tinder_db
     ports:
-      - "5017:5432" # Banco de dados
+      - "5017:5432"
     networks:
       - tinder_network
-
-
-
 
 networks:
   tinder_network:
