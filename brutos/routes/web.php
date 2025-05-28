@@ -88,7 +88,7 @@ Route::middleware(['web'])
         Route::get('/login', function () {
             return view('login');
         });
-        Route::post('/login', [AuthController::class, 'login'])->name('login');
+        Route::post('/login', [AuthController::class, 'login']);
 
         Route::get('/inscricao', function () {
             return view('inscricao');
