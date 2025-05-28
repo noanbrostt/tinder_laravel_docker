@@ -52,9 +52,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://localhost/playground7'),
-
-    'asset_url' => env('ASSET_URL', null),
+    'url' => env('APP_URL', 'http://localhost'),
 
     /*
     |--------------------------------------------------------------------------
