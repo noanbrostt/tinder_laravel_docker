@@ -7,7 +7,7 @@ use App\Http\Controllers\AuthController;
 
 
 Route::middleware(['web'])
-    ->prefix(ltrim(env('PREFIX', ''), '/') . '/')
+    // ->prefix(ltrim(env('PREFIX', ''), '/') . '/')
     ->group(function () {
 
         Route::get('/home', function () {
