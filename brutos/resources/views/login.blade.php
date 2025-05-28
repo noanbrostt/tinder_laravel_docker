@@ -451,22 +451,20 @@
                 window.location.href = '/playground7/inscricao';
 
                 // ✅ Dados válidos - pode enviar via AJAX
-                // $.ajax({
-                //     url: "{{ route('inscricao') }}",
-                //     type: "POST",
-                    // data: {
-                    //     matricula: matricula.val().trim(),
-                    //     senha: senha.val().trim(),
-                    // },
-                    // success: function (response) {
-                    //     console.log("Sucesso:", response);
-                    //     // Redirecionar ou mostrar mensagem de sucesso
-                    // },
-                    // error: function (error) {
-                    //     console.log("Erro:", error);
-                    //     alert("Ocorreu um erro ao fazer login.");
-                    // },
-                // });
+                $.ajax({
+                    url: "{{ route('login') }}",
+                    type: "POST",
+                    data: {
+                        loginMatricula: matricula.val().trim(),
+                        loginPassword: senha.val().trim(),
+                    },
+                    success: function (response) {
+                        console.log("Sucesso:", response);
+                    },
+                    error: function (error) {
+                        console.log("Erro:", error);
+                    },
+                });
             }
         });
     });
