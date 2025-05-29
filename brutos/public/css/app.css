@@ -23,27 +23,6 @@
 .c-pointer {
     cursor: pointer;
 }
-/* .btn-primary {
-    background: var(--bg-blue);
-    outline-color: var(--bg-blue);
-
-    &:hover {
-        background: var(--bg-orange);
-        border-color: var(--bg-blue-light);
-    }
-
-    &:active {
-        background: var(--bg-orange-dark) !important;
-        border-color: var(--bg-orange) !important;
-        box-shadow: inset 0 0 0 2px var(--bg-orange) !important;
-    }
-
-    &:focus {
-        background: var(--bg-blue);
-        border-color: var(--bg-blue-light);
-        box-shadow: none;
-    }
-} */
 button {
     background-color: var(--bg-blue-light);
 
