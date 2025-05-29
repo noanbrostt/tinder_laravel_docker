@@ -1,11 +1,12 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap");
 
 :root {
-    --bg-blue: #022954;
-    --bg-blue-light: #336ba8;
-    --bg-orange: #ff793c;
-    --contrast-primary: #333;
-    --contrast-secondary: #f5f5f5;
+    --bg-blue: #F9286D;
+    --bg-blue-light: #FA3B62;
+    --bg-orange: #FC654B;
+    --bg-orange-dark: #ca462f;
+    --contrast-primary: #424242;
+    --contrast-secondary: #ffffff;
 }
 * {
     margin: 0;
@@ -22,11 +23,46 @@
 .c-pointer {
     cursor: pointer;
 }
-.btn-primary {
+/* .btn-primary {
     background: var(--bg-blue);
+    outline-color: var(--bg-blue);
 
     &:hover {
-        background: var(--bg-blue-light);
+        background: var(--bg-orange);
+        border-color: var(--bg-blue-light);
+    }
+
+    &:active {
+        background: var(--bg-orange-dark) !important;
+        border-color: var(--bg-orange) !important;
+        box-shadow: inset 0 0 0 2px var(--bg-orange) !important;
+    }
+
+    &:focus {
+        background: var(--bg-blue);
+        border-color: var(--bg-blue-light);
+        box-shadow: none;
+    }
+} */
+button {
+    background-color: var(--bg-blue-light);
+
+    &:hover {
+        background-color: var(--bg-blue);
+        border-color: var(--bg-blue-light);
+    }
+
+    &:active {
+        background-color: var(--bg-orange-dark) !important;
+        border-color: var(--bg-orange) !important;
+        box-shadow: inset 0 0 0 2px var(--bg-orange) !important;
+    }
+
+    &:focus {
+        background-color: var(--bg-blue-light);
+        border-color: var(--bg-blue);
+        box-shadow: none;
+        outline: none;
     }
 }
 /* Estilo para erro */

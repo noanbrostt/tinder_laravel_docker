@@ -92,7 +92,7 @@ Route::middleware(['web'])
         Route::post('/login', [AuthController::class, 'login'])->name('login');
 
         Route::post('/trocar_senha', [AuthController::class, 'trocarSenha']);
-        Route::post('/resetar_senha', [AuthController::class, 'resetarSenha']);
+        Route::post('/resetar_senha', [AuthController::class, 'resetarSenha'])->name('resetarSenha');
 
 
         Route::get('/inscricao', function () {

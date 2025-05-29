@@ -6,7 +6,7 @@
 
 <style>
     body {
-        background: var(--contrast-secondary);
+        background: linear-gradient(191.42deg, var(--bg-orange) 5.12%, var(--bg-blue) 107.11%);
         font-family: "Segoe UI", sans-serif;
         margin: 0;
         padding: 20px;
@@ -23,7 +23,7 @@
 
     h2 {
         text-align: center;
-        color: var(--bg-blue-light);
+        color: var(--bg-blue);
         font-weight: bolder;
     }
 
@@ -368,8 +368,6 @@
                 },
             });
 
-            // console.log('Formulário pronto para envio!', formData);
-            alert("Formulário enviado com sucesso!");
         });
 
     function compressImage(canvas, maxSizeKB, callback, quality = 0.9) {

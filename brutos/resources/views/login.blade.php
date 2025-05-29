@@ -8,23 +8,28 @@
 
 <style>
     body {
-        background-color: #c9d6ff;
-        background-image: url('/img/bg-login.jpg');
-        background-position-x: center;
+        background: linear-gradient(191.42deg, var(--bg-orange) 5.12%, var(--bg-blue) 107.11%);
         display: flex;
         align-items: center;
         justify-content: center;
         flex-direction: column;
         height: 100vh;
-        background-repeat: no-repeat;
-        background-size: cover;
     }
 
     #logo {
-        width: 145px;
+        width: 166px;
         position: absolute;
-        top: 10px;
-        left: 10px;
+        top: -30px;
+        justify-self: anchor-center;
+        display: flex;
+        align-items: center;
+
+        img:first-child {
+            width: 50px;
+            height: 50px;
+            margin-right: -30px;
+            margin-top: -10px;
+        }
 
         img {
             width: 100%;
@@ -32,8 +37,7 @@
     }
 
     .container {
-        background-color: transparent;
-        backdrop-filter: blur(10px);
+        background-color: #ffffff;
         border-radius: 30px;
         box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
         position: relative;
@@ -86,6 +90,8 @@
             height: 100%;
 
             h1 {
+                color: var(--bg-blue);
+                font-weight: bold;
                 margin-bottom: 15px;
             }
         }
@@ -202,6 +208,7 @@
         transition: all 0.6s ease-in-out;
 
         h1 {
+            font-weight: bold;
             margin-bottom: 0px;
         }
     }
@@ -241,7 +248,12 @@
     /* Responsive */
 
     @media only screen and (max-width: 600px) {
+        #logo {
+            top: 0px;
+        }
+
         .container {
+            margin-top: 20px;
             button {
                 padding: 6px 15px;
             }
@@ -260,6 +272,8 @@
                 width: 100%;
                 height: 20%;
                 border-radius: 0px 0px 50px 50px;
+                
+                transform: translateY(-1%);
 
                 .toggle-panel {
                     flex-direction: row;
@@ -301,7 +315,7 @@
                 }
 
                 .toggle-container {
-                    transform: translateY(400%);
+                    transform: translateY(401%);
                     border-radius: 50px 50px 0px 0px;
                     bottom: 0;
 
@@ -318,20 +332,23 @@
     }
 </style>
 
-<div id="logo"><img src="{{ asset('img/logo.png') }}" alt="Logo" /></div>
+<div id="logo">
+    <img src="{{ asset('img/logo-plansul.png') }}" alt="Logo" />
+    <img src="{{ asset('img/logo-tinder-white.png') }}" alt="Logo" />
+</div>
 
 <div class="container" id="container">
     <div class="form-container sign-up">
         <div class="form">
-            <h1>Criar Conta</h1>
+            <h1>Criar Senha</h1>
             <input type="text" placeholder="Matrícula Plansul" class="input_matricula" />
             <input type="text" placeholder="CPF" class="input_cpf" />
             <span class="d-contents">
                 <input type="password" class="password" placeholder="Nova Senha" />
                 <i class="fa-solid fa-eye toggle-password"></i>
             </span>
-            <button class="btn btn-primary" id="register_form">
-                Cadastrar-se
+            <button id="register_form">
+                Criar Senha
             </button>
         </div>
     </div>
@@ -344,23 +361,23 @@
                 <i class="fa-solid fa-eye toggle-password"></i>
             </span>
             <span class="c-pointer" data-toggle="modal" data-target="#exampleModalCenter">Esqueceu sua senha?</span>
-            <button class="btn btn-primary" id="login_form">Entrar</button>
+            <button id="login_form">Entrar</button>
         </div>
     </div>
     <div class="toggle-container">
         <div class="toggle">
             <div class="toggle-panel toggle-left">
-                <h1>Já É De Casa?</h1>
+                <h1>Já Tem Senha?</h1>
                 <p>Insira sua matrícula e senha</p>
-                <button class="hidden btn btn-primary" id="login">
+                <button class="hidden" id="login">
                     Entrar
                 </button>
             </div>
             <div class="toggle-panel toggle-right">
-                <h1>Primeira Vez?</h1>
+                <h1>Sem Senha?</h1>
                 <p>Crie uma senha para entrar</p>
-                <button class="hidden btn btn-primary" id="register">
-                    Cadastrar-se
+                <button class="hidden" id="register">
+                    Criar Senha
                 </button>
             </div>
         </div>
@@ -383,7 +400,7 @@
             <div class="modal-body">
                 <p>
                     Caso seja seu primeiro acesso ou tenha esquecido sua senha,
-                    clique em "Cadastrar-se" e crie uma nova senha.
+                    clique em "Criar Senha" e crie uma nova senha.
                 </p>
             </div>
             <div class="modal-footer">
@@ -448,8 +465,6 @@
 
         validarCampos(campos).then(valido => {
             if(valido){
-                // window.location.href = '/playground7/inscricao';
-
                 // ✅ Dados válidos - pode enviar via AJAX
                 $.ajax({
                     url: "{{ route('login') }}",
@@ -460,7 +475,7 @@
                     },
                     success: function (response) {
                         console.log("Sucesso:", response);
-                        // Redirecionar ou mostrar mensagem de sucesso
+                        window.location.href = '/inscricao';
                     },
                     error: function (error) {
                         console.log("Erro:", error);
@@ -499,26 +514,27 @@
 
         validarCampos(campos).then(valido => {
             if (valido) {
-                window.location.href = '/playground7/inscricao';
-
                 // ✅ Dados válidos - pode enviar via AJAX
-                // $.ajax({
-                //     url: "{{ route('inscricao') }}",
-                //     type: "POST",
-                    // data: {
-                    //     matricula: matricula.val().trim(),
-                    //     cpf: cpf.val().trim(),
-                    //     senha: senha.val().trim(),
-                    // },
-                    // success: function (response) {
-                    //     console.log("Sucesso:", response);
-                    //     // Redirecionar ou mostrar mensagem de sucesso
-                    // },
-                    // error: function (error) {
-                    //     console.log("Erro:", error);
-                    //     alert("Ocorreu um erro ao cadastrar.");
-                    // },
-                // });
+                $.ajax({
+                    url: "{{ route('login') }}",
+                    type: "POST",
+                    data: {
+                        matricula: matricula.val().trim(),
+                        cpf: cpf.val().trim(),
+                        nova_senha: senha.val().trim(),
+                    },
+                    success: function (response) {
+                        console.log("Sucesso:", response);
+                        window.location.href = '/inscricao';
+                    },
+                    error: function (error) {
+                        console.log("Erro:", error);
+                        Toast.fire({
+                            icon: "error",
+                            title: "Erro ao criar nova senha",
+                        });
+                    },
+                });
             }
         });
 
