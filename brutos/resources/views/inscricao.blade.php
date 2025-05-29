@@ -175,9 +175,9 @@
         <label for="intencao">Intenção</label>
         <select id="intencao">
             <option value="">Selecione</option>
-            <option value="Amizade">Amizade</option>
-            <option value="Namoro">Namoro</option>
-            <option value="Outros">Outros ( ͡° ͜ʖ ͡°)</option>
+            <option value="1">Amizade</option>
+            <option value="2">Namoro</option>
+            <option value="3">Outros ( ͡° ͜ʖ ͡°)</option>
         </select>
 
         <!-- sobre -->
@@ -331,7 +331,8 @@
             formData.append("sobre", sobreTexto);
 
             $.ajax({
-                url: "/seu-endpoint", // 🔥 Seu endpoint
+                // url: "/seu-endpoint", // 🔥 Seu endpoint
+                url: "{{ route('inscricao.store') }}",
                 type: "POST",
                 data: formData,
                 contentType: false,
@@ -392,5 +393,21 @@
             quality
         );
     }
+
+
+
 </script>
+
+<script>
+    const usuario = @json(session('dados'));
+
+    if (usuario) {
+       console.log("Nome:", usuario?.nome);
+       console.log("Matrícula:", usuario?.matricula);
+       console.log("✅ Dados carregados da sessão:", usuario);
+    } else {
+        console.warn("⚠️ Nenhum dado encontrado na sessão.");
+    }
+</script>
+
 @endsection

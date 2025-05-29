@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\InscricaoController;
 
 
 
@@ -90,9 +91,17 @@ Route::middleware(['web'])
         });
         Route::post('/login', [AuthController::class, 'login'])->name('login');
 
+        Route::post('/trocar_senha', [AuthController::class, 'trocarSenha']);
+        Route::post('/resetar_senha', [AuthController::class, 'resetarSenha']);
+
+
         Route::get('/inscricao', function () {
             return view('inscricao');
         })->name('inscricao');
     });
+
+
+    Route::post('/inscricao', [InscricaoController::class, 'store'])->name('inscricao.store');
+
 
 ?>

@@ -61,7 +61,7 @@ class AuthController extends Controller {
         
         if ($response->status() !== 200) {
             return response()->json([
-                'error' => 'Erro retornado pela API externa.',
+                'error' => $response->status() === 401 ? 'Não autorizado pela API externa.' : 'Senha incorreta.',
                 'api_status' => $response->status(),
                 'api_response' => $data
             ], $response->status());
@@ -69,12 +69,12 @@ class AuthController extends Controller {
         
         if (!isset($data['status']) || $data['status'] !== 'success') {
             return response()->json([
-                'error' => $data['message'] ?? 'Credenciais inválidas.',
+                'error' => $data['message'] ?? 'Não autorizado.',
+                'api_status' => 401,
                 'api_response' => $data
             ], 401);
         }
 
-    
         // Busca dados adicionais no banco local
         $dados = \DB::connection('controle_pessoal')
             ->table('sc_bases.tb_empregados')
@@ -94,7 +94,50 @@ class AuthController extends Controller {
         ], 200);
     }
 
+        public function trocarSenha(Request $request) {
 
+            if (!$this->validarApiKey($request->input('api_key'))) {
+                return response()->json(['error' => 'API key inválida'], 401);
+            }
+    
+            $usuario = DB::table('usuario')->where('matricula', $request->input('matricula'))->first();
+    
+            if (!$usuario || !Hash::check($request->input('senha_atual'), $usuario->senha)) {
+                return response()->json(['error' => 'Senha atual incorreta'], 401);
+            }
+    
+            DB::table('usuario')
+                ->where('matricula', $request->input('matricula'))
+                ->update([
+                    'senha' => Hash::make($request->input('nova_senha')),
+                    'dh_alteracao' => now()
+                ]);
+    
+            return response()->json(['message' => 'Senha alterada com sucesso']);
+        }
+    
+        public function resetarSenha(Request $request){
+
+            if (!$this->validarApiKey($request->input('api_key'))) {
+                return response()->json(['error' => 'API key inválida'], 401);
+            }
+    
+            $usuario = DB::table('usuario')->where('cpf', $request->input('cpf'))->first();
+    
+            if (!$usuario) {
+                return response()->json(['error' => 'Usuário não encontrado com este CPF'], 404);
+            }
+    
+            DB::table('usuario')
+                ->where('cpf', $request->input('cpf'))
+                ->update([
+                    'senha' => Hash::make($request->input('nova_senha')),
+                    'dh_alteracao' => now()
+                ]);
+    
+            return response()->json(['message' => 'Senha redefinida com sucesso']);
+        }
+    
 
 
     /**
@@ -194,6 +237,5 @@ class AuthController extends Controller {
             'expires_in' => Auth::factory()->getTTL() * 60
         ]);
     }
-
 
 }
