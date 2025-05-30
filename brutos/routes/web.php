@@ -39,7 +39,7 @@ Route::middleware(['web'])
                     ->select('matricula', 'ic_ativo') // seleciona campos simples
                     ->limit(1)
                     ->get();
-        
+
                 return response()->json([
                     'status' => 'Conexão e leitura da tabela tb_usuario bem-sucedida!',
                     'amostra' => $resultado
@@ -71,21 +71,21 @@ Route::middleware(['web'])
             }
         });
 
-     Route::get('/teste-paco', function () {
-       try {
-        $resultado = DB::connection('paco')->select('SELECT NOW()');
-        return response()->json([
-            'status' => 'Conexão com banco paco bem-sucedida!',
-            'hora_atual' => $resultado[0]->now ?? 'sem retorno'
-        ]);
-       } catch (\Exception $e) {
-        return response()->json([
-            'status' => 'Erro na conexão com banco paco',
-            'mensagem' => $e->getMessage()
-        ], 500);
-        } 
-      });
-        
+        Route::get('/teste-paco', function () {
+            try {
+                $resultado = DB::connection('paco')->select('SELECT NOW()');
+                return response()->json([
+                    'status' => 'Conexão com banco paco bem-sucedida!',
+                    'hora_atual' => $resultado[0]->now ?? 'sem retorno'
+                ]);
+            } catch (\Exception $e) {
+                return response()->json([
+                    'status' => 'Erro na conexão com banco paco',
+                    'mensagem' => $e->getMessage()
+                ], 500);
+            }
+        });
+
         Route::get('/login', function () {
             return view('login');
         });
@@ -98,10 +98,11 @@ Route::middleware(['web'])
         Route::get('/inscricao', function () {
             return view('inscricao');
         })->name('inscricao');
+
+        Route::get('/validar', function () {
+            return view('validar');
+        })->name('validar');
     });
 
 
-    Route::post('/inscricao', [InscricaoController::class, 'store'])->name('inscricao.store');
-
-
-?>
+Route::post('/inscricao', [InscricaoController::class, 'store'])->name('inscricao.store');
