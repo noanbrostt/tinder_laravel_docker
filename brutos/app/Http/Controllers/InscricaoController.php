@@ -43,9 +43,16 @@ class InscricaoController extends Controller{
        ]);
 
   
-      // 📷 Salvar a imagem no disco
-      $fotoPath = $request->file('foto')->store('public/fotos');
-  
+         // 📷 Salvar a imagem com o nome da matrícula
+       $nomeArquivo = $matricula . '.jpg'; // ou .png dependendo do tipo
+       $caminho = 'public/fotos/' . $nomeArquivo;
+       
+       $request->file('foto')->storeAs('public/fotos', $nomeArquivo);
+       $fotoUrl = 'storage/fotos/' . $nomeArquivo; // Gerar o caminho acessível publicamente
+       
+
+
+
       // 🗂 Inserir dados na tabela usuario
       DB::connection('tinder2')->table('public.usuario')->insert([
           'matricula' => $matricula,

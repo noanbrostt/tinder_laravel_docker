@@ -112,12 +112,14 @@ Route::middleware(['web'])
         Route::post('/login', [AuthController::class, 'login'])->name('login');
 
         Route::post('/trocar_senha', [AuthController::class, 'trocarSenha']);
-        Route::post('/resetar_senha', [AuthController::class, 'resetarSenha'])->name('resetarSenha');
+        Route::post('/resetarSenha', [AuthController::class, 'resetarSenha'])->name('resetarSenha');
 
 
         Route::get('/inscricao', function () {
             return view('inscricao');
         })->name('inscricao');
+
+        Route::post('/inscricao', [InscricaoController::class, 'store'])->name('inscricao.store');
 
         Route::get('/validar', function () {
             return view('validar');
@@ -127,4 +129,4 @@ Route::middleware(['web'])
     });
 
 
-Route::post('/inscricao', [InscricaoController::class, 'store'])->name('inscricao.store');
+

@@ -50,6 +50,20 @@ class AuthController extends Controller {
             return response()->json(['error' => 'Matrícula e senha são obrigatórias.'], 400);
         }
     
+        $cadastro = DB::connection('tinder2')
+        ->table('public.usuario')
+        ->where('matricula', $matricula) 
+        ->first(); 
+
+
+        if ($cadastro) {
+            return response()->json([
+                'message' => 'Usuário já cadastrado.',
+                'dados' => $cadastro
+            ], 200);
+        }
+
+
         $response = Http::post('http://172.32.1.73:9910/login', [
             'matricula' => $matricula,
             'senha' => $senha,
@@ -118,26 +132,46 @@ class AuthController extends Controller {
     
         public function resetarSenha(Request $request){
 
-            if (!$this->validarApiKey($request->input('api_key'))) {
-                return response()->json(['error' => 'API key inválida'], 401);
+            $cpf = $request->input('cpf');
+            $nova_senha = $request->input('nova_senha');
+        
+            if (is_null($cpf) || is_null($nova_senha)) {
+                return response()->json(['error' => 'CPF e nova senha são obrigatórios.'], 400);
             }
-    
-            $usuario = DB::table('usuario')->where('cpf', $request->input('cpf'))->first();
-    
-            if (!$usuario) {
-                return response()->json(['error' => 'Usuário não encontrado com este CPF'], 404);
+        
+            $response = Http::post('http://172.32.1.73:9910/login', [
+                'cpf' => $cpf,
+                'nova_senha' => $nova_senha,
+                'api_key' => 'DVtLwuTJv83QWGPzJKPEi'
+            ]);
+        
+            $data = $response->json();
+        
+            if ($response->status() !== 200) {
+                return response()->json([
+                    'error' => $response->status() === 401 ? 'Não autorizado pela API.' : 'Erro ao redefinir senha.',
+                    'api_status' => $response->status(),
+                    'api_response' => $data,
+                    'cpf' => $cpf,
+                    'nova_senha' => $nova_senha
+                ], $response->status());
             }
-    
-            DB::table('usuario')
-                ->where('cpf', $request->input('cpf'))
-                ->update([
-                    'senha' => Hash::make($request->input('nova_senha')),
-                    'dh_alteracao' => now()
-                ]);
-    
-            return response()->json(['message' => 'Senha redefinida com sucesso']);
+        
+            if (!isset($data['status']) || $data['status'] !== 'success') {
+                return response()->json([
+                    'error' => $data['message'] ?? 'Erro.',
+                    'api_status' => 400,
+                    'api_response' => $data
+                ], 400);
+            }
+        
+            return response()->json([
+                'message' => 'Senha redefinida com sucesso.',
+                'api_response' => $data
+            ], 200);
         }
-    
+
+
 
 
     /**
