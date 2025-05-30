@@ -49,6 +49,14 @@
         padding: 8px;
     }
 
+    .swal2-close {
+        padding-bottom: 2px;
+
+        &:focus {
+            background: unset;
+        }
+    }
+
     .modal-content {
         display: flex;
         gap: 24px;
@@ -189,43 +197,93 @@
     .btn-visualizar:hover {
         background-color: var(--bg-blue-light);
     }
+
+    /* Loader container */
+    .loader-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(255, 255, 255, 0.8);
+        /* Fundo semitransparente */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+    }
+
+    /* Spinner */
+    .spinner {
+        width: 50px;
+        height: 50px;
+        border: 6px solid #ddd;
+        border-top-color: var(--bg-blue);
+        /* Cor principal (ajuste como quiser) */
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    /* Animação de rotação */
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    /* Texto */
+    .loader-container p {
+        margin-top: 10px;
+        font-size: 16px;
+        color: #333;
+        font-weight: 500;
+    }
+
+    #tabela_filter label {
+        margin-bottom: -42px;
+    }
 </style>
 
-<h1>Cadastro de Candidatos</h1>
+<h1>Validação de Candidatos</h1>
 
-<table id="tabela" class="display">
+<div id="loader" class="loader-container">
+    <div class="spinner"></div>
+    <p>Carregando dados...</p>
+</div>
+
+<table id="tabela">
     <thead>
         <tr>
             <th>Matrícula</th>
             <th>Nome</th>
-            <th>Intenção</th>
+            <th>Status</th>
             <th>Ações</th>
         </tr>
     </thead>
     <tbody>
-        <!-- <tr>
-            <td>Ana Souza</td>
-            <td>Namoro</td>
-            <td>Gosta de viajar e de natureza.</td>
-            <td><button class="btn-visualizar" onclick="abrirModal('Ana Souza', 'Namoro', 'Gosta de viajar e de natureza.', 'https://via.placeholder.com/270x480')">Visualizar</button></td>
-        </tr>
-        <tr>
-            <td>Lucas Lima</td>
-            <td>Amizade</td>
-            <td>Apaixonado por tecnologia.</td>
-            <td><button class="btn-visualizar" onclick="abrirModal('Lucas Lima', 'Amizade', 'Apaixonado por tecnologia.', 'https://via.placeholder.com/270x480')">Visualizar</button></td>
-        </tr> -->
+        <!-- Os dados serão preenchidos via DataTables -->
     </tbody>
 </table>
 
-<!-- jQuery -->
-<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-<!-- DataTables -->
-<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css">
+
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
 
 <script>
     $(document).ready(function() {
-        $('#tabela').DataTable({
+        var tabela = $('#tabela').DataTable({
+            dom: 'Bfrtip',
+            buttons: [{
+                extend: 'excelHtml5',
+                text: '<i class="fa-solid fa-file-excel""></i>', // Ícone do FontAwesome
+                titleAttr: 'Exportar para Excel',
+                exportOptions: {
+                    columns: ':not(:last-child)' // Exclui a última coluna
+                }
+            }],
             language: {
                 lengthMenu: "Exibir _MENU_ por página",
                 zeroRecords: "Nenhum registro encontrado",
@@ -242,7 +300,10 @@
             },
             ajax: {
                 url: "{{ route('validar.listar') }}",
-                dataSrc: ''
+                dataSrc: '',
+                complete: function() {
+                    $('#loader').hide();
+                }
             },
             columns: [{
                     data: 'matricula'
@@ -257,24 +318,29 @@
                     data: null,
                     render: function(data, type, row) {
                         return `
-                        <button class="btn-visualizar" 
-                            onclick="abrirModal(
-                                '${row.matricula}', 
-                                '${row.nome}', 
-                                '${row.intencao}', 
-                                '${row.sobre}'
-                            )">
-                            Visualizar
-                        </button>
-                    `;
+                            <button class="btn-visualizar"
+                                data-matricula="${encodeURIComponent(row.matricula)}"
+                                data-nome="${encodeURIComponent(row.nome)}"
+                                data-intencao="${encodeURIComponent(row.intencao)}"
+                                data-sobre="${encodeURIComponent(row.sobre)}">
+                                Visualizar
+                            </button>
+                        `;
                     }
+
+
                 }
             ]
         });
     });
 
 
-    function abrirModal(matricula, nome, intencao, sobre) {
+    $(document).on('click', '.btn-visualizar', function() {
+        matricula = decodeURIComponent($(this).data('matricula'));
+        nome = decodeURIComponent($(this).data('nome'));
+        intencao = decodeURIComponent($(this).data('intencao'));
+        sobre = decodeURIComponent($(this).data('sobre'));
+        
         Swal.fire({
             title: nome,
             html: `
@@ -295,7 +361,7 @@
                     <option value="aprovado">Aprovado(a)</option>
                     <option value="foto-impropria">Foto imprópria</option>
                     <option value="texto-improprio">Texto impróprio</option>
-                    <option value="foto-texto-improprio">Foto e textos impróprios</option>
+                    <option value="foto-texto-improprio">Foto e texto impróprios</option>
                 </select>
             </div>
             `,
@@ -333,7 +399,7 @@
                 */
             }
         });
-    }
+    });
 </script>
 
 @endsection
