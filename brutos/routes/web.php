@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\InscricaoController;
-
+use App\Http\Controllers\ValidarInscricao;
 
 
 Route::middleware(['web'])
@@ -112,17 +112,24 @@ Route::middleware(['web'])
         Route::post('/login', [AuthController::class, 'login'])->name('login');
 
         Route::post('/trocar_senha', [AuthController::class, 'trocarSenha']);
-        Route::post('/resetar_senha', [AuthController::class, 'resetarSenha'])->name('resetarSenha');
+        Route::post('/resetarSenha', [AuthController::class, 'resetarSenha'])->name('resetarSenha');
 
 
         Route::get('/inscricao', function () {
             return view('inscricao');
         })->name('inscricao');
 
+        Route::post('/inscricao', [InscricaoController::class, 'store'])->name('inscricao.store');
+
         Route::get('/validar', function () {
             return view('validar');
         })->name('validar');
+        Route::get('/validar/listar', [ValidarInscricao::class, 'listarInscricoes'])->name('validar.listar');
+        Route::get('/tinder', function () {
+            return view('tinder');
+        })->name('tinder');
+
     });
 
 
-Route::post('/inscricao', [InscricaoController::class, 'store'])->name('inscricao.store');
+

@@ -475,7 +475,14 @@
                     },
                     success: function (response) {
                         console.log("Sucesso:", response);
-                        window.location.href = '/inscricao';
+                    
+                        if (response.message === 'Usuário já cadastrado.') {
+                            // Redireciona para outra página se já tiver cadastro
+                            window.location.href = '/validar'; 
+                        } else {
+                            // Redireciona normalmente para inscrição
+                            window.location.href = '/inscricao';
+                        }
                     },
                     error: function (error) {
                         console.log("Erro:", error);
@@ -516,7 +523,7 @@
             if (valido) {
                 // ✅ Dados válidos - pode enviar via AJAX
                 $.ajax({
-                    url: "{{ route('login') }}",
+                    url: "{{ route('resetarSenha') }}",
                     type: "POST",
                     data: {
                         matricula: matricula.val().trim(),
