@@ -485,10 +485,17 @@
                         }
                     },
                     error: function (error) {
-                        console.log("Erro:", error);
+                        var erro = error.responseJSON.error;
+
+                        if (erro == 'Matrícula não encontrada, cadastra-se em "Criar Senha".') {
+                            matricula.addClass("input-error");
+                        } else if (erro == 'Senha incorreta.') {
+                            senha.addClass("input-error");
+                        }
+
                         Toast.fire({
                             icon: "error",
-                            title: "Erro ao fazer login",
+                            title: erro,
                         });
                     },
                 });
@@ -527,7 +534,7 @@
                     type: "POST",
                     data: {
                         matricula: matricula.val().trim(),
-                        cpf: cpf.val().trim(),
+                        cpf: cpf.val().replace(/\D/g, '').trim(),
                         nova_senha: senha.val().trim(),
                     },
                     success: function (response) {
