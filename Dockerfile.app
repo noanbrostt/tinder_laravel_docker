@@ -25,6 +25,9 @@ COPY ./brutos  .
 # Instalar as dependências do Laravel
 RUN composer install
 
+# Criar link simbólico para storage
+RUN php artisan storage:link
+
 # Definir permissões corretas para os arquivos
 RUN chown -R www-data:www-data /var/www
 
