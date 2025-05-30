@@ -4,6 +4,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Inscricao;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
 
 class InscricaoController extends Controller{
 
@@ -30,27 +36,28 @@ class InscricaoController extends Controller{
     $idade = \Carbon\Carbon::parse($dtnascimento)->age;
   
       // 📌 Validar dados do request
-      $request->validate([
-          'foto' => 'required|image|mimes:jpg,jpeg,png|max:2048',
-          'intencao' => 'required|integer|exists:tipo_intencao,id_tipo_intencao',
-          'sobre' => 'required|string|max:240',
-      ]);
+       $request->validate([
+           'foto' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+           'intencao' => 'required|integer|in:1,2,3', // aceita somente os valores dessa lista
+           'sobre' => 'required|string|max:240',
+       ]);
+
   
       // 📷 Salvar a imagem no disco
       $fotoPath = $request->file('foto')->store('public/fotos');
   
       // 🗂 Inserir dados na tabela usuario
-      DB::table('usuario')->insert([
+      DB::connection('tinder2')->table('public.usuario')->insert([
           'matricula' => $matricula,
           'nome' => $nome,
           'idade' => $idade,
           'de_sobre' => $request->input('sobre'),
           'id_tipo_intencao' => $request->input('intencao'),
-          'id_status_usuario' => 1, // Pendente
+          'id_status_usuario' => 1,
           'dh_criacao' => now(),
           'dh_alteracao' => now(),
       ]);
-  
+
       return response()->json([
           'success' => true,
           'message' => 'Inscrição salva com sucesso!'
