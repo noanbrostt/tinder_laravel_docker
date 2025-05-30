@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\InscricaoController;
-
+use App\Http\Controllers\ValidarInscricao;
 
 
 Route::middleware(['web'])
@@ -122,6 +122,8 @@ Route::middleware(['web'])
         Route::get('/validar', function () {
             return view('validar');
         })->name('validar');
+        Route::get('/validar/listar', [ValidarInscricao::class, 'listarInscricoes'])->name('validar.listar');
+
     });
 
 

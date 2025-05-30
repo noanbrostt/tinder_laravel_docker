@@ -196,14 +196,14 @@
 <table id="tabela" class="display">
     <thead>
         <tr>
+            <th>Matrícula</th>
             <th>Nome</th>
             <th>Intenção</th>
-            <th>Sobre</th>
             <th>Ações</th>
         </tr>
     </thead>
     <tbody>
-        <tr>
+        <!-- <tr>
             <td>Ana Souza</td>
             <td>Namoro</td>
             <td>Gosta de viajar e de natureza.</td>
@@ -214,7 +214,7 @@
             <td>Amizade</td>
             <td>Apaixonado por tecnologia.</td>
             <td><button class="btn-visualizar" onclick="abrirModal('Lucas Lima', 'Amizade', 'Apaixonado por tecnologia.', 'https://via.placeholder.com/270x480')">Visualizar</button></td>
-        </tr>
+        </tr> -->
     </tbody>
 </table>
 
@@ -239,16 +239,47 @@
                     next: "Próximo",
                     previous: "Anterior"
                 }
-            }
+            },
+            ajax: {
+                url: "{{ route('validar.listar') }}",
+                dataSrc: ''
+            },
+            columns: [{
+                    data: 'matricula'
+                },
+                {
+                    data: 'nome'
+                },
+                {
+                    data: 'intencao'
+                },
+                {
+                    data: null,
+                    render: function(data, type, row) {
+                        return `
+                        <button class="btn-visualizar" 
+                            onclick="abrirModal(
+                                '${row.matricula}', 
+                                '${row.nome}', 
+                                '${row.intencao}', 
+                                '${row.sobre}'
+                            )">
+                            Visualizar
+                        </button>
+                    `;
+                    }
+                }
+            ]
         });
     });
 
-    function abrirModal(nome, intencao, sobre, foto) {
+
+    function abrirModal(matricula, nome, intencao, sobre) {
         Swal.fire({
             title: nome,
             html: `
             <div class="modal-content">
-                <img src="${foto}" class="foto-candidato" alt="Foto de ${nome}">
+                <img src="${matricula}" class="foto-candidato" alt="Foto de ${nome}">
                 <div class="modal-info">
                     <h3>Intenção: <span>${intencao}</span></h3>
                     <div class="modal-sobre">
