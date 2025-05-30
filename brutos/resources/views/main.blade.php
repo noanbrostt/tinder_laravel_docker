@@ -860,8 +860,6 @@
     </style>
     <!-- <link rel="stylesheet" href="{{ asset('css/app.css') }}"> -->
     <style> 
-        @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap");
-
         :root {
             --bg-blue: #F9286D;
             --bg-blue-light: #FA3B62;
@@ -874,7 +872,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: "Montserrat", sans-serif;
+            font-family: "Roboto", sans-serif;
         }
         #conteudo {
             width: 100%;
