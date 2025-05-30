@@ -18,10 +18,10 @@ Route::middleware(['web'])
         // Testa conexão com banco principal (pgsql)
         Route::get('/teste-principal', function () {
             try {
-                $resultado = DB::connection('pgsql')->select('SELECT NOW()');
+                $resultado = DB::connection('tinder2')->select('SELECT datname from pg_database');
                 return response()->json([
                     'status' => 'Conexão principal bem-sucedida!',
-                    'hora_atual' => $resultado[0]->now ?? 'sem retorno'
+                    'hora_atual' => $resultado ?? 'sem retorno'
                 ]);
             } catch (\Exception $e) {
                 return response()->json([
@@ -29,6 +29,26 @@ Route::middleware(['web'])
                     'mensagem' => $e->getMessage()
                 ], 500);
             }
+        });
+
+        Route::get('/teste-tinder', function () {
+           try {
+               $resultado = DB::connection('tinder2')
+                ->table('public.tipo_intencao')
+                ->select('*') 
+                ->limit(1)
+                ->get();
+       
+               return response()->json([
+                   'status' => 'Conexão e acesso à tabela "usuario" bem-sucedido!',
+                   'dados' => $resultado
+               ]);
+           } catch (\Exception $e) {
+               return response()->json([
+                   'status' => 'Erro ao acessar a tabela usuario',
+                   'mensagem' => $e->getMessage()
+               ], 500);
+           }
         });
 
         // Testa conexão com banco secundário (controle_pessoal) + leitura da tabela
