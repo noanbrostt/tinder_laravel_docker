@@ -345,7 +345,7 @@
             title: nome,
             html: `
             <div class="modal-content">
-                <img src="${matricula}" class="foto-candidato" alt="Foto de ${nome}">
+                <img src="storage/fotos/${matricula}.jpg" class="foto-candidato" alt="Foto de ${nome}">
                 <div class="modal-info">
                     <h3>Intenção: <span>${intencao}</span></h3>
                     <div class="modal-sobre">

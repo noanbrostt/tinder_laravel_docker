@@ -476,13 +476,13 @@
                     success: function (response) {
                         console.log("Sucesso:", response);
                     
-                        if (response.message === 'Usuário já cadastrado.') {
+                        // if (response.message === 'Usuário já cadastrado.') {
                             // Redireciona para outra página se já tiver cadastro
-                            window.location.href = '/validar'; 
-                        } else {
+                            // window.location.href = '/validar'; 
+                        // } else {
                             // Redireciona normalmente para inscrição
                             window.location.href = '/inscricao';
-                        }
+                        // }/
                     },
                     error: function (error) {
                         var erro = error.responseJSON.error;

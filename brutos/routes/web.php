@@ -33,11 +33,11 @@ Route::middleware(['web'])
 
         Route::get('/teste-tinder', function () {
            try {
-               $resultado = DB::connection('tinder2')
-                ->table('public.tipo_intencao')
-                ->select('*') 
-                ->limit(1)
-                ->get();
+                $resultado = DB::connection('tinder2')
+                    ->table('public.usuario')
+                    ->where('matricula', 123582)
+                    ->delete();
+
        
                return response()->json([
                    'status' => 'Conexão e acesso à tabela "usuario" bem-sucedido!',

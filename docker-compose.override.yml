@@ -1,0 +1,10 @@
+services:
+  app:
+    ports:
+      - "9000:9000"
+    volumes:
+      - ./brutos:/var/www:delegated
+
+  nginx:
+    ports:
+      - "8080:80"
