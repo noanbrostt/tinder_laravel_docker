@@ -47,7 +47,7 @@ class InscricaoController extends Controller{
        $nomeArquivo = $matricula . '.jpg'; // ou .png dependendo do tipo
        $caminho = 'public/fotos/' . $nomeArquivo;
        
-       $request->file('foto')->storeAs('public/fotos', $nomeArquivo);
+       $request->file('foto')->storeAs('fotos', $nomeArquivo, 'public');
        $fotoUrl = 'storage/fotos/' . $nomeArquivo; // Gerar o caminho acessível publicamente
        
 
