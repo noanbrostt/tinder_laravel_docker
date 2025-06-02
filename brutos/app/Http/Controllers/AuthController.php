@@ -149,7 +149,7 @@ class AuthController extends Controller {
         
             if ($response->status() !== 200) {
                 return response()->json([
-                    'error' => $response->status() === 401 ? 'Não autorizado pela API.' : 'Erro ao redefinir senha.',
+                    'error' => $response->status() === 401 ? 'Não autorizado pela API.' : 'CPF não encontrado.',
                     'api_status' => $response->status(),
                     'api_response' => $data,
                     'cpf' => $cpf,

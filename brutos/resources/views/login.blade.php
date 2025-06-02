@@ -542,11 +542,17 @@
                         window.location.href = '/inscricao';
                     },
                     error: function (error) {
-                        console.log("Erro:", error);
+                        var erro = error.responseJSON.error;
+
+                        if (erro == 'CPF não encontrado.') {
+                            cpf.addClass("input-error");
+                        }
+
                         Toast.fire({
                             icon: "error",
-                            title: "Erro ao criar nova senha",
+                            title: erro,
                         });
+
                     },
                 });
             }
@@ -554,6 +560,25 @@
 
 
     });
+
+    $(".sign-in input, .sign-up input").on("keydown", function(e) {
+        if (e.key === "Enter") {
+            e.preventDefault();
+
+            const container = $(this).closest(".form"); // Encontra o container do formulário atual
+            const inputs = container.find("input"); // Todos os inputs desse container
+            const index = inputs.index(this); // Pega o índice do input atual
+
+            if (index === inputs.length - 1) {
+                // Último input → clica no botão desse container
+                container.find("button").click();
+            } else {
+                // Foca no próximo input
+                inputs.eq(index + 1).focus();
+            }
+        }
+    });
+
 </script>
 
 @endsection
