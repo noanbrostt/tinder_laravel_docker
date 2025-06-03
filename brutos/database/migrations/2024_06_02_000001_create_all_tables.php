@@ -44,7 +44,7 @@ return new class extends Migration
 
             $table->unsignedBigInteger('id_tipo_intencao');
             $table->unsignedBigInteger('id_status_usuario');
-            $table->unsignedBigInteger('id_motivo_recusa');
+            $table->unsignedBigInteger('id_motivo_recusa')->nullable();
 
             $table->foreign('id_tipo_intencao')->references('id_tipo_intencao')->on('tipo_intencao')->onDelete('cascade');
             $table->foreign('id_status_usuario')->references('id_status_usuario')->on('status_usuario')->onDelete('cascade');
@@ -140,7 +140,6 @@ return new class extends Migration
         Schema::dropIfExists('job_batches');
         Schema::dropIfExists('sessions');
         Schema::dropIfExists('usuario');
-        Schema::dropIfExists('migrations');
         Schema::dropIfExists('status_usuario');
         Schema::dropIfExists('users');
         Schema::dropIfExists('interacao');

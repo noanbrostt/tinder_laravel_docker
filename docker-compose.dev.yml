@@ -33,6 +33,7 @@ services:
     command: >
       sh -c "composer install &&
             php artisan migrate &&
+            php artisan db:seed &&
             php artisan storage:link &&
             chown -R www-data:www-data storage bootstrap/cache &&
             chmod -R 777 storage bootstrap/cache &&
