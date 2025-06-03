@@ -171,10 +171,12 @@ class AuthController extends Controller {
                 ], 400);
             }
         
-           $cadastro = DB::connection('tinder2')// consulta se já está cadstrado
-           ->table('public.usuario')
-           ->where('matricula', $matricula) 
-           ->first(); 
+            $cadastro = DB::connection('tinder2')
+            ->table('public.usuario')
+            ->leftJoin('public.motivo_recusa', 'public.usuario.id_motivo_recusa', '=', 'public.motivo_recusa.id_motivo_recusa')
+            ->where('public.usuario.matricula', $matricula)
+            ->select('public.usuario.*', 'public.motivo_recusa.no_motivo_recusa')
+            ->first();
 
             $dados = \DB::connection('controle_pessoal')
             ->table('sc_bases.tb_empregados')

@@ -488,10 +488,6 @@
                         });
                     },
                     success: function (response) {
-                        Swal.close();
-
-                        console.log("Sucesso:", response);
-
                         // Salva os dados no localStorage, sessionStorage ou envia via URL se quiser
                         sessionStorage.setItem('possuiCadastro', JSON.stringify(response.possuiCadastro));
                         sessionStorage.setItem('cadastro', JSON.stringify(response.cadastro));
@@ -555,10 +551,28 @@
                         cpf: cpf.val().replace(/\D/g, '').trim(),
                         nova_senha: senha.val().trim(),
                     },
+                    beforeSend: function () {
+                        Swal.fire({
+                            title: 'Aguarde...',
+                            text: 'Verificando seus dados',
+                            allowOutsideClick: false,
+                            didOpen: () => {
+                                Swal.showLoading();
+                            }
+                        });
+                    },
                     success: function (response) {
-                        console.log("Sucesso:", response);
+                        // Salva os dados no localStorage, sessionStorage ou envia via URL se quiser
+                        sessionStorage.setItem('possuiCadastro', JSON.stringify(response.possuiCadastro));
+                        sessionStorage.setItem('cadastro', JSON.stringify(response.cadastro));
+                        sessionStorage.setItem('dados', JSON.stringify(response.dados));
+
+                        // Redireciona para a página de inscrição
+                        window.location.href = response.redirect;
                     },
                     error: function (error) {
+                        Swal.close();
+
                         var erro = error.responseJSON.error;
 
                         if (erro == 'CPF não encontrado.') {
