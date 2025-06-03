@@ -52,8 +52,11 @@ class AuthController extends Controller {
     
         $cadastro = DB::connection('tinder2')
         ->table('public.usuario')
-        ->where('matricula', $matricula) 
-        ->first(); 
+        ->leftJoin('public.motivo_recusa', 'public.usuario.id_motivo_recusa', '=', 'public.motivo_recusa.id_motivo_recusa')
+        ->where('public.usuario.matricula', $matricula)
+        ->select('public.usuario.*', 'public.motivo_recusa.no_motivo_recusa')
+        ->first();
+
 
 
         $response = Http::post('http://172.32.1.73:9910/login', [
@@ -94,17 +97,20 @@ class AuthController extends Controller {
             'resposta_api' => $data // opcional: guarda a resposta da API
         ]);
 
-        if ($cadastro) {
-            return response()->json([
-                'message' => 'Usuário já cadastrado.',
-                'dados' => $cadastro
-            ], 200);
+        if ($cadastro) { // varifica se já está cadstrado
+            $possuiCadastro = true;
+        } else {
+            $possuiCadastro = false;
         }
-    
+
         return response()->json([
-            'message' => 'Login autorizado pela API e dados carregados.',
-            'dados' => $dados
-        ], 200);
+                'success' => true,
+                'redirect' => route('inscricao'),
+                'possuiCadastro' => $possuiCadastro,
+                'cadastro' => $cadastro,
+                'dados' => $dados,
+            ]);
+
     }
 
         public function trocarSenha(Request $request) {
@@ -182,16 +188,18 @@ class AuthController extends Controller {
             ]);
 
             if ($cadastro) { // varifica se já está cadstrado
-                return response()->json([
-                    'message' => 'Usuário já cadastrado.',
-                    'dados' => $cadastro
-                ], 200);
+                $possuiCadastro = true;
+            } else {
+                $possuiCadastro = false;
             }
 
             return response()->json([
-                'message' => 'Senha redefinida com sucesso.',
-                'api_response' => $data
-            ], 200);
+                'success' => true,
+                'redirect' => route('inscricao'),
+                'possuiCadastro' => $possuiCadastro,
+                'cadastro' => $cadastro,
+                'dados' => $dados,
+            ]);
         }
 
 

@@ -241,6 +241,10 @@
         align-self: self-end;
     }
 
+    .esqueceu {
+        color: var(--contrast-primary);
+    }
+
     .fa-eye-slash {
         right: 9px;
     }
@@ -360,7 +364,7 @@
                 <input type="password" class="password" placeholder="Senha do Paco" />
                 <i class="fa-solid fa-eye toggle-password"></i>
             </span>
-            <span class="c-pointer" data-toggle="modal" data-target="#exampleModalCenter">Esqueceu sua senha?</span>
+            <span class="c-pointer esqueceu" data-toggle="modal" data-target="#exampleModalCenter">Esqueceu sua senha?</span>
             <button id="login_form">Entrar</button>
         </div>
     </div>
@@ -473,18 +477,32 @@
                         loginMatricula: matricula.val().trim(),
                         loginPassword: senha.val().trim(),
                     },
+                    beforeSend: function () {
+                        Swal.fire({
+                            title: 'Aguarde...',
+                            text: 'Verificando seus dados',
+                            allowOutsideClick: false,
+                            didOpen: () => {
+                                Swal.showLoading();
+                            }
+                        });
+                    },
                     success: function (response) {
+                        Swal.close();
+
                         console.log("Sucesso:", response);
-                    
-                        // if (response.message === 'Usuário já cadastrado.') {
-                            // Redireciona para outra página se já tiver cadastro
-                            // window.location.href = '/validar'; 
-                        // } else {
-                            // Redireciona normalmente para inscrição
-                            window.location.href = '/inscricao';
-                        // }/
+
+                        // Salva os dados no localStorage, sessionStorage ou envia via URL se quiser
+                        sessionStorage.setItem('possuiCadastro', JSON.stringify(response.possuiCadastro));
+                        sessionStorage.setItem('cadastro', JSON.stringify(response.cadastro));
+                        sessionStorage.setItem('dados', JSON.stringify(response.dados));
+
+                        // Redireciona para a página de inscrição
+                        window.location.href = response.redirect;
                     },
                     error: function (error) {
+                        Swal.close();
+
                         var erro = error.responseJSON.error;
 
                         if (erro == 'Matrícula não encontrada, cadastra-se em "Criar Senha".') {
@@ -539,7 +557,6 @@
                     },
                     success: function (response) {
                         console.log("Sucesso:", response);
-                        window.location.href = '/inscricao';
                     },
                     error: function (error) {
                         var erro = error.responseJSON.error;
