@@ -2,10 +2,7 @@
 FROM nginx:alpine
 
 # Copiar o arquivo de configuração do Nginx
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-# Copiar o código do Laravel para dentro do contêiner
-COPY ./brutos /var/www
+COPY ./docker/nginx/nginx.conf /etc/nginx/conf.d/default.conf
 
 # Expor porta 80 para o Nginx
 EXPOSE 80

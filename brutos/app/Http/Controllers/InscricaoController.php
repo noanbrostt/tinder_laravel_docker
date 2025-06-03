@@ -34,6 +34,16 @@ class InscricaoController extends Controller{
     }
     
     $idade = \Carbon\Carbon::parse($dtnascimento)->age;
+
+
+     $cadastro = DB::connection('tinder2')
+     ->table('public.usuario')
+     ->where('matricula', $matricula) 
+     ->first(); 
+
+      if($cadastro){
+          return $this->atualizarCadastro($matricula, $request);
+      }
   
       // 📌 Validar dados do request
        $request->validate([
@@ -47,10 +57,8 @@ class InscricaoController extends Controller{
        $nomeArquivo = $matricula . '.jpg'; // ou .png dependendo do tipo
        $caminho = 'public/fotos/' . $nomeArquivo;
        
-       $request->file('foto')->storeAs('public/fotos', $nomeArquivo);
+       $request->file('foto')->storeAs('fotos', $nomeArquivo, 'public');
        $fotoUrl = 'storage/fotos/' . $nomeArquivo; // Gerar o caminho acessível publicamente
-       
-
 
 
       // 🗂 Inserir dados na tabela usuario
@@ -70,6 +78,40 @@ class InscricaoController extends Controller{
           'message' => 'Inscrição salva com sucesso!'
       ]);
     }
+
+
+    public function atualizarCadastro($matricula, Request $request){
+
+    
+        // 🧹 Apagar a foto antiga, se existir
+        $nomeArquivo = $matricula . '.jpg'; // ou .png dependendo do seu padrão
+        $caminho = 'public/fotos/' . $nomeArquivo;
+    
+        if (Storage::disk('public')->exists('fotos/' . $nomeArquivo)) {
+            Storage::disk('public')->delete('fotos/' . $nomeArquivo);
+        }
+    
+        // 📷 Salvar a nova imagem
+        $request->file('foto')->storeAs('fotos', $nomeArquivo, 'public');
+        $fotoUrl = 'storage/fotos/' . $nomeArquivo;
+    
+        // 🗂 Atualizar os dados no banco
+        DB::connection('tinder2')->table('public.usuario')
+            ->where('matricula', $matricula)
+            ->update([
+                'de_sobre' => $request->input('sobre'),
+                'id_tipo_intencao' => $request->input('intencao'),
+                'dh_alteracao' => now(),
+            ]);
+    
+        return response()->json([
+            'success' => true,
+            'message' => 'Cadastro atualizado com sucesso!',
+            'foto_url' => $fotoUrl,
+        ]);
+    }
+
+
 
 }
 

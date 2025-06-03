@@ -100,6 +100,11 @@
         background-color: var(--bg-blue);
     }
 
+    #status-aprovacao {
+        text-align: center;
+        margin-block: 40px;
+    }
+
     /* Modal */
     .modal {
         display: none;
@@ -163,7 +168,15 @@
 
 <div class="container">
     <h2>Inscrição no Tinder</h2>
-    <form id="formInscricao">
+
+    <!-- Inscrição já feita -->
+    <div class="status-box" style="display: none;">
+        <h3 id="status-aprovacao"></h3>
+
+        <button id="editar">Editar/Visualizar inscrição</button>
+    </div>
+
+    <form id="formInscricao" style="display: none;">
         <!-- Upload Foto -->
         <label for="fotoInput">Foto em pé <small>(9:16)</small></label>
         <div class="upload-area" id="uploadArea">
@@ -208,6 +221,79 @@
         </div>
     </div>
 </div>
+
+<script>
+    // Recupera os dados do sessionStorage
+    const possuiCadastro = JSON.parse(sessionStorage.getItem('possuiCadastro'));
+    const cadastro = JSON.parse(sessionStorage.getItem('cadastro'));
+    const dados = JSON.parse(sessionStorage.getItem('dados'));
+
+    // Exemplo de uso:
+    console.log('Possui Cadastro:', possuiCadastro);
+    console.log('Cadastro:', cadastro);
+    console.log('Dados:', dados);
+
+    if (possuiCadastro) {
+       
+
+        switch (cadastro.id_status_usuario) {
+            case 1:
+                $('#status-aprovacao').addClass('text-warning').html('Aguardando aprovação <i class="fa-solid fa-hourglass-half"></i>');
+                break;
+        
+            case 2:
+                $('#status-aprovacao').addClass('text-success').html('Inscrição aprovada <i class="fa-solid fa-check-circle"></i>');
+                break;
+        
+            case 3:
+                $('#status-aprovacao').addClass('text-danger').html('Inscrição recusada: '+cadastro.no_motivo_recusa);
+                break;
+        
+            default:
+                break;
+        }
+
+
+        $('.status-box').show();
+
+        // Preencher intenção
+        $('#intencao').val(cadastro.id_tipo_intencao);
+
+        // Preencher sobre você
+        $('#sobre').val(cadastro.de_sobre);
+        $('#contador').text(cadastro.de_sobre.length);
+
+        // Preencher foto
+        preencherFotoDireto(`storage/fotos/${cadastro.matricula}.jpg`);
+        // $('.upload-text').hide(); // Esconde o texto "Clique para enviar foto"
+
+
+    } else {
+        $('#formInscricao').show();
+    }
+
+    $('#editar').on('click', function() {
+        $('.status-box').hide();
+        $('#formInscricao').show();
+    });
+
+    async function preencherFotoDireto(urlImagem) {
+        try {
+            const response = await fetch(urlImagem);
+            if (!response.ok) throw new Error('Imagem não encontrada');
+
+            const blob = await response.blob();
+            const url = URL.createObjectURL(blob);
+
+            uploadArea.innerHTML = `<img src="${url}" alt="Foto"/>`;
+            croppedBlob = blob; // já define o blob da foto recortada
+            uploadArea.classList.remove("input-error");
+        } catch (error) {
+            console.log('Foto não encontrada:', error);
+        }
+    }
+
+</script>
 
 <script>
     const fotoInput = document.getElementById("fotoInput");
@@ -353,7 +439,6 @@
                     Toast.fire({
                         icon: "success",
                         title: "Enviado com sucesso!",
-                        position: "top",
                     });
                     // Ou faça qualquer outra ação aqui
                 },
@@ -363,7 +448,6 @@
                     Toast.fire({
                         icon: "error",
                         title: "Ocorreu um erro ao enviar!",
-                        position: "top",
                     });
                 },
             });
@@ -392,20 +476,6 @@
         );
     }
 
-
-
-</script>
-
-<script>
-    const usuario = @json(session('dados'));
-
-    if (usuario) {
-       console.log("Nome:", usuario?.nome);
-       console.log("Matrícula:", usuario?.matricula);
-       console.log("✅ Dados carregados da sessão:", usuario);
-    } else {
-        console.warn("⚠️ Nenhum dado encontrado na sessão.");
-    }
 </script>
 
 @endsection

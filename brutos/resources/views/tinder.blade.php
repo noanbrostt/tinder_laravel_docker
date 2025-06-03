@@ -6,13 +6,17 @@
 
 <style>
     body {
+        background: linear-gradient(191.42deg, var(--bg-orange) 5.12%, var(--bg-blue) 107.11%);
         height: 100vh;
         width: 100vw;
         font-family: "Roboto", sans-serif;
-        background: #6495ed2b;
         overflow: hidden;
         display: flex;
         align-content: center;
+    }
+
+    #conteudo {
+        display: flex;
     }
 
     p {
@@ -185,7 +189,7 @@
 
     .topbar-right::after {
         content: "";
-        background: #e4edfb;
+        background: #fc5952;
         width: 10px;
         height: 12px;
         top: 149px;
@@ -215,6 +219,11 @@
         width: 100%;
         height: 45px;
         pointer-events: none;
+
+        img {
+            width: 140px;
+            margin-top: -5px;
+        }
     }
 
     .person {
@@ -256,23 +265,6 @@
         transform: rotate(15deg);
     }
 
-    .photo.super_like::after {
-        content: "SUPER LIKE";
-        color: #08a4ef;
-        border: 6px solid #08a4ef;
-        border-radius: 8px;
-        font-family: "Roboto", sans-serif;
-        text-align: center;
-        font-weight: 500;
-        font-size: 2.8rem;
-        padding: 0.2rem 0.4rem;
-        position: absolute;
-        width: 150px;
-        bottom: 10%;
-        left: 24%;
-        transform: rotate(-15deg);
-    }
-
     .photo.like::after {
         content: "LIKE";
         color: #1be4a1;
@@ -299,7 +291,10 @@
 
         p {
             font-size: 14px;
-            /* text-align: justify; */
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-height: 60px;
+            transition: max-height .6s ease;
         }
     }
 
@@ -320,29 +315,16 @@
         font-weight: 400;
     }
 
-    .data p {
-        display: -webkit-box;
-        -webkit-line-clamp: 3;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        max-height: 60px;
-        /* Aproximadamente 3 linhas (1.5em por linha) */
-        transition: max-height .6s ease;
-    }
-
     /* Ao passar o mouse na div.person */
-    .person:hover .data p {
-        -webkit-line-clamp: unset;
-        max-height: 500px;
-        /* Um valor suficientemente grande */
-        overflow: visible;
-    }
-
-    .person:hover .personal {
+    .person:hover .personal,
+    .person:has(+ .commands .command:hover) .personal {
         background: linear-gradient(180deg,
                 rgba(0, 0, 0, 0) 0%,
                 rgba(0, 0, 0, 0.8) 24%);
+
+        .data p {
+            max-height: 600px;
+        }
     }
 
 
@@ -414,15 +396,8 @@
     }
 
     /* icon size and colors */
-    .fa-circle-user,
-    .fa-comment-dots {
-        color: #dadfe6;
-        font-size: 1.5rem;
-    }
-
     .fa-fire-flame-curved {
-        color: #fe466d;
-        font-size: 1.7rem;
+        font-size: 13px;
     }
 
     .fa-circle-info {
@@ -450,7 +425,7 @@
         <div class="topbar">
             <div class="topbar-left">
                 <div class="clock">00:00</div>
-                <i class="fa fa-youtube-play"></i>
+                <i class="fa fa-fire-flame-curved"></i>
             </div>
             <div class="topbar-middle">
                 <div class="camera"></div>
@@ -464,9 +439,7 @@
             </div>
         </div>
         <nav class="navbar">
-            <i class="fa-solid fa-circle-user"></i>
-            <i class="fa-solid fa-fire-flame-curved"></i>
-            <i class="fa-solid fa-comment-dots"></i>
+            <img src="data:image/png;base64,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" alt="Tinder Plansul">
         </nav>
         <div class="person">
             <figure class="photo">
@@ -521,10 +494,7 @@
         // If the photo go 80px left/right, the "nope"/"like" stamp appears using css::after
         el.classList.toggle("nope", ev.deltaX < -80);
         el.classList.toggle("like", ev.deltaX > 80);
-        el.classList.toggle(
-            "super_like",
-            (ev.deltaY < -72) & (Math.abs(ev.deltaX) < 80)
-        );
+
         // Calculates photo rotation based on offset
         var rotate = ev.deltaX * ev.deltaY * 4e-4;
         // And applies the movement
@@ -544,7 +514,7 @@
         var absVel = Math.abs(ev.velocity);
         var absDelX = Math.abs(ev.deltaX);
         // Removes the stamps and retrieve the 300ms transition
-        el.classList.remove("nope", "like", "super_like", "oops", "moving");
+        el.classList.remove("nope", "like", "oops", "moving");
         if (absDelX > 80) {
             // If the photo had a "like"/"dislike" reaction
             // Photo fades faster if dragged faster, beetwen 400 and 150ms
@@ -570,19 +540,6 @@
             el.style.opacity = 0;
             // And the photo returns
             repeat(transitionDuration);
-        } else if (ev.deltaY < -72) {
-            // If the photo had a "super like" reaction, very similar code to the previous one
-            var transitionDuration =
-                250 / (absVel + 0.4) > 150 ?
-                250 / (absVel + 0.4) > 400 ?
-                400 :
-                250 / (absVel + 0.4) :
-                150;
-            el.style.transitionDuration = transitionDuration + "ms";
-            var mult = absVel > 2 ? absVel : 2;
-            el.style.transform = "translate( 0px, " + ev.deltaY * mult + "px)";
-            el.style.opacity = 0;
-            repeat(transitionDuration);
         } else {
             // If the photo didn't have a reaction, it goes back to the middle
             el.style.transform = "";
@@ -603,7 +560,7 @@
         setTimeout(function() {
             el.style.transform = "";
             setTimeout(function() {
-                el.classList.remove("nope", "like", "super_like", "oops", "moving");
+                el.classList.remove("nope", "like", "oops", "moving");
                 el.style.opacity = 1;
                 setTimeout(function() {
                     // Reactivates the buttons with a slight delay so that the photo has time to be recognized

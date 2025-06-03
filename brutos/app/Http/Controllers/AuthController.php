@@ -52,16 +52,11 @@ class AuthController extends Controller {
     
         $cadastro = DB::connection('tinder2')
         ->table('public.usuario')
-        ->where('matricula', $matricula) 
-        ->first(); 
+        ->leftJoin('public.motivo_recusa', 'public.usuario.id_motivo_recusa', '=', 'public.motivo_recusa.id_motivo_recusa')
+        ->where('public.usuario.matricula', $matricula)
+        ->select('public.usuario.*', 'public.motivo_recusa.no_motivo_recusa')
+        ->first();
 
-
-        if ($cadastro) {
-            return response()->json([
-                'message' => 'Usuário já cadastrado.',
-                'dados' => $cadastro
-            ], 200);
-        }
 
 
         $response = Http::post('http://172.32.1.73:9910/login', [
@@ -69,7 +64,7 @@ class AuthController extends Controller {
             'senha' => $senha,
             'api_key' => 'DVtLwuTJv83QWGPzJKPEi'
         ]);
-        
+
         // Mesmo que a API responda com erro, captura o conteúdo
         $data = $response->json(); 
         
@@ -101,11 +96,21 @@ class AuthController extends Controller {
             'dados' => $dados,
             'resposta_api' => $data // opcional: guarda a resposta da API
         ]);
-    
+
+        if ($cadastro) { // varifica se já está cadstrado
+            $possuiCadastro = true;
+        } else {
+            $possuiCadastro = false;
+        }
+
         return response()->json([
-            'message' => 'Login autorizado pela API e dados carregados.',
-            'dados' => $dados
-        ], 200);
+                'success' => true,
+                'redirect' => route('inscricao'),
+                'possuiCadastro' => $possuiCadastro,
+                'cadastro' => $cadastro,
+                'dados' => $dados,
+            ]);
+
     }
 
         public function trocarSenha(Request $request) {
@@ -132,14 +137,15 @@ class AuthController extends Controller {
     
         public function resetarSenha(Request $request){
 
+            $matricula = $request->input('matricula');
             $cpf = $request->input('cpf');
             $nova_senha = $request->input('nova_senha');
         
-            if (is_null($cpf) || is_null($nova_senha)) {
-                return response()->json(['error' => 'CPF e nova senha são obrigatórios.'], 400);
+            if (is_null($cpf) || is_null($nova_senha)||is_null($matricula) ) {
+                return response()->json(['error' => 'CPF, matricula e nova senha são obrigatórios.'], 400);
             }
         
-            $response = Http::post('http://172.32.1.73:9910/login', [
+            $response = Http::post('http://172.32.1.73:9910/resetar_senha', [
                 'cpf' => $cpf,
                 'nova_senha' => $nova_senha,
                 'api_key' => 'DVtLwuTJv83QWGPzJKPEi'
@@ -149,7 +155,7 @@ class AuthController extends Controller {
         
             if ($response->status() !== 200) {
                 return response()->json([
-                    'error' => $response->status() === 401 ? 'Não autorizado pela API.' : 'Erro ao redefinir senha.',
+                    'error' => $response->status() === 401 ? 'Não autorizado pela API.' : 'CPF não encontrado.',
                     'api_status' => $response->status(),
                     'api_response' => $data,
                     'cpf' => $cpf,
@@ -165,10 +171,35 @@ class AuthController extends Controller {
                 ], 400);
             }
         
+           $cadastro = DB::connection('tinder2')// consulta se já está cadstrado
+           ->table('public.usuario')
+           ->where('matricula', $matricula) 
+           ->first(); 
+
+            $dados = \DB::connection('controle_pessoal')
+            ->table('sc_bases.tb_empregados')
+            ->where('matricula', $matricula)
+            ->first();
+                       
+            session([ // Armazena na sessão
+                'matricula' => $matricula,
+                'dados' => $dados,
+                'resposta_api' => $data 
+            ]);
+
+            if ($cadastro) { // varifica se já está cadstrado
+                $possuiCadastro = true;
+            } else {
+                $possuiCadastro = false;
+            }
+
             return response()->json([
-                'message' => 'Senha redefinida com sucesso.',
-                'api_response' => $data
-            ], 200);
+                'success' => true,
+                'redirect' => route('inscricao'),
+                'possuiCadastro' => $possuiCadastro,
+                'cadastro' => $cadastro,
+                'dados' => $dados,
+            ]);
         }
 
 
