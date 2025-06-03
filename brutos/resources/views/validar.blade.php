@@ -301,8 +301,38 @@
             ajax: {
                 url: "{{ route('validar.listar') }}",
                 dataSrc: '',
-                complete: function() {
+                complete: function(xhr) {
                     $('#loader').hide();
+            
+                    if (xhr && xhr.responseJSON) {
+                        const resposta = xhr.responseJSON;
+            
+                        if (resposta.status === 'erro') {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Erro',
+                                text: resposta.mensagem,
+                                confirmButtonText: 'OK'
+                            }).then(() => {
+                                window.location.href = '/login'; // 🔁 redireciona para tela de login
+                            });
+                        }
+                    }
+                },
+                error: function(xhr) {
+                    $('#loader').hide();
+            
+                    if (xhr.status === 401 || xhr.status === 403) {
+                        const mensagem = xhr.responseJSON?.mensagem || 'Acesso negado.';
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Acesso Restrito',
+                            text: mensagem,
+                            confirmButtonText: 'Ir para Login'
+                        }).then(() => {
+                            window.location.href = '/login';
+                        });
+                    }
                 }
             },
             columns: [{

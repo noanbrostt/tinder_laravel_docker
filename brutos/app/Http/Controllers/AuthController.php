@@ -56,20 +56,12 @@ class AuthController extends Controller {
         ->first(); 
 
 
-        if ($cadastro) {
-            return response()->json([
-                'message' => 'Usuário já cadastrado.',
-                'dados' => $cadastro
-            ], 200);
-        }
-
-
         $response = Http::post('http://172.32.1.73:9910/login', [
             'matricula' => $matricula,
             'senha' => $senha,
             'api_key' => 'DVtLwuTJv83QWGPzJKPEi'
         ]);
-        
+
         // Mesmo que a API responda com erro, captura o conteúdo
         $data = $response->json(); 
         
@@ -101,6 +93,13 @@ class AuthController extends Controller {
             'dados' => $dados,
             'resposta_api' => $data // opcional: guarda a resposta da API
         ]);
+
+        if ($cadastro) {
+            return response()->json([
+                'message' => 'Usuário já cadastrado.',
+                'dados' => $cadastro
+            ], 200);
+        }
     
         return response()->json([
             'message' => 'Login autorizado pela API e dados carregados.',
@@ -132,14 +131,15 @@ class AuthController extends Controller {
     
         public function resetarSenha(Request $request){
 
+            $matricula = $request->input('matricula');
             $cpf = $request->input('cpf');
             $nova_senha = $request->input('nova_senha');
         
-            if (is_null($cpf) || is_null($nova_senha)) {
-                return response()->json(['error' => 'CPF e nova senha são obrigatórios.'], 400);
+            if (is_null($cpf) || is_null($nova_senha)||is_null($matricula) ) {
+                return response()->json(['error' => 'CPF, matricula e nova senha são obrigatórios.'], 400);
             }
         
-            $response = Http::post('http://172.32.1.73:9910/login', [
+            $response = Http::post('http://172.32.1.73:9910/resetar_senha', [
                 'cpf' => $cpf,
                 'nova_senha' => $nova_senha,
                 'api_key' => 'DVtLwuTJv83QWGPzJKPEi'
@@ -165,6 +165,29 @@ class AuthController extends Controller {
                 ], 400);
             }
         
+           $cadastro = DB::connection('tinder2')// consulta se já está cadstrado
+           ->table('public.usuario')
+           ->where('matricula', $matricula) 
+           ->first(); 
+
+            $dados = \DB::connection('controle_pessoal')
+            ->table('sc_bases.tb_empregados')
+            ->where('matricula', $matricula)
+            ->first();
+                       
+            session([ // Armazena na sessão
+                'matricula' => $matricula,
+                'dados' => $dados,
+                'resposta_api' => $data 
+            ]);
+
+            if ($cadastro) { // varifica se já está cadstrado
+                return response()->json([
+                    'message' => 'Usuário já cadastrado.',
+                    'dados' => $cadastro
+                ], 200);
+            }
+
             return response()->json([
                 'message' => 'Senha redefinida com sucesso.',
                 'api_response' => $data
