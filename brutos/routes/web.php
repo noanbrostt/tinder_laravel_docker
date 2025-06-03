@@ -125,6 +125,7 @@ Route::middleware(['web'])
             return view('validar');
         })->name('validar');
         Route::get('/validar/listar', [ValidarInscricao::class, 'listarInscricoes'])->name('validar.listar');
+        Route::post('/validar/atualizar', [ValidarInscricao::class, 'atualizarInscricao'])->name('validar.atualizar');
         Route::get('/tinder', function () {
             return view('tinder');
         })->name('tinder');

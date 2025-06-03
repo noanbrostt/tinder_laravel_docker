@@ -47,4 +47,51 @@ class ValidarInscricao extends Controller
         return response()->json($inscricoes);
     }
 
+    public function atualizarInscricao(Request $request){
+        $request->validate([
+            'matricula' => 'required|integer',
+            'classificacao' => 'required|string',
+            'matricula_recusa' => 'required|string',
+        ]);
+    
+        $status = null;
+        $motivoRecusa = null;
+    
+        if ($request->classificacao === 'aprovado') {
+            $status = 2; // Ativo
+        } else {
+            $status = 3; // Recusado
+    
+            // Tenta buscar o motivo no banco
+            $motivoRecusa = DB::connection('tinder2')
+                ->table('public.motivo_recusa')
+                ->where('id_motivo_recusa', $request->classificacao)
+                ->first();
+    
+            if (!$motivoRecusa) {
+                return response()->json([
+                    'status' => 'erro',
+                    'mensagem' => 'Motivo de recusa inválido ou não encontrado.'
+                ], 400);
+            }
+        }
+    
+        // Realiza o update
+        $update = DB::connection('tinder2')
+            ->table('public.usuario')
+            ->where('matricula', $request->matricula)
+            ->update([
+                'id_status_usuario' => $status,
+                'id_motivo_recusa' => $motivoRecusa->id_motivo_recusa ?? null,
+                'de_observacao_recusa' => $motivoRecusa->legenda ?? null,
+                'matricula_recusa' => $request->matricula_recusa,
+                'dh_alteracao' => now(),
+            ]);
+    
+        return response()->json([
+            'status' => $update ? 'success' : 'erro',
+            'mensagem' => $update ? 'Inscrição atualizada com sucesso.' : 'Nenhuma alteração realizada.',
+        ]);
+    }
+    
 }
