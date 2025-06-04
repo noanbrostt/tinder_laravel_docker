@@ -435,13 +435,17 @@
                     });
                 },
                 success: function(response) {
+                    $('button[type="submit"]').prop('disabled', true);
                     Swal.close(); // 🔥 Fecha o loading
                     console.log(response);
                     Toast.fire({
                         icon: "success",
                         title: "Enviado com sucesso!",
                     });
-                    // Ou faça qualquer outra ação aqui
+                    
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 3000);
                 },
                 error: function(xhr, status, error) {
                     Swal.close(); // 🔥 Fecha o loading mesmo se der erro
