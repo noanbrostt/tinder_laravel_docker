@@ -94,18 +94,23 @@ class AuthController extends Controller {
         session([
             'matricula' => $matricula,
             'dados' => $dados,
-            'resposta_api' => $data // opcional: guarda a resposta da API
+            'resposta_api' => $data 
         ]);
-
-        if ($cadastro) { // varifica se já está cadstrado
-            $possuiCadastro = true;
-        } else {
-            $possuiCadastro = false;
+        
+        $possuiCadastro = $cadastro ? true : false;
+        
+        $funcoesAdm = [677, 1097, 1110, 15, 255, 572, 574, 676, 15264];
+        
+        $rota = 'inscricao';
+        
+        if (in_array($dados->co_funcao, $funcoesAdm)) {
+            $rota = 'validar';
         }
+
 
         return response()->json([
                 'success' => true,
-                'redirect' => route('inscricao'),
+                'redirect' => route($rota),
                 'possuiCadastro' => $possuiCadastro,
                 'cadastro' => $cadastro,
                 'dados' => $dados,
