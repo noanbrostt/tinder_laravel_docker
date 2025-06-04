@@ -10,6 +10,7 @@
         font-family: "Segoe UI", sans-serif;
         margin: 0;
         padding: 20px;
+        height: 100vh;
     }
 
     .container {
