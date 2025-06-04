@@ -1,4 +1,7 @@
 # Laravel Postgres
+## PORTAS
+- app: 8098
+- db: 7098
 
 ### Descrição:
 Projeto base para utilização do laravel com o banco em postgres através do docker
