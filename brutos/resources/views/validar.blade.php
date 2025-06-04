@@ -482,8 +482,7 @@
         // ✅ Aprovar
         $(document).on('click', '.btn-aprovar', function() {
             const matricula = $(this).data('matricula');
-            const dados = JSON.parse(sessionStorage.getItem('dados')) ?? {};
-            const matriculaRecusa = dados.matricula ?? null;
+            const matriculaRecusa = @json($matricula);
 
             Swal.fire({
                 title: 'Confirma Aprovação?',
@@ -517,8 +516,7 @@
         // ❌ Recusar
         $(document).on('click', '.btn-recusar', function() {
             const matricula = $(this).data('matricula');
-            const dados = JSON.parse(sessionStorage.getItem('dados')) ?? {};
-            const matriculaRecusa = dados.matricula ?? null;
+            const matriculaRecusa = @json($matricula);
             
             Swal.fire({
                 title: 'Recusar Candidato',

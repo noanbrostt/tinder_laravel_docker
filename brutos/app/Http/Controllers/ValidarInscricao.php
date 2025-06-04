@@ -17,6 +17,12 @@ class ValidarInscricao extends Controller{
     protected $adm = [677, 1097, 1110, 15, 255, 572, 574, 676, 15264]; // perfis com permissões (devs,coordenadores,gerentes)
 
 
+    public function home(){
+        $matricula = session('matricula');
+
+        return view('validar', compact('matricula'));
+    }
+
 
     public function listarInscricoes(){
         $usuario = session('dados'); // pega as infos do user logado

@@ -121,9 +121,7 @@ Route::middleware(['web'])
         Route::get('/inscricao', [InscricaoController::class, 'home'])->name('inscricao');
         Route::post('/inscricao', [InscricaoController::class, 'store'])->name('inscricao.store');
 
-        Route::get('/validar', function () {
-            return view('validar');
-        })->name('validar');
+        Route::get('/validar', [ValidarInscricao::class, 'home'])->name('validar');
         Route::get('/validar/listar', [ValidarInscricao::class, 'listarInscricoes'])->name('validar.listar');
         Route::post('/validar/atualizar', [ValidarInscricao::class, 'atualizarInscricao'])->name('validar.atualizar');
         Route::get('/tinder', function () {
