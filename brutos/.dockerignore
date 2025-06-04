@@ -1,0 +1,50 @@
+# Arquivos de segurança e ambiente. NUNCA inclua na imagem.
+.env
+.env.*
+!.env.example
+/storage/*.key
+
+# Dependências que devem ser instaladas DENTRO do contêiner
+/vendor
+/node_modules
+
+# Logs e Cache do ambiente de desenvolvimento
+/storage/logs
+/storage/framework/sessions
+/storage/framework/views
+/storage/framework/cache
+/bootstrap/cache/*.php
+
+# Artefatos de build de frontend
+/public/build
+/public/hot
+
+# O link simbólico do storage. Não copie para a imagem.
+/public/storage
+
+# Arquivos de teste
+/tests
+phpunit.xml
+.phpunit.cache
+.phpunit.result.cache
+
+# Configuração de IDEs, editores e ferramentas locais
+.phpactor.json
+Homestead.json
+Homestead.yaml
+npm-debug.log
+yarn-error.log
+/auth.json
+/.fleet
+/.idea
+/.nova
+/.vscode
+/.zed
+
+# Arquivos do Git e Docker
+.git
+.gitignore
+.gitattributes
+Dockerfile
+.dockerignore
+docker-compose.yml
