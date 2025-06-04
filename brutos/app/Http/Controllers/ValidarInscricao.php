@@ -61,50 +61,38 @@ class ValidarInscricao extends Controller{
     }
 
     public function atualizarInscricao(Request $request){
+
         $request->validate([
             'matricula' => 'required|integer',
             'classificacao' => 'required|string',
             'matricula_recusa' => 'required|string',
         ]);
     
-        $status = null;
-        $motivoRecusa = null;
+        $status = $request->classificacao === 'aprovado' ? 2 : 3;
     
-        if ($request->classificacao === 'aprovado') {
-            $status = 2; // Ativo
-        } else {
-            $status = 3; // Recusado
+        // Define observação de recusa: usa explicação se enviada, senão null
+        $observacao = $request->filled('explicacao') ? $request->explicacao : null;
     
-            // Tenta buscar o motivo no banco
-            $motivoRecusa = DB::connection('tinder2')
-                ->table('public.motivo_recusa')
-                ->where('id_motivo_recusa', $request->classificacao)
-                ->first();
-    
-            if (!$motivoRecusa) {
-                return response()->json([
-                    'status' => 'erro',
-                    'mensagem' => 'Motivo de recusa inválido ou não encontrado.'
-                ], 400);
-            }
-        }
+        // Define id_motivo_recusa: apenas se for recusado
+        $idMotivoRecusa = $status === 3 ? $request->classificacao : null;
     
         // Realiza o update
         $update = DB::connection('tinder2')
             ->table('public.usuario')
             ->where('matricula', $request->matricula)
             ->update([
-                'id_status_usuario' => $status,
-                'id_motivo_recusa' => $motivoRecusa->id_motivo_recusa ?? null,
-                'de_observacao_recusa' => $motivoRecusa->legenda ?? null,
-                'matricula_recusa' => $request->matricula_recusa,
-                'dh_alteracao' => now(),
+                'id_status_usuario'   => $status,
+                'id_motivo_recusa'    => $idMotivoRecusa,
+                'de_observacao_recusa'=> $observacao,
+                'matricula_recusa'    => $request->matricula_recusa,
+                'dh_alteracao'        => now(),
             ]);
     
         return response()->json([
-            'status' => $update ? 'success' : 'erro',
+            'status'   => $update ? 'success' : 'erro',
             'mensagem' => $update ? 'Inscrição atualizada com sucesso.' : 'Nenhuma alteração realizada.',
         ]);
     }
+
     
 }
