@@ -27,6 +27,8 @@ services:
       dockerfile: Dockerfile.prod
     container_name: tinder-app-prod
     working_dir: /var/www
+    volumes:
+      - app_storage:/var/www/storage/app/public
     depends_on:
       db:
         condition: service_healthy
@@ -40,17 +42,18 @@ services:
       context: .
       dockerfile: docker/nginx/Dockerfile
     container_name: tinder-nginx-prod
+    volumes:
+      - app_storage:/var/www/storage/app/public:ro
     networks:
       - tinder-net
     ports:
       - "80:80"
     depends_on:
       - app
-    volumes:
-      - ./docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
 
 volumes:
   pg_data_tinder_prod:
+  app_storage:
 
 
 networks:
