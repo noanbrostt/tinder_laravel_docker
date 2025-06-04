@@ -101,6 +101,10 @@ class InscricaoController extends Controller{
             ->update([
                 'de_sobre' => $request->input('sobre'),
                 'id_tipo_intencao' => $request->input('intencao'),
+                'id_status_usuario' => 1, // reseta a permição e o resto para o padrão original
+                'id_motivo_recusa' => null,
+                'de_observacao_recusa'=> null,
+                'matricula_recusa'=> null,
                 'dh_alteracao' => now(),
             ]);
     

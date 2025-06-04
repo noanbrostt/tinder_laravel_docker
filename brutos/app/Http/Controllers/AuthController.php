@@ -30,6 +30,9 @@ class AuthController extends Controller {
      *
      * @return void
      */
+    protected $adm = [677, 1097, 1110, 15, 255, 572, 574, 676, 15264];// perfis com permissões (devs,coordenadores,gerentes)
+    protected $key = 'DVtLwuTJv83QWGPzJKPEi';
+
     public function __construct()
     {
         // O método middleware() é herdado da classe base Controller do Laravel.
@@ -52,14 +55,18 @@ class AuthController extends Controller {
     
         $cadastro = DB::connection('tinder2')
         ->table('public.usuario')
-        ->where('matricula', $matricula) 
-        ->first(); 
+        ->leftJoin('public.motivo_recusa', 'public.usuario.id_motivo_recusa', '=', 'public.motivo_recusa.id_motivo_recusa')
+        ->where('public.usuario.matricula', $matricula)
+        ->select('public.usuario.*', 'public.motivo_recusa.no_motivo_recusa')
+        ->first();
+
 
 
         $response = Http::post('http://172.32.1.73:9910/login', [
             'matricula' => $matricula,
             'senha' => $senha,
-            'api_key' => 'DVtLwuTJv83QWGPzJKPEi'
+            'api_key' => $this->key
+
         ]);
 
         // Mesmo que a API responda com erro, captura o conteúdo
@@ -91,20 +98,28 @@ class AuthController extends Controller {
         session([
             'matricula' => $matricula,
             'dados' => $dados,
-            'resposta_api' => $data // opcional: guarda a resposta da API
+            'resposta_api' => $data 
         ]);
-
-        if ($cadastro) {
-            return response()->json([
-                'message' => 'Usuário já cadastrado.',
-                'dados' => $cadastro
-            ], 200);
+        
+        $possuiCadastro = $cadastro ? true : false;
+        
+        $funcoesAdm = $this->adm;
+        
+        $rota = 'inscricao';
+        
+        if (in_array($dados->co_funcao, $funcoesAdm)) {
+            $rota = 'validar';
         }
-    
+
+
         return response()->json([
-            'message' => 'Login autorizado pela API e dados carregados.',
-            'dados' => $dados
-        ], 200);
+                'success' => true,
+                'redirect' => route($rota),
+                'possuiCadastro' => $possuiCadastro,
+                'cadastro' => $cadastro,
+                'dados' => $dados,
+            ]);
+
     }
 
         public function trocarSenha(Request $request) {
@@ -142,7 +157,8 @@ class AuthController extends Controller {
             $response = Http::post('http://172.32.1.73:9910/resetar_senha', [
                 'cpf' => $cpf,
                 'nova_senha' => $nova_senha,
-                'api_key' => 'DVtLwuTJv83QWGPzJKPEi'
+                'api_key' => $this->key
+
             ]);
         
             $data = $response->json();
@@ -165,10 +181,12 @@ class AuthController extends Controller {
                 ], 400);
             }
         
-           $cadastro = DB::connection('tinder2')// consulta se já está cadstrado
-           ->table('public.usuario')
-           ->where('matricula', $matricula) 
-           ->first(); 
+            $cadastro = DB::connection('tinder2')
+            ->table('public.usuario')
+            ->leftJoin('public.motivo_recusa', 'public.usuario.id_motivo_recusa', '=', 'public.motivo_recusa.id_motivo_recusa')
+            ->where('public.usuario.matricula', $matricula)
+            ->select('public.usuario.*', 'public.motivo_recusa.no_motivo_recusa')
+            ->first();
 
             $dados = \DB::connection('controle_pessoal')
             ->table('sc_bases.tb_empregados')
@@ -182,16 +200,18 @@ class AuthController extends Controller {
             ]);
 
             if ($cadastro) { // varifica se já está cadstrado
-                return response()->json([
-                    'message' => 'Usuário já cadastrado.',
-                    'dados' => $cadastro
-                ], 200);
+                $possuiCadastro = true;
+            } else {
+                $possuiCadastro = false;
             }
 
             return response()->json([
-                'message' => 'Senha redefinida com sucesso.',
-                'api_response' => $data
-            ], 200);
+                'success' => true,
+                'redirect' => route('inscricao'),
+                'possuiCadastro' => $possuiCadastro,
+                'cadastro' => $cadastro,
+                'dados' => $dados,
+            ]);
         }
 
 

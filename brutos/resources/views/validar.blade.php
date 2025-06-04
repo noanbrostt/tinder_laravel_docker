@@ -273,6 +273,17 @@
 <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
 
 <script>
+
+    const usuario = @json(session('dados'));
+
+    if (usuario) {
+       console.log("Nome:", usuario?.nome);
+       console.log("Matrícula:", usuario?.matricula);
+       console.log("✅ Dados carregados da sessão:", usuario);
+    } else {
+        console.warn("⚠️ Nenhum dado encontrado na sessão.");
+    }
+
     $(document).ready(function() {
         var tabela = $('#tabela').DataTable({
             dom: 'Bfrtip',
@@ -389,9 +400,9 @@
                 <select id="motivo">
                     <option value="">Selecione</option>
                     <option value="aprovado">Aprovado(a)</option>
-                    <option value="foto-impropria">Foto imprópria</option>
-                    <option value="texto-improprio">Texto impróprio</option>
-                    <option value="foto-texto-improprio">Foto e texto impróprios</option>
+                    <option value="1">Foto imprópria</option>
+                    <option value="2">Texto impróprio</option>
+                    <option value="3">Foto e texto impróprios</option>
                 </select>
             </div>
             `,
@@ -420,13 +431,21 @@
                     showConfirmButton: false
                 });
 
-                // Aqui você pode enviar via AJAX para backend, exemplo:
-                /*
-                $.post('/api/avaliar', {
-                    id: candidato.id,
-                    motivo: motivoSelecionado
-                });
-                */
+               $.ajax({
+                   url: "{{ route('validar.atualizar') }}",
+                   method: "POST",
+                   data: {
+                       matricula: matricula,
+                       classificacao: motivoSelecionado, 
+                       matricula_recusa: usuario?.matricula
+                   },
+                   success: function(res) {
+                       console.log("✅ RESPOSTA:", res);
+                   },
+                   error: function(err) {
+                       console.error("❌ ERRO:", err.responseJSON);
+                   }
+               });
             }
         });
     });
