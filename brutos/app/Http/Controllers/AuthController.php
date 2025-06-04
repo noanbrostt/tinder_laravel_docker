@@ -93,13 +93,6 @@ class AuthController extends Controller {
             ->table('sc_bases.tb_empregados')
             ->where('matricula', $matricula)
             ->first();
-    
-        // Armazena na sessão
-        session([
-            'matricula' => $matricula,
-            'dados' => $dados,
-            'resposta_api' => $data 
-        ]);
         
         $possuiCadastro = $cadastro ? true : false;
         
@@ -111,6 +104,13 @@ class AuthController extends Controller {
             $rota = 'validar';
         }
 
+        // Armazena na sessão
+        session([
+            'matricula' => $matricula,
+            'possuiCadastro' => $possuiCadastro,
+            'dados' => $dados,
+            'resposta_api' => $data 
+        ]);
 
         return response()->json([
                 'success' => true,

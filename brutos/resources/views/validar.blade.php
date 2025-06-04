@@ -373,6 +373,7 @@
         
         const tabela = $('#tabela').DataTable({
             dom: 'Bfrtip',
+            order: [],
             buttons: [{
                 extend: 'excelHtml5',
                 text: '<i class="fa-solid fa-file-excel"></i>',
@@ -439,7 +440,7 @@
             columns: [
                 { data: 'matricula' },
                 { data: 'nome' },
-                { data: 'intencao' },
+                { data: 'status_usr' },
                 {
                     data: null,
                     render: function(data, type, row) {

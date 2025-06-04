@@ -114,11 +114,7 @@ Route::middleware(['web'])
         Route::post('/trocar_senha', [AuthController::class, 'trocarSenha']);
         Route::post('/resetarSenha', [AuthController::class, 'resetarSenha'])->name('resetarSenha');
 
-
-        Route::get('/inscricao', function () {
-            return view('inscricao');
-        })->name('inscricao');
-
+        Route::get('/inscricao', [InscricaoController::class, 'home'])->name('inscricao');
         Route::post('/inscricao', [InscricaoController::class, 'store'])->name('inscricao.store');
 
         Route::get('/validar', function () {

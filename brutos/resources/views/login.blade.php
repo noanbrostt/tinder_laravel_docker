@@ -488,11 +488,6 @@
                         });
                     },
                     success: function (response) {
-                        // Salva os dados no localStorage, sessionStorage ou envia via URL se quiser
-                        sessionStorage.setItem('possuiCadastro', JSON.stringify(response.possuiCadastro));
-                        sessionStorage.setItem('cadastro', JSON.stringify(response.cadastro));
-                        sessionStorage.setItem('dados', JSON.stringify(response.dados));
-
                         // Redireciona para a página de inscrição
                         window.location.href = response.redirect;
                     },
@@ -562,11 +557,6 @@
                         });
                     },
                     success: function (response) {
-                        // Salva os dados no localStorage, sessionStorage ou envia via URL se quiser
-                        sessionStorage.setItem('possuiCadastro', JSON.stringify(response.possuiCadastro));
-                        sessionStorage.setItem('cadastro', JSON.stringify(response.cadastro));
-                        sessionStorage.setItem('dados', JSON.stringify(response.dados));
-
                         // Redireciona para a página de inscrição
                         window.location.href = response.redirect;
                     },

@@ -167,17 +167,21 @@
     }
 </style>
 
+@php
+    
+@endphp
+
 <div class="container">
     <h2>Inscrição no Tinder</h2>
 
     <!-- Inscrição já feita -->
-    <div class="status-box" style="display: none;">
+    <div class="status-box" {{ !$possuiCadastro ? 'style=display:none;' : '' }} >
         <h3 id="status-aprovacao"></h3>
 
         <button id="editar">Editar/Visualizar inscrição</button>
     </div>
 
-    <form id="formInscricao" style="display: none;">
+    <form id="formInscricao" {{ $possuiCadastro ? 'style=display:none;' : '' }} >
         <!-- Upload Foto -->
         <label for="fotoInput">Foto em pé <small>(9:16)</small></label>
         <div class="upload-area" id="uploadArea">
@@ -225,9 +229,9 @@
 
 <script>
     // Recupera os dados do sessionStorage
-    const possuiCadastro = JSON.parse(sessionStorage.getItem('possuiCadastro'));
-    const cadastro = JSON.parse(sessionStorage.getItem('cadastro'));
-    const dados = JSON.parse(sessionStorage.getItem('dados'));
+    const possuiCadastro = @json($possuiCadastro);
+    const cadastro = @json($cadastro);
+    const dados = @json($dados);
 
     // Exemplo de uso:
     console.log('Possui Cadastro:', possuiCadastro);
@@ -236,7 +240,8 @@
 
     if (possuiCadastro) {
        
-
+        console.log(cadastro.id_status_usuario);
+        
         switch (cadastro.id_status_usuario) {
             case 1:
                 $('#status-aprovacao').addClass('text-warning').html('Aguardando aprovação <i class="fa-solid fa-hourglass-half"></i>');
@@ -254,9 +259,6 @@
                 break;
         }
 
-
-        $('.status-box').show();
-
         // Preencher intenção
         $('#intencao').val(cadastro.id_tipo_intencao);
 
@@ -266,11 +268,6 @@
 
         // Preencher foto
         preencherFotoDireto(`storage/fotos/${cadastro.matricula}.jpg`);
-        // $('.upload-text').hide(); // Esconde o texto "Clique para enviar foto"
-
-
-    } else {
-        $('#formInscricao').show();
     }
 
     $('#editar').on('click', function() {
