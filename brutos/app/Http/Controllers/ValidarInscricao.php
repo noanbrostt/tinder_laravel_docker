@@ -11,8 +11,13 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 
-class ValidarInscricao extends Controller
-{
+class ValidarInscricao extends Controller{
+
+
+    protected $adm = [677, 1097, 1110, 15, 255, 572, 574, 676, 15264]; // perfis com permissões (devs,coordenadores,gerentes)
+
+
+
     public function listarInscricoes(){
         $usuario = session('dados'); // pega as infos do user logado
     
@@ -23,7 +28,7 @@ class ValidarInscricao extends Controller
             ], 401);
         }
     
-        $funcoesPermitidas = [677,1097,1110,15,255,572,574,676,15264]; // perfis com permições (devs,coordenadores,gerentes)
+        $funcoesPermitidas = $this->adm;
     
         if (!in_array($usuario->co_funcao, $funcoesPermitidas)) {
             return response()->json([
