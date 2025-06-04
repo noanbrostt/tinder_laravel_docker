@@ -5,4 +5,4 @@ FROM nginx:alpine
 COPY ./docker/nginx/nginx.conf /etc/nginx/conf.d/default.conf
 
 # Expor porta 80 para o Nginx
-EXPOSE 80
+EXPOSE 8098

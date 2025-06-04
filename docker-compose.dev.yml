@@ -14,7 +14,7 @@ services:
       POSTGRES_USER: tinder_user
       POSTGRES_PASSWORD: UX91*se%LR7
     ports:
-      - "5432:5432"
+      - "7098:5432"
 
   app:
     build:
@@ -47,7 +47,7 @@ services:
     networks:
       - tinder-net
     ports:
-      - "80:80"
+      - "8098:8098"
     depends_on:
       - app
     volumes:

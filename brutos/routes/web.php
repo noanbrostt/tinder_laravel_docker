@@ -15,6 +15,10 @@ Route::middleware(['web'])
             return view('welcome');
         });
 
+        Route::get('/', function () {
+            return redirect()->route('login');
+        });
+
         // Testa conexão com banco principal (pgsql)
         Route::get('/teste-principal', function () {
             try {
