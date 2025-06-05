@@ -16,8 +16,8 @@ class StatusUsuarioSeeder extends Seeder
     {
         StatusUsuario::upsert(
             [
-                ['id_status_usuario' => 1, 'no_status_usuario' => 'Em revisao'],
-                ['id_status_usuario' => 2, 'no_status_usuario' => 'Ativo'],
+                ['id_status_usuario' => 1, 'no_status_usuario' => 'Em revisão'],
+                ['id_status_usuario' => 2, 'no_status_usuario' => 'Aprovado'],
                 ['id_status_usuario' => 3, 'no_status_usuario' => 'Recusado'],
                 ['id_status_usuario' => 4, 'no_status_usuario' => 'Desativado'],
             ],
