@@ -394,10 +394,23 @@
 
 <script>
     $(document).ready(function() {
-        
+
+        $.fn.dataTable.ext.order['custom-status'] = function(settings, col) {
+            return this.api().column(col, {order: 'index'}).nodes().map(function(td, i) {
+                const status = $(td).text().toLowerCase();
+                return status === 'recusado' ? 1 : 0; // Recusado = 1 (vem depois), outros = 0 (vem antes)
+            });
+        };
+
         const tabela = $('#tabela').DataTable({
             dom: 'Bfrtip',
-            order: [],
+            order: [[2, 'asc']], // Coluna de status (índice começa em 0)
+            columnDefs: [
+                {
+                    targets: 2, // Coluna de status
+                    orderDataType: 'custom-status'
+                }
+            ],
             buttons: [{
                 extend: 'excelHtml5',
                 text: '<i class="fa-solid fa-file-excel"></i>',
@@ -464,7 +477,19 @@
             columns: [
                 { data: 'matricula' },
                 { data: 'nome' },
-                { data: 'status_usr' },
+                {
+                    data: 'status_usr',
+                    render: function(data, type, row) {
+                        if (data.toLowerCase() === 'recusado') {
+                            return `
+                                <span class="text-danger"><strong>Recusado</strong></span><br>
+                                <small><strong>Motivo:</strong> ${row.no_motivo_recusa || 'Não informado'}</small>
+                            `;
+                        } else {
+                            return `${data}`;
+                        }
+                    }
+                }
                 {
                     data: null,
                     render: function(data, type, row) {
@@ -486,14 +511,20 @@
                     className: 'acoes',
                     orderable: false,
                     render: function(data, type, row) {
+                        const isRecusado = row.status_usr.toLowerCase() === 'recusado';
+                        const disableClass = isRecusado ? 'disabled' : '';
+                        const colorAprovar = isRecusado ? 'text-secondary' : 'text-success';
+                        const colorRecusar = isRecusado ? 'text-secondary' : 'text-danger';
+                        const pointerEvents = isRecusado ? 'pointer-events: none; opacity: 0.5;' : '';
+
                         return `
-                            <span style="display: flex;">
-                                <i class="fa-solid fa-circle-check text-success btn-aprovar" title="Aprovar"
+                            <span style="display: flex; gap: 10px; ${pointerEvents}">
+                                <i class="fa-solid fa-circle-check ${colorAprovar} btn-aprovar ${disableClass}" title="Aprovar"
                                     data-matricula="${row.matricula}"
                                     data-classificacao="aprovado"
                                     data-explicacao="null"
                                 ></i>
-                                <i class="fa-solid fa-circle-xmark text-danger btn-recusar" title="Recusar"
+                                <i class="fa-solid fa-circle-xmark ${colorRecusar} btn-recusar ${disableClass}" title="Recusar"
                                     data-matricula="${row.matricula}"
                                 ></i>
                             </span>

@@ -47,13 +47,16 @@ class ValidarInscricao extends Controller{
             ->table('public.usuario as u')
             ->join('public.tipo_intencao as ti', 'u.id_tipo_intencao', '=', 'ti.id_tipo_intencao')
             ->join('public.status_usuario as st', 'st.id_status_usuario', '=', 'u.id_status_usuario')
+            ->leftJoin('public.motivo_recusa as mr', 'u.id_motivo_recusa', '=', 'rc.id_motivo_recusa')
             ->select(
                 'u.id_usuario',
                 'u.matricula',
                 'u.nome',
                 'ti.no_tipo_intencao as intencao',
                 'st.no_status_usuario as status_usr',
-                'u.de_sobre as sobre' )
+                'u.de_sobre as sobre',
+                'mr.no_motivo_recusa' )
+            ->whereNotIn('st.no_status_usuario', ['Aprovado'])
             ->get();
 
     

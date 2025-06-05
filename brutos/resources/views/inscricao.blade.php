@@ -248,11 +248,16 @@
                 break;
         
             case 2:
-                $('#status-aprovacao').addClass('text-success').html('Inscrição aprovada <i class="fa-solid fa-check-circle"></i>');
+                $('#status-aprovacao').addClass('text-success').html('Aprovada <i class="fa-solid fa-check-circle"></i>');
                 break;
         
             case 3:
-                $('#status-aprovacao').addClass('text-danger').html('Inscrição recusada: '+cadastro.no_motivo_recusa);
+                let obs_recusa;
+                if (cadastro.de_observacao_recusa) {
+                    obs_recusa = '<br><br> <span style="color:black; font-size:19px; font-weight:300;";>Motivo: '+cadastro.de_observacao_recusa+'</span>';
+                }
+
+                $('#status-aprovacao').addClass('text-danger').html('Recusada: '+cadastro.no_motivo_recusa+" <i class='fa fa-ban'></i>"+obs_recusa);
                 break;
         
             default:
