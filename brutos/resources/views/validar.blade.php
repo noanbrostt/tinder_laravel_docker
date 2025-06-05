@@ -68,14 +68,14 @@
 
     .foto-mini {
         width: 40px;
-        height: 40px;
+        height: 71.11px;
         object-fit: cover;
         transition: all 0.3s ease;
     }
 
     tr:hover .foto-mini {
         width: 200px;
-        height: 200px;
+        height: 355.56px;
     }
 
     td.acoes {
@@ -410,7 +410,7 @@
                                 icon: 'error',
                                 title: 'Erro',
                                 text: resposta.mensagem,
-                                confirmButtonText: 'OK'
+                                showConfirmButton: false
                             }).then(() => {
                                 setTimeout(() => {
                                     window.location.href = '/login'; // 🔁 redireciona para tela de login
@@ -428,7 +428,7 @@
                             icon: 'warning',
                             title: 'Acesso Restrito',
                             text: mensagem,
-                            confirmButtonText: 'Ir para Login'
+                            showConfirmButton: false
                         }).then(() => {
                             setTimeout(() => {
                                 window.location.href = '/login';
