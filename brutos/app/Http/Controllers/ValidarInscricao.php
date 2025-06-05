@@ -47,7 +47,7 @@ class ValidarInscricao extends Controller{
             ->table('public.usuario as u')
             ->join('public.tipo_intencao as ti', 'u.id_tipo_intencao', '=', 'ti.id_tipo_intencao')
             ->join('public.status_usuario as st', 'st.id_status_usuario', '=', 'u.id_status_usuario')
-            ->leftJoin('public.motivo_recusa as mr', 'u.id_motivo_recusa', '=', 'rc.id_motivo_recusa')
+            ->leftJoin('public.motivo_recusa as mr', 'u.id_motivo_recusa', '=', 'mr.id_motivo_recusa')
             ->select(
                 'u.id_usuario',
                 'u.matricula',
