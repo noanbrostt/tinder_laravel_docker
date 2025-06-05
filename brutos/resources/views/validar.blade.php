@@ -406,11 +406,20 @@
             dom: 'Bfrtip',
             order: [[2, 'asc']], // Coluna de status (índice começa em 0)
             columnDefs: [
+                { width: "10%", targets: 0 }, // matrícula
+                { width: "20%", targets: 1 }, // nome
+                { width: "15%", targets: 2 }, // status
+                { width: "45%", targets: 3 }, // informações (dá mais espaço aqui)
+                { width: "10%", targets: 4 }, // ações
                 {
-                    targets: 2, // Coluna de status
-                    orderDataType: 'custom-status'
+                    targets: 2, // coluna status
+                    orderDataType: "dom-text",
+                    render: function(data, type, row) {
+                        return data.toLowerCase() === 'recusado' ? 'zzz' : data;
+                    }
                 }
             ],
+            autoWidth: false, // Importante para permitir que o width funcione
             buttons: [{
                 extend: 'excelHtml5',
                 text: '<i class="fa-solid fa-file-excel"></i>',
@@ -482,14 +491,23 @@
                     render: function(data, type, row) {
                         if (data.toLowerCase() === 'recusado') {
                             return `
-                                <span class="text-danger"><strong>Recusado</strong></span><br>
-                                <small><strong>Motivo:</strong> ${row.no_motivo_recusa || 'Não informado'}</small>
+                                <div style="text-align:center;">
+                                    Recusado
+                                    <br>
+                                    <small style="color: #666;">
+                                        ${row.no_motivo_recusa || 'Não informado'}
+                                    </small>
+                                </div>
                             `;
                         } else {
-                            return `${data}`;
+                            return `
+                                <div style="text-align:center;">
+                                    ${data}
+                                </div>
+                            `;
                         }
                     }
-                }
+                },
                 {
                     data: null,
                     render: function(data, type, row) {
