@@ -489,7 +489,7 @@
                             return `${data}`;
                         }
                     }
-                }
+                },
                 {
                     data: null,
                     render: function(data, type, row) {
