@@ -7,13 +7,18 @@
 <!-- Inspirações: AsmrProg-YT -> https://www.youtube.com/watch?v=PlpM2LJWu-s -->
 
 <style>
+    html,body {
+        height: 100%;
+    }
+
     body {
         background: linear-gradient(191.42deg, var(--bg-orange) 5.12%, var(--bg-blue) 107.11%);
         display: flex;
         align-items: center;
         justify-content: center;
         flex-direction: column;
-        height: 100vh;
+        height: 100dvh;
+        min-height: 100vh;
     }
 
     #logo {

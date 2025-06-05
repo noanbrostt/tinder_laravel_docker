@@ -68,15 +68,39 @@
 
     .foto-mini {
         width: 40px;
-        height: 40px;
+        height: 71.11px;
         object-fit: cover;
         transition: all 0.3s ease;
+        cursor: pointer;
     }
 
     tr:hover .foto-mini {
         width: 200px;
-        height: 200px;
+        height: 355.56px;
     }
+
+    /* Estilo da imagem em tela cheia */
+    .fullscreen-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.9);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        cursor: zoom-out;
+    }
+
+    .fullscreen-overlay img {
+        max-width: 90%;
+        max-height: 90%;
+        box-shadow: 0 0 20px rgba(0,0,0,0.7);
+        border-radius: 10px;
+    }
+
 
     td.acoes {
         text-align: center !important;
@@ -410,7 +434,7 @@
                                 icon: 'error',
                                 title: 'Erro',
                                 text: resposta.mensagem,
-                                confirmButtonText: 'OK'
+                                showConfirmButton: false
                             }).then(() => {
                                 setTimeout(() => {
                                     window.location.href = '/login'; // 🔁 redireciona para tela de login
@@ -428,7 +452,7 @@
                             icon: 'warning',
                             title: 'Acesso Restrito',
                             text: mensagem,
-                            confirmButtonText: 'Ir para Login'
+                            showConfirmButton: false
                         }).then(() => {
                             setTimeout(() => {
                                 window.location.href = '/login';
@@ -446,7 +470,7 @@
                     render: function(data, type, row) {
                         return `
                             <div style="display: flex; align-items: center; gap: 10px;">
-                                <img src="storage/fotos/${row.matricula}.jpg" class="foto-mini" alt="Foto de ${row.nome}">
+                                <img src="storage/fotos/${row.matricula}.jpg" class="foto-mini" alt="Foto de ${row.nome}" onclick="zoomNaFoto(this);">
                                 <div>
                                     <div><strong>Intenção:</strong> ${row.intencao}</div>
                                     <div class="info-resumida">
@@ -577,6 +601,28 @@
             });
         });
     });
+
+    function zoomNaFoto(img) {
+         // Cria a div de fundo escuro
+        const overlay = document.createElement('div');
+        overlay.classList.add('fullscreen-overlay');
+
+        // Clona a imagem clicada
+        const fullImg = document.createElement('img');
+        fullImg.src = img.src;
+        fullImg.alt = img.alt;
+
+        // Adiciona a imagem na overlay
+        overlay.appendChild(fullImg);
+
+        // Quando clicar na overlay, ela some
+        overlay.addEventListener('click', () => {
+            overlay.remove();
+        });
+
+        // Adiciona a overlay no body
+        document.body.appendChild(overlay);
+    }
 </script>
 
 @endsection
