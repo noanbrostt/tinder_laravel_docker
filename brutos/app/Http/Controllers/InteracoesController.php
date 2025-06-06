@@ -70,6 +70,36 @@ class InteracoesController extends Controller
     }
 
 
+    public function listarMatches(){
+
+        $dados = session('dados');
+
+        if (!$dados || !isset($dados->matricula)) {
+            return response()->json(['error' => 'Usuário não autenticado.'], 401);
+        }
+       
+
+        $matriculaMinha = $dados->matricula;
+
+        $interacoesFeitas = DB::connection('tinder2')  // quem  curti com Like ou SuperLike
+            ->table('public.interacao')
+            ->select('matricula_destino')
+            ->where('matricula_origem', $matriculaMinha)
+            ->whereIn('id_tipo_interacao', [1, 3]);
+    
+
+        $matches = DB::connection('tinder2') // Matches: pessoas também curtiram de volta
+            ->table('public.interacao as i')
+            ->join('public.usuario as u', 'i.matricula_origem', '=', 'u.matricula')
+            ->whereIn('i.matricula_origem', $interacoesFeitas)
+            ->where('i.matricula_destino', $matriculaMinha)
+            ->whereIn('i.id_tipo_interacao', [1, 3])
+            ->select('u.nome', 'u.idade', 'u.de_sobre', 'u.matricula')
+            ->distinct()
+            ->get();
+    
+        return response()->json($matches); // ou view() se quiser renderizar na tela
+    }
 
 
 
