@@ -258,7 +258,7 @@
 
     @media only screen and (max-width: 600px) {
         #logo {
-            top: 0px;
+            top: -25px;
         }
 
         .container {
