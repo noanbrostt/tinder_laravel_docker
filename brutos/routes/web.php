@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\InscricaoController;
+use App\Http\Controllers\InteracoesController;
 use App\Http\Controllers\ValidarInscricao;
 
 
@@ -124,9 +125,16 @@ Route::middleware(['web'])
         Route::get('/validar', [ValidarInscricao::class, 'home'])->name('validar');
         Route::get('/validar/listar', [ValidarInscricao::class, 'listarInscricoes'])->name('validar.listar');
         Route::post('/validar/atualizar', [ValidarInscricao::class, 'atualizarInscricao'])->name('validar.atualizar');
-        Route::get('/tinder', function () {
-            return view('tinder');
-        })->name('tinder');
+
+
+        // Route::get('/tinder', function () {
+        //     return view('tinder');
+        // })->name('tinder');
+
+        Route::get('/tinder', [InteracoesController::class, 'index'])->name('tinder');
+
+        Route::post('/interacoes', [InteracoesController::class, 'store']);
+
 
     });
 

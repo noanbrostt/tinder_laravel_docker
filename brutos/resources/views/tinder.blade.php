@@ -812,4 +812,11 @@
     });
 </script>
 
+
+<script>
+    const usuarios = @json($usuarios);
+    console.log("Usuários recebidos do backend:", usuarios);
+</script>
+
+
 @endsection
