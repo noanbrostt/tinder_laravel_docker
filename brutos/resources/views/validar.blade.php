@@ -489,23 +489,11 @@
                 {
                     data: 'status_usr',
                     render: function(data, type, row) {
-                        if (data.toLowerCase() === 'recusado') {
-                            return `
-                                <div style="text-align:center;">
-                                    Recusado
-                                    <br>
-                                    <small style="color: #666;">
-                                        ${row.no_motivo_recusa || 'Não informado'}
-                                    </small>
-                                </div>
-                            `;
-                        } else {
-                            return `
-                                <div style="text-align:center;">
-                                    ${data}
-                                </div>
-                            `;
-                        }
+                        return `
+                            <div style="text-align:center;">
+                                ${data}
+                            </div>
+                        `;
                     }
                 },
                 {
