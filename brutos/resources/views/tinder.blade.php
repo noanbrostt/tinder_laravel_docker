@@ -602,7 +602,7 @@
         var absVel = Math.abs(ev.velocity);
         var absDelX = Math.abs(ev.deltaX);
         // Removes the stamps and retrieve the 300ms transition
-        el.classList.remove("nope", "like", "oops", "moving");
+        el.classList.remove("nope", "like", "moving");
         if (absDelX > 80) {
             // If the photo had a "like"/"dislike" reaction
             // Photo fades faster if dragged faster, beetwen 400 and 150ms
@@ -648,7 +648,7 @@
         setTimeout(function () {
             el.style.transform = "";
             setTimeout(function () {
-                el.classList.remove("nope", "like", "oops", "moving");
+                el.classList.remove("nope", "like", "moving");
                 el.style.opacity = 1;
                 setTimeout(function () {
                     // Reactivates the buttons with a slight delay so that the photo has time to be recognized

@@ -10,7 +10,9 @@
         font-family: "Segoe UI", sans-serif;
         margin: 0;
         padding: 20px;
-        height: 100vh;
+        height: fit-content;
+        height: -moz-fit-content;
+        min-height: 100vh;
     }
 
     .container {
@@ -238,6 +240,10 @@
     console.log('Cadastro:', cadastro);
     console.log('Dados:', dados);
 
+    const primeiroNome = dados.nome.split(' ')[0].toLowerCase();
+    const nomeFormatado = primeiroNome.charAt(0).toUpperCase() + primeiroNome.slice(1);
+    $('.container > h2').html('Inscrição no Tinder, '+nomeFormatado);
+
     if (possuiCadastro) {
        
         console.log(cadastro.id_status_usuario);
@@ -451,7 +457,7 @@
                 },
                 error: function(xhr, status, error) {
                     Swal.close(); // 🔥 Fecha o loading mesmo se der erro
-                    console.error("Erro na requisição:", error);
+
                     Toast.fire({
                         icon: "error",
                         title: "Ocorreu um erro ao enviar!",

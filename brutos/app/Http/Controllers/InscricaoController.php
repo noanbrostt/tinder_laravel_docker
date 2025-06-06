@@ -15,7 +15,6 @@ class InscricaoController extends Controller{
 
     public function home(){
         $matricula = session('matricula');
-        $possuiCadastro = session('possuiCadastro');
         $dados = session('dados');
 
         $cadastro = DB::connection('tinder2')
@@ -24,6 +23,8 @@ class InscricaoController extends Controller{
             ->where('public.usuario.matricula', $matricula)
             ->select('public.usuario.*', 'public.motivo_recusa.no_motivo_recusa')
             ->first();
+
+        $possuiCadastro = (bool) $cadastro;
 
         return view('inscricao', compact('cadastro', 'possuiCadastro', 'dados'));
     }

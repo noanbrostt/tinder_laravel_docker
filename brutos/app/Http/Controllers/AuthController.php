@@ -107,7 +107,6 @@ class AuthController extends Controller {
         // Armazena na sessão
         session([
             'matricula' => $matricula,
-            'possuiCadastro' => $possuiCadastro,
             'dados' => $dados,
             'resposta_api' => $data 
         ]);
