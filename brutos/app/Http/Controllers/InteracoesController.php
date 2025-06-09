@@ -18,26 +18,18 @@ class InteracoesController extends Controller
 
 
 
+    public function index(){ // Traz a lista de usuarios aprovados
 
-    public function index(){
-
-          $usuarios = DB::connection('tinder2')
-              ->table('public.usuario as u')
-              ->select('u.matricula', 'u.nome', 'u.idade', 'u.de_sobre','u.id_tipo_intencao',
-              'ti.no_tipo_intencao as intencao')
-              ->join('public.tipo_intencao as ti', 'u.id_tipo_intencao', '=', 'ti.id_tipo_intencao')
-              ->where('id_status_usuario', 2) // Somente usuários aprovados
-              ->orderByDesc('dh_alteracao')
-              ->get();
+          $usuarios = $this->listarInteracoes();
       
           return view('tinder', compact('usuarios'));
     }
 
-    public function store(Request $request){
+    public function store(Request $request){ //Salva a interacao
 
         $request->validate([
             'matricula_destino' => 'required|integer',
-            'id_tipo_interacao' => 'required|integer|in:1,2,3', // Like, Deslike, SuperLike
+            'id_tipo_interacao' => 'required|integer|in:1,2', // Like, Deslike
         ]);
 
         $dados = session('dados');
@@ -59,8 +51,7 @@ class InteracoesController extends Controller
 
         $tipos = [
             1 => 'Like',
-            2 => 'Deslike',
-            3 => 'SuperLike'
+            2 => 'Deslike'
         ];
 
         return response()->json([
@@ -70,14 +61,13 @@ class InteracoesController extends Controller
     }
 
 
-    public function listarMatches(){
+    public function listarMatches(){ // Lista os Matches do Usr logado
 
         $dados = session('dados');
 
         if (!$dados || !isset($dados->matricula)) {
             return response()->json(['error' => 'Usuário não autenticado.'], 401);
         }
-       
 
         $matriculaMinha = $dados->matricula;
 
@@ -85,7 +75,7 @@ class InteracoesController extends Controller
             ->table('public.interacao')
             ->select('matricula_destino')
             ->where('matricula_origem', $matriculaMinha)
-            ->whereIn('id_tipo_interacao', [1, 3]);
+            ->whereIn('id_tipo_interacao', [1]);
     
 
         $matches = DB::connection('tinder2') // Matches: pessoas também curtiram de volta
@@ -93,12 +83,91 @@ class InteracoesController extends Controller
             ->join('public.usuario as u', 'i.matricula_origem', '=', 'u.matricula')
             ->whereIn('i.matricula_origem', $interacoesFeitas)
             ->where('i.matricula_destino', $matriculaMinha)
-            ->whereIn('i.id_tipo_interacao', [1, 3])
+            ->whereIn('i.id_tipo_interacao', [1])
             ->select('u.nome', 'u.idade', 'u.de_sobre', 'u.matricula')
             ->distinct()
             ->get();
     
         return response()->json($matches); // ou view() se quiser renderizar na tela
+    }
+
+    public function verificarSeTemMatch(){ // Traz o total de Matchs ou null caso não tenha
+
+        $dados = session('dados');
+
+        $matriculaMinha = $dados->matricula;
+    
+        $interacoesFeitas = DB::connection('tinder2') // Subquery: pessoas que o usuário curtiu
+            ->table('public.interacao')
+            ->select('matricula_destino')
+            ->where('matricula_origem', $matriculaMinha)
+            ->whereIn('id_tipo_interacao', [1]);
+    
+        $quantidadeMatches = DB::connection('tinder2') // Conta os matches
+            ->table('public.interacao as i')
+            ->whereIn('i.matricula_origem', $interacoesFeitas)
+            ->where('i.matricula_destino', $matriculaMinha)
+            ->whereIn('i.id_tipo_interacao', [1])
+            ->distinct()
+            ->count('i.matricula_origem');
+    
+        return response()->json([
+            'tem_match' => $quantidadeMatches > 0 ? $quantidadeMatches : null
+        ]);
+    }
+
+    public function listarInteracoes(){
+
+        $dados = session('dados');
+    
+        if (!$dados || !isset($dados->matricula)) {
+            return response()->json(['error' => 'Usuário não autenticado.'], 401);
+        }
+    
+        $matriculaMinha = $dados->matricula;
+    
+        // Pega todos os IDs que o usuário já interagiu
+        $idsInteragidos = DB::connection('tinder2')
+            ->table('public.interacao')
+            ->where('matricula_origem', $matriculaMinha)
+            ->pluck('matricula_destino');
+    
+        // 🔍 1. Usuários ativos que ainda não receberam interação
+        $semInteracoes = DB::connection('tinder2')
+            ->table('public.usuario as u')
+            ->where('u.id_status_usuario', 2)
+            ->where('u.matricula', '!=', $matriculaMinha)
+            ->whereNotIn('u.matricula', $idsInteragidos)
+            ->select('matricula', 'nome', 'idade', 'ti.no_tipo_intencao AS intencao','de_sobre')
+            ->join('public.tipo_intencao as ti', 'u.id_tipo_intencao', '=', 'ti.id_tipo_intencao')
+            ->get()
+            ->map(function ($user) {
+                $user->tipo = 'sem_interacao';
+                return $user;
+            });
+    
+        $interacoesDeslike = collect(); // coleção vazia por padrão
+    
+        // 🔍 2. Executa apenas se a primeira lista estiver vazia
+        if ($semInteracoes->isEmpty()) {
+            $interacoesDeslike = DB::connection('tinder2')
+                ->table('public.interacao as i')
+                ->join('public.usuario as u', 'i.matricula_destino', '=', 'u.matricula')
+                ->join('public.tipo_intencao as ti', 'u.id_tipo_intencao', '=', 'ti.id_tipo_intencao')
+                ->where('i.matricula_origem', $matriculaMinha)
+                ->where('i.id_tipo_interacao', 2)
+                ->select('u.matricula', 'u.nome', 'u.idade', 'ti.no_tipo_intencao AS intencao', 'u.de_sobre')
+                ->get()
+                ->map(function ($user) {
+                    $user->tipo = 'dislike';
+                    return $user;
+                });
+        }
+    
+        // 🔗 Junta as listas
+        $resultado = $semInteracoes->merge($interacoesDeslike);
+    
+        return response()->json($resultado);
     }
 
 
