@@ -29,6 +29,9 @@ prod-app-logs:
 prod-down:
 	docker-compose -f docker-compose.prod.yml down
 
+prod-down-apagatudosemdonaouseisso:
+	docker-compose -f docker-compose.prod.yml down -v
+
 prod-migrate-database:
 	docker exec tinder-app-prod php artisan migrate --force
 	docker exec tinder-app-prod php artisan db:seed --force
