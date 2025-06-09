@@ -278,7 +278,9 @@
         $('#contador').text(cadastro.de_sobre.length);
 
         // Preencher foto
-        preencherFotoDireto(`storage/fotos/${cadastro.matricula}.jpg`);
+        const fotoUrl = `storage/fotos/${cadastro.matricula}.jpg?v=${new Date().getTime()}`;
+        preencherFotoDireto(fotoUrl);
+
     }
 
     $('#editar').on('click', function() {

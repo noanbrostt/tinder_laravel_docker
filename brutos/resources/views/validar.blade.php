@@ -501,8 +501,8 @@
                     render: function(data, type, row) {
                         return `
                             <div style="display: flex; align-items: center; gap: 10px;">
-                                <img src="storage/fotos/${row.matricula}.jpg" class="foto-mini" alt="Foto de ${row.nome}" onclick="zoomNaFoto(this);">
-                                <div>
+                              <img src="storage/fotos/${row.matricula}.jpg?v=${new Date().getTime()}" class="foto-mini" alt="Foto de ${row.nome}" onclick="zoomNaFoto(this);">
+                            <div>
                                     <div><strong>Intenção:</strong> ${row.intencao}</div>
                                     <div class="info-resumida">
                                         <strong>Sobre:</strong> ${row.sobre}
