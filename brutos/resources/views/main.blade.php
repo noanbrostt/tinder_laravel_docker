@@ -1051,7 +1051,7 @@
 
                 setTimeout(() => {
                     campos.forEach((campo) => {
-                        let valor;
+                        let valor = "";
 
                         if (campo.type === "custom") {
                             if (!campo.isValid) {
@@ -1069,7 +1069,9 @@
                             valor = campo.element.val().trim();
                         }
 
-                        if (valor.length < campo.length) {
+                        const minLength = campo.minLength || 1;
+
+                        if (valor.length < minLength) {
                             erros.push(campo.message);
                             campo.element.addClass("input-error");
                         }
@@ -1078,7 +1080,6 @@
                     if (erros.length > 0) {
                         erros.forEach((erro, index) => {
                             console.log(erro);
-
                             setTimeout(() => {
                                 Toast.fire({
                                     icon: "error",
@@ -1086,13 +1087,14 @@
                                 });
                             }, index * 600);
                         });
-                        resolve(false);
+                        return resolve(false);
                     }
 
                     resolve(true);
                 }, 0);
             });
         }
+
 
         // 🔧 Remover borda de erro ao começar a digitar/selecionar
         $(document).on("input change", ".input-error", function() {

@@ -463,12 +463,12 @@
         const campos = [
             {
                 element: matricula,
-                length: 6,
+                minLength: 6,
                 message: "A matrícula deve ter 6 números.",
             },
             {
                 element: senha,
-                length: 1,
+                minLength: 1,
                 message: "A senha está vazia.",
             },
         ];
@@ -526,17 +526,17 @@
         const campos = [
             {
                 element: matricula,
-                length: 6,
+                minLength: 6,
                 message: "A matrícula deve ter 6 números.",
             },
             {
                 element: cpf,
-                length: 14, // Máscara aplicada no CPF
+                minLength: 14, // Máscara aplicada no CPF
                 message: "O CPF deve ter 11 números.",
             },
             {
                 element: senha,
-                length: 1,
+                minLength: 1,
                 message: "A senha está vazia.",
             },
         ];
