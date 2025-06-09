@@ -7,18 +7,20 @@
 <!-- Inspirações: AsmrProg-YT -> https://www.youtube.com/watch?v=PlpM2LJWu-s -->
 
 <style>
-    html,body {
+    html, body {
+        margin: 0;
+        padding: 0;
         height: 100%;
+        overflow: hidden;
     }
 
     body {
-        background: linear-gradient(191.42deg, var(--bg-orange) 5.12%, var(--bg-blue) 107.11%);
+        height: calc(var(--vh, 1vh) * 100);
         display: flex;
         align-items: center;
         justify-content: center;
         flex-direction: column;
-        height: 100dvh;
-        min-height: 100vh;
+        background: linear-gradient(191.42deg, var(--bg-orange) 5.12%, var(--bg-blue) 107.11%);
     }
 
     #logo {
@@ -424,6 +426,16 @@
 </div>
 
 <script>
+
+    // Isso ajusta a altura da viewport real do device
+    function setViewportHeight() {
+        let vh = window.innerHeight * 0.01;
+        document.documentElement.style.setProperty('--vh', `${vh}px`);
+    }
+    window.addEventListener('resize', setViewportHeight);
+    window.addEventListener('orientationchange', setViewportHeight);
+    setViewportHeight();
+
     // Animação tela de login/register
     $("#register").on("click", function() {
         $("#container").addClass("active");
