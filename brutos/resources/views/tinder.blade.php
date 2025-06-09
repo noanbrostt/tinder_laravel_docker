@@ -487,7 +487,12 @@
         <div class="topbar">
             <div class="topbar-left">
                 <div class="clock">00:00</div>
-                <i class="fa fa-fire-flame-curved"></i>
+                <svg xmlns="http://www.w3.org/2000/svg" 
+                    width="24" height="24" viewBox="0 0 384 512" 
+                    fill="currentColor" 
+                    style="cursor: pointer;">
+                <path d="M216 0c-12.3 0-23.3 7-28.4 17.9C175.1 53.4 160 98.5 160 128c0 25.3 8.4 46.7 17.4 66.3l-10.9-6.9C149.4 178.5 128 164.6 128 128c0-24.2-16.7-38.3-28.4-43.8c-10.6-5-23.2-2.5-31.3 6.1C24.2 139.5 0 195.8 0 256c0 141.4 114.6 256 256 256s256-114.6 256-256c0-53.7-26.6-108.2-70.6-149.6c-9.2-8.7-23.1-9.9-33.8-3.1c-27.8 17.7-58.4 27.4-92.6 27.4c-21.5 0-42.1-5.4-61.1-14.5C224.6 137.4 216 114.5 216 96V0z"/>
+                </svg>
             </div>
             <div class="topbar-middle">
                 <div class="camera"></div>
@@ -648,7 +653,7 @@
         }, transitionDuration);
     }
 
-    function    () {
+    function switchingPeople () {
         girlCount == girlLast ? (girlCount = 1) : girlCount++;
         document.querySelector(".photo").style.background =
             "url('../assets/tinderImgs/girl" + girlCount + ".jpeg') center center/cover";

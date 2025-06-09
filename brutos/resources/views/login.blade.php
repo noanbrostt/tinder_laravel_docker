@@ -368,7 +368,7 @@
     <div class="form-container sign-in">
         <div class="form">
             <h1>Entrar</h1>
-            <input type="text" placeholder="Matrícula Plansul" class="input_matricula" />
+            <input type="text" placeholder="Matrícula Plansul" class="input_matricula" autofocus />
             <span class="d-contents">
                 <input type="password" class="password" placeholder="Senha do Paco" />
                 <i class="fa-solid fa-eye toggle-password"></i>

@@ -550,15 +550,28 @@
                         const pointerEvents = isRecusado ? 'pointer-events: none; opacity: 0.5;' : '';
 
                         return `
-                            <span style="display: flex; gap: 10px; ${pointerEvents}">
-                                <i class="fa-solid fa-circle-check ${colorAprovar} btn-aprovar ${disableClass}" title="Aprovar"
-                                    data-matricula="${row.matricula}"
-                                    data-classificacao="aprovado"
-                                    data-explicacao="null"
-                                ></i>
-                                <i class="fa-solid fa-circle-xmark ${colorRecusar} btn-recusar ${disableClass}" title="Recusar"
-                                    data-matricula="${row.matricula}"
-                                ></i>
+                            <span style="display: flex; scale: 1.5; ${pointerEvents}">
+                            <!-- Ícone de Aprovar (Check Circle) -->
+                            <svg xmlns="http://www.w3.org/2000/svg" 
+                                class="btn-aprovar ${colorAprovar} ${disableClass}" 
+                                title="Aprovar" 
+                                data-matricula="${row.matricula}" 
+                                data-classificacao="aprovado" 
+                                data-explicacao="null"
+                                width="28" height="28" fill="currentColor" viewBox="0 0 28 28"
+                                style="cursor: pointer;">
+                                <path d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm-1.293-6.293 5-5a1 1 0 0 0-1.414-1.414L11 13.586l-1.293-1.293a1 1 0 1 0-1.414 1.414l2 2a1 1 0 0 0 1.414 0z"/>
+                            </svg>
+
+                            <!-- Ícone de Recusar (X Circle) -->
+                            <svg xmlns="http://www.w3.org/2000/svg" 
+                                class="btn-recusar ${colorRecusar} ${disableClass}" 
+                                title="Recusar" 
+                                data-matricula="${row.matricula}" 
+                                width="28" height="28" fill="currentColor" viewBox="0 0 28 28"
+                                style="cursor: pointer;">
+                                <path d="M12 2C6.477 2 2 6.478 2 12s4.477 10 10 10 10-4.478 10-10S17.523 2 12 2zm3.536 13.536a1 1 0 0 1-1.414 1.414L12 13.414l-2.122 2.122a1 1 0 0 1-1.414-1.414L10.586 12 8.464 9.879a1 1 0 1 1 1.414-1.414L12 10.586l2.122-2.121a1 1 0 1 1 1.414 1.414L13.414 12l2.122 2.122z"/>
+                            </svg>
                             </span>
                         `;
                     }
