@@ -1,5 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap");
-
 :root {
     --bg-blue: #F9286D;
     --bg-blue-light: #FA3B62;
@@ -8,21 +6,26 @@
     --contrast-primary: #424242;
     --contrast-secondary: #ffffff;
 }
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: "Montserrat", sans-serif;
+    font-family: "Roboto", sans-serif;
 }
+
 #conteudo {
     width: 100%;
 }
+
 .d-contents {
     display: contents;
 }
+
 .c-pointer {
     cursor: pointer;
 }
+
 button {
     background-color: var(--bg-blue-light);
 
@@ -44,30 +47,37 @@ button {
         outline: none;
     }
 }
+
 /* Estilo para erro */
 .input-error {
     border: 2px solid #ff4d4d !important;
     padding: 8px 13px !important;
     animation: shake 0.3s;
 }
+
 /* Animação de tremor */
 @keyframes shake {
     0% {
         transform: translateX(0);
     }
+
     25% {
         transform: translateX(-5px);
     }
+
     50% {
         transform: translateX(5px);
     }
+
     75% {
         transform: translateX(-5px);
     }
+
     100% {
         transform: translateX(0);
     }
 }
+
 select:focus,
 textarea:focus,
 input:focus {

@@ -361,9 +361,35 @@
     #tabela_filter label {
         margin-bottom: -42px;
     }
+
+    span#logo {
+        width: 164.5px;
+        gap: 10px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        img {
+            filter: invert(56%) sepia(81%) saturate(3411%) hue-rotate(325deg) brightness(100%) contrast(96%);
+            width: 140px;
+        }
+
+        img:first-child {
+            width: 40px;
+            height: 40px;
+            margin-right: -35px;
+            margin-top: -10px;
+        }
+
+    }
+
 </style>
 
 <div class="header">
+    <span id="logo">
+        <img src="{{ asset('img/logo-plansul.png')}}" alt="Logo" />
+        <img src="{{ asset('img/logo-tinder-white.png') }}" alt="Logo" />
+    </span>
     <h1>Validação de Candidatos</h1>
     <button id="redirectInscricao" onClick="window.location.href = '/inscricao';">Tela de Inscrição <i class="fa-solid fa-arrow-right"></i></button>
 </div>

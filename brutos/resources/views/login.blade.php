@@ -7,24 +7,26 @@
 <!-- Inspirações: AsmrProg-YT -> https://www.youtube.com/watch?v=PlpM2LJWu-s -->
 
 <style>
-    html,body {
+    html, body {
+        margin: 0;
+        padding: 0;
         height: 100%;
+        overflow: hidden;
     }
 
     body {
-        background: linear-gradient(191.42deg, var(--bg-orange) 5.12%, var(--bg-blue) 107.11%);
+        height: calc(var(--vh, 1vh) * 100);
         display: flex;
         align-items: center;
         justify-content: center;
         flex-direction: column;
-        height: 100dvh;
-        min-height: 100vh;
+        background: linear-gradient(191.42deg, var(--bg-orange) 5.12%, var(--bg-blue) 107.11%);
     }
 
     #logo {
         width: 166px;
         position: absolute;
-        top: -30px;
+        top: 0px;
         justify-self: anchor-center;
         display: flex;
         align-items: center;
@@ -342,8 +344,10 @@
 </style>
 
 <div id="logo">
-    <img src="{{ asset('img/logo-plansul.png') }}" alt="Logo" />
+    <img src="{{ asset('img/logo-plansul.png')}}" alt="Logo" />
     <img src="{{ asset('img/logo-tinder-white.png') }}" alt="Logo" />
+</div>
+
 </div>
 
 <div class="container" id="container">
@@ -422,6 +426,16 @@
 </div>
 
 <script>
+
+    // Isso ajusta a altura da viewport real do device
+    function setViewportHeight() {
+        let vh = window.innerHeight * 0.01;
+        document.documentElement.style.setProperty('--vh', `${vh}px`);
+    }
+    window.addEventListener('resize', setViewportHeight);
+    window.addEventListener('orientationchange', setViewportHeight);
+    setViewportHeight();
+
     // Animação tela de login/register
     $("#register").on("click", function() {
         $("#container").addClass("active");
@@ -462,12 +476,12 @@
         const campos = [
             {
                 element: matricula,
-                length: 6,
+                minLength: 6,
                 message: "A matrícula deve ter 6 números.",
             },
             {
                 element: senha,
-                length: 1,
+                minLength: 1,
                 message: "A senha está vazia.",
             },
         ];
@@ -525,17 +539,17 @@
         const campos = [
             {
                 element: matricula,
-                length: 6,
+                minLength: 6,
                 message: "A matrícula deve ter 6 números.",
             },
             {
                 element: cpf,
-                length: 14, // Máscara aplicada no CPF
+                minLength: 14, // Máscara aplicada no CPF
                 message: "O CPF deve ter 11 números.",
             },
             {
                 element: senha,
-                length: 1,
+                minLength: 1,
                 message: "A senha está vazia.",
             },
         ];

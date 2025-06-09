@@ -22,6 +22,27 @@
         padding: 24px;
         border-radius: 16px;
         box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+
+        h2 {
+            margin-block: -40px;
+
+            span {
+                margin-inline: -5px -35px;
+
+                img {
+                    filter: invert(56%) sepia(81%) saturate(3411%) hue-rotate(325deg) brightness(100%) contrast(96%);
+                    width: 140px;
+                }
+
+                img:first-child {
+                    width: 40px;
+                    height: 40px;
+                    margin-right: -35px;
+                    margin-top: -10px;
+                }
+
+            }
+        }
     }
 
     h2 {
@@ -83,7 +104,6 @@
         font-size: 13px;
         color: #666;
         margin-top: -8px;
-        margin-bottom: 10px;
     }
 
     button {
@@ -167,23 +187,74 @@
             font-size: 22px;
         }
     }
+
+    /* Checkbox */
+
+    /* From Uiverse.io by PriyanshuGupta28 */
+    .checkbox-wrapper input[type="checkbox"] {
+        visibility: hidden;
+        display: none;
+    }
+
+    .checkbox-wrapper *,
+    .checkbox-wrapper ::after,
+    .checkbox-wrapper ::before {
+        box-sizing: border-box;
+        user-select: none;
+    }
+
+    .checkbox-wrapper {
+        position: relative;
+        display: block;
+        overflow: hidden;
+    }
+
+    .checkbox-wrapper .label {
+        cursor: pointer;
+        margin-block: -5px 5px;
+        font-size: 13px;
+    }
+
+    .checkbox-wrapper .check {
+        width: 50px;
+        height: 50px;
+        position: absolute;
+        opacity: 0;
+    }
+
+    .checkbox-wrapper .label svg {
+        vertical-align: middle;
+    }
+
+    .checkbox-wrapper .path1 {
+        stroke-dasharray: 400;
+        stroke-dashoffset: 400;
+        transition: .5s stroke-dashoffset;
+        opacity: 0;
+    }
+
+    .checkbox-wrapper .check:checked+label svg g path {
+        stroke-dashoffset: 0;
+        opacity: 1;
+    }
+
 </style>
 
 @php
-    
+
 @endphp
 
 <div class="container">
     <h2>Inscrição no Tinder</h2>
 
     <!-- Inscrição já feita -->
-    <div class="status-box" {{ !$possuiCadastro ? 'style=display:none;' : '' }} >
+    <div class="status-box" {{ !$possuiCadastro ? 'style=display:none;' : '' }}>
         <h3 id="status-aprovacao"></h3>
 
         <button id="editar">Editar/Visualizar inscrição</button>
     </div>
 
-    <form id="formInscricao" {{ $possuiCadastro ? 'style=display:none;' : '' }} >
+    <form id="formInscricao" {{ $possuiCadastro ? 'style=display:none;' : '' }}>
         <!-- Upload Foto -->
         <label for="fotoInput">Foto em pé <small>(9:16)</small></label>
         <div class="upload-area" id="uploadArea">
@@ -202,13 +273,30 @@
 
         <!-- sobre -->
         <label for="sobre">Sobre você <small>(máx. 240)</small></label>
-        <textarea
-            id="sobre"
-            rows="4"
-            maxlength="240"
-            placeholder="Digite algo sobre você..."></textarea>
+        <textarea id="sobre" rows="4" maxlength="240" placeholder="Digite algo sobre você..."></textarea>
         <div class="char-count"><span id="contador">0</span>/240</div>
 
+        <div class="checkbox-wrapper">
+            <input type="checkbox" class="check" id="check1-61">
+            <label for="check1-61" class="label">
+                <svg width="32" height="32" viewBox="0 0 95 95">
+                    <rect x="25" y="20" width="50" height="50" stroke="black" fill="none"></rect>
+                    <g transform="translate(0,-952.36222)">
+                        <path d="m 56,963 c -102,122 6,9 7,9 17,-5 -66,69 -38,52 122,-77 -7,14 18,4 29,-11 45,-43 23,-4"
+                            stroke="black" stroke-width="3" fill="none" class="path1"></path>
+                    </g>
+                </svg>
+                <span>
+                    <span>
+                        Eu concordo com os
+                        <a href="/storage/TERMO-ACEITE-CONDICOES-TINDER-PLANSUL.pdf" target="_blank">
+                            Termos, Condições e a Política de Privacidade
+                        </a>
+                        .
+                    </span>
+                </span>
+            </label>
+        </div>
         <button type="submit">Enviar Inscrição</button>
     </form>
 </div>
@@ -218,9 +306,7 @@
     <div class="modal-content">
         <h3>Recorte sua foto</h3>
         <div>
-            <img
-                id="cropImage"
-                style="max-width: 100%; display: block" />
+            <img id="cropImage" style="max-width: 100%; display: block" />
         </div>
         <div class="modal-buttons">
             <button id="cancelCrop">Cancelar</button>
@@ -242,30 +328,39 @@
 
     const primeiroNome = dados.nome.split(' ')[0].toLowerCase();
     const nomeFormatado = primeiroNome.charAt(0).toUpperCase() + primeiroNome.slice(1);
-    $('.container > h2').html('Inscrição no Tinder, '+nomeFormatado);
+    $('.container > h2').html(
+        `Inscrição no 
+        <span> 
+            <img src="{{ asset('img/logo-plansul.png')}}" alt="Logo" />
+            <img src="{{ asset('img/logo-tinder-white.png') }}" alt="Logo" />
+        </span>, ` + nomeFormatado);
 
     if (possuiCadastro) {
-       
+
         console.log(cadastro.id_status_usuario);
-        
+
         switch (cadastro.id_status_usuario) {
             case 1:
-                $('#status-aprovacao').addClass('text-warning').html('Aguardando aprovação <i class="fa-solid fa-hourglass-half"></i>');
+                $('#status-aprovacao').addClass('text-warning').html(
+                    'Aguardando aprovação <i class="fa-solid fa-hourglass-half"></i>');
                 break;
-        
+
             case 2:
-                $('#status-aprovacao').addClass('text-success').html('Aprovada <i class="fa-solid fa-check-circle"></i>');
+                $('#status-aprovacao').addClass('text-success').html(
+                    'Aprovada <i class="fa-solid fa-check-circle"></i>');
                 break;
-        
+
             case 3:
                 let obs_recusa;
                 if (cadastro.de_observacao_recusa) {
-                    obs_recusa = '<br><br> <span style="color:black; font-size:19px; font-weight:300;";>Motivo: '+cadastro.de_observacao_recusa+'</span>';
+                    obs_recusa = '<br><br> <span style="color:black; font-size:19px; font-weight:300;";>Motivo: ' +
+                        cadastro.de_observacao_recusa + '</span>';
                 }
 
-                $('#status-aprovacao').addClass('text-danger').html('Recusada: '+cadastro.no_motivo_recusa+" <i class='fa fa-ban'></i>"+obs_recusa);
+                $('#status-aprovacao').addClass('text-danger').html('Recusada: ' + cadastro.no_motivo_recusa +
+                    " <i class='fa fa-ban'></i>" + obs_recusa);
                 break;
-        
+
             default:
                 break;
         }
@@ -283,7 +378,7 @@
 
     }
 
-    $('#editar').on('click', function() {
+    $('#editar').on('click', function () {
         $('.status-box').hide();
         $('#formInscricao').show();
     });
@@ -399,11 +494,13 @@
             const campos = [{
                     element: $("#intencao"),
                     type: "required",
+                    minLength: 1,
                     message: "Selecione uma intenção.",
                 },
                 {
                     element: $("#sobre"),
                     type: "required",
+                    minLength: 1,
                     message: "Escreva algo sobre você.",
                 },
                 {
@@ -415,6 +512,14 @@
             ];
 
             if (!validarCampos(campos)) {
+                return;
+            }
+
+            if (!$('#check1-61').is(':checked')) {
+                Toast.fire({
+                    icon: "error",
+                    title: "Aceite os termos e condições",
+                });
                 return;
             }
 
@@ -434,7 +539,7 @@
                 data: formData,
                 contentType: false,
                 processData: false,
-                beforeSend: function() {
+                beforeSend: function () {
                     Swal.fire({
                         title: "Enviando...",
                         text: "Por favor, aguarde",
@@ -444,7 +549,7 @@
                         },
                     });
                 },
-                success: function(response) {
+                success: function (response) {
                     $('button[type="submit"]').prop('disabled', true);
                     Swal.close(); // 🔥 Fecha o loading
                     console.log(response);
@@ -452,12 +557,12 @@
                         icon: "success",
                         title: "Enviado com sucesso!",
                     });
-                    
+
                     setTimeout(() => {
                         window.location.reload();
                     }, 3000);
                 },
-                error: function(xhr, status, error) {
+                error: function (xhr, status, error) {
                     Swal.close(); // 🔥 Fecha o loading mesmo se der erro
 
                     Toast.fire({

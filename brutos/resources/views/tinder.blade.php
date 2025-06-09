@@ -435,12 +435,15 @@
         0% {
             transform: translate(0, 0) rotate(0deg);
         }
+
         33% {
             transform: translate(-140px, 40px) rotate(-8deg);
         }
+
         66% {
             transform: translate(140px, -40px) rotate(8deg);
         }
+
         100% {
             transform: translate(0, 0) rotate(0deg);
         }
@@ -454,9 +457,11 @@
         0% {
             transform: scale(1);
         }
+
         50% {
             transform: scale(1.2);
         }
+
         100% {
             transform: scale(1);
         }
@@ -469,17 +474,15 @@
     .alto .data p {
         max-height: 600px;
     }
+
 </style>
 
 <!-- <script src="https://cdn.jsdelivr.net/npm/driver.js@latest/dist/driver.js.iife.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@latest/dist/driver.css" /> -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/intro.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/introjs.min.css"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/introjs.min.css" />
 
-<div
-    class="smartphone"
-
->
+<div class="smartphone">
     <div class="screen">
         <div class="topbar">
             <div class="topbar-left">
@@ -500,26 +503,16 @@
         <nav class="navbar">
             <img src="data:image/png;base64,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"
                 alt="Tinder Plansul">
-            <i
-                class="fa fa-question-circle"
-                data-intro='Se quiser ver esse tour novamente, só clicar aqui.'
-                data-step="5"
-                data-position="right"
-            ></i>
+            <i class="fa fa-question-circle" data-intro='Se quiser ver esse tour novamente, só clicar aqui.'
+                data-step="5" data-position="right"></i>
         </nav>
         <div class="person">
-            <figure
-                class="photo"
+            <figure class="photo"
                 data-intro='Bem-vindo, arraste a foto para à esquerda para "Passar" alguém, e arraste para à direita para "Gostar" de alguém.'
-                data-step="1"
-                data-position="left"
-            >
-                <div
-                    class="personal"
+                data-step="1" data-position="left">
+                <div class="personal"
                     data-intro='E ao passar o mouse em qualquer um desses elementos, a descrição da pessoa expandirá.'
-                    data-step="4"
-                    data-position="right"
-                >
+                    data-step="4" data-position="right">
                     <div class="name-age">
                         <h2 class="name">Lorem</h2>
                         <h2 class="age">26</h2>
@@ -535,20 +528,14 @@
             </figure>
         </div>
         <div class="commands">
-            <div
-                class="command passar"
+            <div class="command passar"
                 data-intro='Esse botão (>>) serve para "Passar" alguém, isso jogará a pessoa para o fim da fila!'
-                data-step="2"
-                data-position="top"
-            >
+                data-step="2" data-position="top">
                 <i class="fa-solid fa-forward"></i>
             </div>
-            <div
-                class="command coracao"
+            <div class="command coracao"
                 data-intro='Esse botão (♡) serve para "Gostar" de alguém, isso dará um coração pra ela, e se a pessoa também gostar de você, é um Match!'
-                data-step="3"
-                data-position="top"
-            >
+                data-step="3" data-position="top">
                 <i class="fa-solid fa-heart"></i>
             </div>
         </div>
@@ -661,7 +648,7 @@
         }, transitionDuration);
     }
 
-    function switchingPeople() {
+    function    () {
         girlCount == girlLast ? (girlCount = 1) : girlCount++;
         document.querySelector(".photo").style.background =
             "url('../assets/tinderImgs/girl" + girlCount + ".jpeg') center center/cover";
@@ -749,10 +736,8 @@
 
     switchingPeople();
 
-</script>
 
-
-<script>
+    // Biblioteca do tutorial
     document.addEventListener('DOMContentLoaded', () => {
         intro = introJs(); // Cria a instância do introJs
 
@@ -767,7 +752,7 @@
         // Callback antes de cada mudança de passo
         intro.onbeforechange((element) => {
             const currentStep = intro._introItems[intro._currentStep]; // Acessa o passo atual
-            
+
             // Verifica se é o primeiro passo (data-step="1")
             // ou se é o elemento do primeiro passo
             if (currentStep.element && currentStep.element.classList.contains('photo')) {
@@ -780,20 +765,20 @@
             } else if (currentStep.element && currentStep.element.classList.contains('coracao')) {
                 limparClasses();
                 $('.coracao').addClass('pulsar');
-           
+
             } else if (currentStep.element && currentStep.element.classList.contains('personal')) {
                 limparClasses();
                 $('.personal').addClass('alto');
 
             } else {
-            limparClasses();
+                limparClasses();
             }
         });
-        
+
         intro.onexit(() => {
             limparClasses();
         });
-        
+
         intro.oncomplete(() => {
             limparClasses();
         });
@@ -807,16 +792,94 @@
         $('.personal').removeClass('alto');
     }
 
-    $('.fa-question-circle').on('click', function() {
+    $('.fa-question-circle').on('click', function () {
         intro.start();
     });
-</script>
+    // Fim da biblioteca do tutorial
 
 
-<script>
+
+
+
+
+
     const usuarios = @json($usuarios);
     console.log("Usuários recebidos do backend:", usuarios);
+
+
+    let todosPerfis = @json($usuarios); // Recebido da Controller
+    let filaAtual = [];
+    let perfilAtualIndex = 0;
+
+    $(document).ready(function () {
+        embaralhar(todosPerfis);
+        filaAtual = [...todosPerfis];
+        exibirProximoPerfil();
+
+        $('.coracao').click(() => reagir('like'));
+        $('.passar').click(() => reagir('pass'));
+    });
+
+    function exibirProximoPerfil() {
+        if (filaAtual.length === 0) {
+            Swal.fire({
+                title: 'Perfis finalizados!',
+                text: 'Reiniciando a fila com os que você passou...',
+                icon: 'info',
+                confirmButtonText: 'Ok'
+            }).then(() => {
+                reiniciarComPasses();
+            });
+            return;
+        }
+
+        const perfil = filaAtual[0];
+        $('#perfil').html(`
+            <h2>${perfil.nome}</h2>
+            <img src="${perfil.foto}" alt="${perfil.nome}" width="200">
+        `);
+    }
+
+    function reagir(tipo) {
+        const perfil = filaAtual[0];
+
+        // Envia para o back-end imediatamente
+        $.post('/registrar-reacao', {
+            target_id: perfil.id,
+            tipo: tipo
+        });
+
+        // Atualiza a lista
+        if (tipo === 'like') {
+            // Remove completamente o perfil
+            todosPerfis = todosPerfis.filter(p => p.id !== perfil.id);
+        } else {
+            // Move para o final
+            filaAtual.push(perfil);
+        }
+
+        // Remove o atual da fila
+        filaAtual.shift();
+
+        // Próximo
+        exibirProximoPerfil();
+    }
+
+    function reiniciarComPasses() {
+        filaAtual = [...todosPerfis]; // Apenas os que restaram (sem likes)
+        embaralhar(filaAtual);
+        exibirProximoPerfil();
+    }
+
+    function embaralhar(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
+
 </script>
+
 
 
 @endsection

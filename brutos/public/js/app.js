@@ -29,7 +29,7 @@ function validarCampos(campos) {
 
         setTimeout(() => {
             campos.forEach((campo) => {
-                let valor;
+                let valor = "";
 
                 if (campo.type === "custom") {
                     if (!campo.isValid) {
@@ -47,7 +47,9 @@ function validarCampos(campos) {
                     valor = campo.element.val().trim();
                 }
 
-                if (valor.length < campo.length) {
+                const minLength = campo.minLength || 1;
+
+                if (valor.length < minLength) {
                     erros.push(campo.message);
                     campo.element.addClass("input-error");
                 }
@@ -56,7 +58,6 @@ function validarCampos(campos) {
             if (erros.length > 0) {
                 erros.forEach((erro, index) => {
                     console.log(erro);
-                    
                     setTimeout(() => {
                         Toast.fire({
                             icon: "error",
@@ -64,15 +65,16 @@ function validarCampos(campos) {
                         });
                     }, index * 600);
                 });
-                resolve(false);
+                return resolve(false);
             }
-        
+
             resolve(true);
-        }, 10);
+        }, 0);
     });
 }
 
+
 // 🔧 Remover borda de erro ao começar a digitar/selecionar
-$(document).on("input change", ".input-error", function () {
+$(document).on("input change", ".input-error", function() {
     $(this).removeClass("input-error");
 });
