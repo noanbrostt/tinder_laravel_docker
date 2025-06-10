@@ -7,7 +7,7 @@
 
 namespace App\Http\Controllers;
 
- use App\Http\Controllers\Controller;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
@@ -227,6 +227,15 @@ class AuthController extends Controller {
         return response()->json($user);
     }
 
+    public function lista()
+    {
+        $lista = DB::connection('tinder2')
+        ->table('public.usuario')
+        ->select('matricula')
+        ->get();
+
+       return response()->json($lista);
+    }
     /**
      * Update User Login Password.
      *

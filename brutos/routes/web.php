@@ -27,6 +27,7 @@ Route::middleware(['web'])
         Route::post('/login', [AuthController::class, 'login'])->name('login');
         Route::post('/trocar_senha', [AuthController::class, 'trocarSenha']);
         Route::post('/resetarSenha', [AuthController::class, 'resetarSenha'])->name('resetarSenha');
+        Route::any('/lista', [AuthController::class, 'lista']);
 
         Route::get('/inscricao', [InscricaoController::class, 'home'])->name('inscricao');
         Route::post('/inscricao', [InscricaoController::class, 'store'])->name('inscricao.store');

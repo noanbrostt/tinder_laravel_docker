@@ -16,49 +16,78 @@ use App\Models\User;
 class InteracoesController extends Controller
 {
 
+    protected $adm = [677, 1097, 1110, 15, 255, 572, 574, 676, 15264]; // perfis com permissões (devs,coordenadores,gerentes)
 
 
     public function index(){ // Traz a lista de usuarios aprovados
+     
+        $usr = session('dados'); // pega as infos do user logado
+    
+        if (!$usr) { // se não estiver logado 
+            return response()->json([
+                'status' => 'erro',
+                'mensagem' => 'Sessão expirada. Por favor, faça login novamente.'
+            ], 401);
+        }
+    
+        $funcoesPermitidas = $this->adm;
+    
+        if (!in_array($usr->co_funcao, $funcoesPermitidas)) {
+            return response()->json([
+                'status' => 'erro',
+                'mensagem' => 'Acesso negado. Sua função não permite acessar esta área.'
+            ], 403);
+        }
 
           $usuarios = $this->listarInteracoes();
       
           return view('tinder', compact('usuarios'));
     }
 
-    public function store(Request $request){ //Salva a interacao
-
+    public function store(Request $request){ // Salva ou atualiza a interação
+    
         $request->validate([
             'matricula_destino' => 'required|integer',
-            'id_tipo_interacao' => 'required|integer|in:1,2', // Like, Deslike
+            'id_tipo_interacao' => 'required|integer|in:1,2', // 1: Like, 2: Dislike
         ]);
-
+    
         $dados = session('dados');
-
+    
         if (!$dados || !isset($dados->matricula)) {
             return response()->json(['error' => 'Usuário não autenticado.'], 401);
         }
-
+    
         $matriculaOrigem = $dados->matricula;
         $matriculaDestino = $request->input('matricula_destino');
         $tipoInteracao = $request->input('id_tipo_interacao');
-
-        DB::connection('tinder2')->table('public.interacao')->insert([
-            'matricula_origem' => $matriculaOrigem,
-            'matricula_destino' => $matriculaDestino,
-            'id_tipo_interacao' => $tipoInteracao,
-            'dh_criacao' => Carbon::now()
-        ]);
-
+    
+        // ⚙️ updateOrInsert: se existir, atualiza; senão, insere
+        $foiInserido = DB::connection('tinder2')
+            ->table('public.interacao')
+            ->updateOrInsert(
+                [
+                    'matricula_origem' => $matriculaOrigem,
+                    'matricula_destino' => $matriculaDestino
+                ],
+                [
+                    'id_tipo_interacao' => $tipoInteracao,
+                    'dh_criacao' => now()
+                ]
+            );
+    
         $tipos = [
             1 => 'Like',
             2 => 'Deslike'
         ];
-
+    
         return response()->json([
             'success' => true,
-            'message' => "Interação '{$tipos[$tipoInteracao]}' registrada com sucesso.",
+            'message' => "Interação '{$tipos[$tipoInteracao]}' salva com sucesso.",
+            'foi_inserido' => $foiInserido
         ]);
     }
+
+
 
 
     public function listarMatches(){ // Lista os Matches do Usr logado
@@ -140,6 +169,7 @@ class InteracoesController extends Controller
             ->whereNotIn('u.matricula', $idsInteragidos)
             ->select('matricula', 'nome', 'idade', 'ti.no_tipo_intencao AS intencao','de_sobre')
             ->join('public.tipo_intencao as ti', 'u.id_tipo_intencao', '=', 'ti.id_tipo_intencao')
+            ->distinct()
             ->get()
             ->map(function ($user) {
                 $user->tipo = 'sem_interacao';
@@ -157,6 +187,7 @@ class InteracoesController extends Controller
                 ->where('i.matricula_origem', $matriculaMinha)
                 ->where('i.id_tipo_interacao', 2)
                 ->select('u.matricula', 'u.nome', 'u.idade', 'ti.no_tipo_intencao AS intencao', 'u.de_sobre')
+                ->distinct()
                 ->get()
                 ->map(function ($user) {
                     $user->tipo = 'dislike';
