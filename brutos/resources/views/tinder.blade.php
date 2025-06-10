@@ -299,7 +299,7 @@
 
     .name-age {
         display: flex;
-        align-items: baseline;
+        align-items: center;
         margin-bottom: 6px;
     }
 
@@ -311,7 +311,14 @@
     .age {
         font-size: 1.6rem;
         margin-left: 10px;
+        margin-bottom: 5px;
         font-weight: 400;
+    }
+
+    .intention {
+        margin-block: -8px 8px;
+        font-weight: 500;
+        font-size: 15px;
     }
 
     /* Ao passar o mouse na div.person */
@@ -467,8 +474,6 @@
 
 </style>
 
-<!-- <script src="https://cdn.jsdelivr.net/npm/driver.js@latest/dist/driver.js.iife.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/driver.js@latest/dist/driver.css" /> -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/intro.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/introjs.min.css" />
 
@@ -501,7 +506,7 @@
                 >
                     <path d="M576 0c17.7 0 32 14.3 32 32l0 448c0 17.7-14.3 32-32 32s-32-14.3-32-32l0-448c0-17.7 14.3-32 32-32zM448 96c17.7 0 32 14.3 32 32l0 352c0 17.7-14.3 32-32 32s-32-14.3-32-32l0-352c0-17.7 14.3-32 32-32zM352 224l0 256c0 17.7-14.3 32-32 32s-32-14.3-32-32l0-256c0-17.7 14.3-32 32-32s32 14.3 32 32zM192 288c17.7 0 32 14.3 32 32l0 160c0 17.7-14.3 32-32 32s-32-14.3-32-32l0-160c0-17.7 14.3-32 32-32zM96 416l0 64c0 17.7-14.3 32-32 32s-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32s32 14.3 32 32z"/>
                 </svg>
-                73%
+                96%
                 <svg xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 566 312"                    
                     width="15"
@@ -551,7 +556,8 @@
                         <h2 class="age">26</h2>
                     </div>
                     <div class="data">
-                        <p>
+                        <p class="intention">Intenção: Amizade</p>
+                        <p class="about">
                             Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ab, quasi cum a voluptatibus eius
                             eum temporibus? Voluptate quidem odio consectetur ea veniam debitis repellat aspernatur,
                             molestiae reiciendis eaque quod perspiciatis. Lorem Ipsum d
@@ -662,6 +668,13 @@
         // Gets the positive value of velocity and X-deslocation
         var absVel = Math.abs(ev.velocity);
         var absDelX = Math.abs(ev.deltaX);
+
+        if (el.classList.contains('like')) {
+            reagir('like')
+        } else if (el.classList.contains('nope')) {
+            reagir('pass')
+        }
+
         // Removes the stamps and retrieve the 300ms transition
         el.classList.remove("nope", "like", "moving");
         if (absDelX > 80) {
@@ -718,44 +731,8 @@
                         .classList.remove("events-none");
                 }, 140);
             }, transitionDuration);
-            switchingPeople();
+            exibirProximoPerfil();
         }, transitionDuration);
-    }
-
-    function switchingPeople () {
-        girlCount == girlLast ? (girlCount = 1) : girlCount++;
-        document.querySelector(".photo").style.background =
-            "url('../assets/tinderImgs/girl" + girlCount + ".jpeg') center center/cover";
-        switch (girlCount) {
-            case 1:
-                document.querySelector(".name").innerHTML = "Lorem";
-                document.querySelector(".age").innerHTML = "26";
-                document.querySelector(".ocupation").innerHTML = "Designer";
-                document.querySelector(".work").innerHTML = "Stanford University";
-                document.querySelector(".distance").innerHTML = "3 miles away";
-                break;
-            case 2:
-                document.querySelector(".name").innerHTML = "Ipsum";
-                document.querySelector(".age").innerHTML = "31";
-                document.querySelector(".ocupation").innerHTML = "Lawyer";
-                document.querySelector(".work").innerHTML = "Stanford University";
-                document.querySelector(".distance").innerHTML = "4 miles away";
-                break;
-            case 3:
-                document.querySelector(".name").innerHTML = "Dolor";
-                document.querySelector(".age").innerHTML = "32";
-                document.querySelector(".ocupation").innerHTML = "Engineer";
-                document.querySelector(".work").innerHTML = "Stanford Engineering";
-                document.querySelector(".distance").innerHTML = "4 miles away";
-                break;
-            case 4:
-                document.querySelector(".name").innerHTML = "Sit";
-                document.querySelector(".age").innerHTML = "29";
-                document.querySelector(".ocupation").innerHTML = "Doctor";
-                document.querySelector(".work").innerHTML = "Stanford Medicine";
-                document.querySelector(".distance").innerHTML = "5 miles away";
-                break;
-        }
     }
 
     // The reactions animation
@@ -772,10 +749,12 @@
         if (reaction == "like") {
             // If the reaction was a "like", stamps "like"
             el.classList.add("like");
+            reagir('like');
         } else if (reaction == "dislike") {
             // If the reaction was a "dislike", stamps "nope" and moves the photo to the left
             el.classList.add("nope");
             x *= -1;
+            reagir('pass');
         }
 
         el.style.transitionDuration = transitionDuration + "ms";
@@ -808,10 +787,10 @@
         document.querySelector(".clock").innerHTML = displayDate.substring(0, 5);
     }
 
-    switchingPeople();
-
-
     // Biblioteca do tutorial
+    let intro;
+    const TUTORIAL_SEEN_KEY = 'introJsTutorialSeen'; // Key para o localStorage
+
     document.addEventListener('DOMContentLoaded', () => {
         intro = introJs(); // Cria a instância do introJs
 
@@ -851,13 +830,20 @@
 
         intro.onexit(() => {
             limparClasses();
+            // Marca o tutorial como visto quando o usuário sai do tutorial
+            localStorage.setItem(TUTORIAL_SEEN_KEY, 'true');
         });
 
         intro.oncomplete(() => {
             limparClasses();
+            // Marca o tutorial como visto quando o usuário sai do tutorial
+            localStorage.setItem(TUTORIAL_SEEN_KEY, 'true');
         });
 
-        intro.start(); // Inicia o tour
+        // *** Lógica para iniciar o tutorial apenas no primeiro acesso ***
+        if (!localStorage.getItem(TUTORIAL_SEEN_KEY)) {
+            intro.start(); // Inicia o tour apenas se não foi visto antes
+        }
     });
 
     function limparClasses() {
@@ -877,11 +863,10 @@
 
 
 
-    const usuarios = @json($usuarios);
-    console.log("Usuários recebidos do backend:", usuarios);
+    let usuarios = @json($usuarios);
+    console.log("todosPerfis:", usuarios.original);
 
-
-    let todosPerfis = @json($usuarios); // Recebido da Controller
+    let todosPerfis = usuarios.original; // Recebido da Controller
     let filaAtual = [];
     let perfilAtualIndex = 0;
 
@@ -890,28 +875,43 @@
         filaAtual = [...todosPerfis];
         exibirProximoPerfil();
 
-        $('.coracao').click(() => reagir('like'));
-        $('.passar').click(() => reagir('pass'));
+        // $('.coracao').click(() => reagir('like'));
+        // $('.passar').click(() => reagir('pass'));
     });
 
     function exibirProximoPerfil() {
         if (filaAtual.length === 0) {
             Swal.fire({
                 title: 'Perfis finalizados!',
-                text: 'Reiniciando a fila com os que você passou...',
+                // text: 'Reiniciando a fila com os que você passou...',
                 icon: 'info',
                 confirmButtonText: 'Ok'
             }).then(() => {
-                reiniciarComPasses();
+                $('.name').html('');
+                $('.age').html('');
+                $('.intention').html('');
+                $('.about').html('');
             });
             return;
         }
 
         const perfil = filaAtual[0];
-        $('#perfil').html(`
-            <h2>${perfil.nome}</h2>
-            <img src="${perfil.foto}" alt="${perfil.nome}" width="200">
-        `);
+
+        let nomes = perfil.nome.split(" ");
+        let primeiroNome = nomes[0].charAt(0).toUpperCase() + nomes[0].slice(1).toLowerCase();
+        let ultimoNome = nomes[nomes.length - 1].charAt(0).toUpperCase() + nomes[nomes.length - 1].slice(1).toLowerCase();
+
+        let nomeFormatado = primeiroNome + " " + ultimoNome;
+
+        if (perfil.intencao == 'Outros') perfil.intencao+= ' ( ͡° ͜ʖ ͡°)';
+
+        document.querySelector(".photo").style.background = `
+            url('storage/fotos/${perfil.matricula}.jpg?v=${new Date().getTime()}') center center/cover
+        `;
+        $('.name').html(nomeFormatado+',');
+        $('.age').html(perfil.idade);
+        $('.intention').html('Intenção: '+perfil.intencao);
+        $('.about').html(perfil.de_sobre);
     }
 
     function reagir(tipo) {
