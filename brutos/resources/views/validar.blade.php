@@ -456,6 +456,8 @@
 <script>
     $(document).ready(function() {
 
+      fazerChamadaAjaxTotaisUsuarios();
+
         $.fn.dataTable.ext.order['custom-status'] = function(settings, col) {
             return this.api().column(col, {order: 'index'}).nodes().map(function(td, i) {
                 const status = $(td).text().toLowerCase();
@@ -745,6 +747,29 @@
         // Adiciona a overlay no body
         document.body.appendChild(overlay);
     }
+
+
+    function fazerChamadaAjaxTotaisUsuarios() {
+        $.ajax({
+            url: "{{ route('validar.contarUsuariosPorStatus') }}", // Usa a URL definida no Blade 
+            type: 'GET', // Método HTTP GET
+            dataType: 'json', // Espera uma resposta JSON
+            success: function(data) {
+                // Requisição bem-sucedida
+                console.log('--- Totais de Usuários por Status (via AJAX) ---');
+                console.log('Aprovados:', data.aprovados);
+                console.log('Pendentes (Em revisão):', data.pendentes);
+                console.log('Recusados:', data.recusados);
+                console.log('-------------------------------------------');
+            },
+            error: function(xhr, status, error) {
+                // Ocorreu um erro na requisição
+                console.error('Erro na requisição AJAX para totais de usuários:', status, error);
+                console.error('Resposta de erro:', xhr.responseText);
+            }
+        });
+    }
+
 </script>
 
 @endsection
