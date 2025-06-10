@@ -39,7 +39,7 @@ Route::middleware(['web'])
 
         Route::get('/matches', [InteracoesController::class, 'listarMatches']);
         Route::get('/tinder', [InteracoesController::class, 'index'])->name('tinder');
-        Route::post('/interacoes', [InteracoesController::class, 'store']);
+        Route::post('/interacoes', [InteracoesController::class, 'store'])->name('reagir');
 
 
     });
