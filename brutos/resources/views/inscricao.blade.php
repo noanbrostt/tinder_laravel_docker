@@ -333,7 +333,7 @@
         <span> 
             <img src="{{ asset('img/logo-plansul.png')}}" alt="Logo" />
             <img src="{{ asset('img/logo-tinder-white.png') }}" alt="Logo" />
-        </span>, ` + nomeFormatado);
+        </span>, </h2><h2 style="margin-block: -50px 60px;">` + nomeFormatado);
 
     if (possuiCadastro) {
 
