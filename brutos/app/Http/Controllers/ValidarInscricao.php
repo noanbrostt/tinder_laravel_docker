@@ -95,5 +95,36 @@ class ValidarInscricao extends Controller{
         ]);
     }
 
+
+    public function contarUsuariosPorStatus(){
+
+        $idPendente = 1; // 'Em revisão' 
+        $idAprovado = 2; // 'Ativo'
+        $idRecusado = 3; // 'Recusado' 
+
+        // Contagem de usuários com status 'Aprovado'
+        $totalUsuariosAprovados = DB::connection('tinder2')
+            ->table('public.usuario')
+            ->where('id_status_usuario', $idAprovado)
+            ->count();
+
+        // Contagem de usuários com status 'Em revisão' 
+        $totalUsuariosPendentes = DB::connection('tinder2')
+            ->table('public.usuario')
+            ->where('id_status_usuario', $idPendente)
+            ->count();
+
+        // Contagem de usuários com status 'Recusado'
+        $totalUsuariosRecusados = DB::connection('tinder2')
+            ->table('public.usuario')
+            ->where('id_status_usuario', $idRecusado)
+            ->count();
+
+        return response()->json([
+            'aprovados' => $totalUsuariosAprovados,
+            'pendentes' => $totalUsuariosPendentes,
+            'recusados' => $totalUsuariosRecusados,
+        ]);
+    }
     
 }

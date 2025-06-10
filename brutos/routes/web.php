@@ -34,6 +34,7 @@ Route::middleware(['web'])
         Route::get('/validar', [ValidarInscricao::class, 'home'])->name('validar');
         Route::get('/validar/listar', [ValidarInscricao::class, 'listarInscricoes'])->name('validar.listar');
         Route::post('/validar/atualizar', [ValidarInscricao::class, 'atualizarInscricao'])->name('validar.atualizar');
+        Route::get('/validar/contarUsuariosPorStatus', [ValidarInscricao::class, 'contarUsuariosPorStatus'])->name('validar.contarUsuariosPorStatus');
 
         Route::get('/matches', [InteracoesController::class, 'listarMatches']);
         Route::get('/tinder', [InteracoesController::class, 'index'])->name('tinder');
