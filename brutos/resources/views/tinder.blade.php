@@ -731,7 +731,7 @@
                         .classList.remove("events-none");
                 }, 140);
             }, transitionDuration);
-            exibirProximoPerfil();
+            // exibirProximoPerfil();
         }, transitionDuration);
     }
 
@@ -874,9 +874,6 @@
         embaralhar(todosPerfis);
         filaAtual = [...todosPerfis];
         exibirProximoPerfil();
-
-        // $('.coracao').click(() => reagir('like'));
-        // $('.passar').click(() => reagir('pass'));
     });
 
     function exibirProximoPerfil() {
@@ -917,14 +914,16 @@
     function reagir(tipo) {
         const perfil = filaAtual[0];
 
+        console.log(filaAtual);
+        
         // Envia para o back-end imediatamente
-        $.post('/registrar-reacao', {
-            target_id: perfil.id,
-            tipo: tipo
+        $.post("{{ route('reagir') }}", {
+            matricula_destino: perfil.matricula,
+            id_tipo_interacao: tipo == 'like' ? 1 : 2
         });
 
         // Atualiza a lista
-        if (tipo === 'like') {
+        if (tipo == 'like') {
             // Remove completamente o perfil
             todosPerfis = todosPerfis.filter(p => p.id !== perfil.id);
         } else {
@@ -932,16 +931,10 @@
             filaAtual.push(perfil);
         }
 
-        // Remove o atual da fila
+        // // Remove o atual da fila
         filaAtual.shift();
 
         // Próximo
-        exibirProximoPerfil();
-    }
-
-    function reiniciarComPasses() {
-        filaAtual = [...todosPerfis]; // Apenas os que restaram (sem likes)
-        embaralhar(filaAtual);
         exibirProximoPerfil();
     }
 
