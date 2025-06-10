@@ -342,12 +342,32 @@
         switch (cadastro.id_status_usuario) {
             case 1:
                 $('#status-aprovacao').addClass('text-warning').html(
-                    'Aguardando aprovação <i class="fa-solid fa-hourglass-half"></i>');
-                break;
+                    `Aguardando aprovação 
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 384 512"
+                        width="32"
+                        height="32"
+                        fill="currentColor"
+                        style="margin-bottom: -6px;"
+                    >
+                        <path d="M32 0C14.3 0 0 14.3 0 32S14.3 64 32 64l0 11c0 42.4 16.9 83.1 46.9 113.1L146.7 256 78.9 323.9C48.9 353.9 32 394.6 32 437l0 11c-17.7 0-32 14.3-32 32s14.3 32 32 32l32 0 256 0 32 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l0-11c0-42.4-16.9-83.1-46.9-113.1L237.3 256l67.9-67.9c30-30 46.9-70.7 46.9-113.1l0-11c17.7 0 32-14.3 32-32s-14.3-32-32-32L320 0 64 0 32 0zM96 75l0-11 192 0 0 11c0 19-5.6 37.4-16 53L112 128c-10.3-15.6-16-34-16-53zm16 309c3.5-5.3 7.6-10.3 12.1-14.9L192 301.3l67.9 67.9c4.6 4.6 8.6 9.6 12.1 14.9L112 384z"/>
+                    </svg>
+                `);
+            break;
 
             case 2:
                 $('#status-aprovacao').addClass('text-success').html(
-                    'Aprovada <i class="fa-solid fa-check-circle"></i>');
+                    `Aprovada 
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 512 512"
+                        width="32"
+                        height="32"
+                        fill="currentColor"
+                        style="margin-bottom: -6px;"
+                    >
+                        <path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM369 209L241 337c-9.4 9.4-24.6 9.4-33.9 0l-64-64c-9.4-9.4-9.4-24.6 0-33.9s24.6-9.4 33.9 0l47 47L335 175c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9z"/>
+                    </svg>
+                `);
                 break;
 
             case 3:
@@ -357,8 +377,20 @@
                         cadastro.de_observacao_recusa + '</span>';
                 }
 
-                $('#status-aprovacao').addClass('text-danger').html('Recusada: ' + cadastro.no_motivo_recusa +
-                    " <i class='fa fa-ban'></i>" + obs_recusa);
+                $('#status-aprovacao').addClass('text-danger').html(`
+                    Recusada: `
+                    + cadastro.no_motivo_recusa +
+                    `<svg xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 512 512"
+                        width="32"
+                        height="32"
+                        fill="currentColor"
+                        style="margin-bottom: -6px; margin-left: 10px;"
+                    >
+                        <path d="M367.2 412.5L99.5 144.8C77.1 176.1 64 214.5 64 256c0 106 86 192 192 192c41.5 0 79.9-13.1 111.2-35.5zm45.3-45.3C434.9 335.9 448 297.5 448 256c0-106-86-192-192-192c-41.5 0-79.9 13.1-111.2 35.5L412.5 367.2zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256z"/>
+                    </svg>`
+                    + obs_recusa
+                );
                 break;
 
             default:
@@ -556,11 +588,12 @@
                     Toast.fire({
                         icon: "success",
                         title: "Enviado com sucesso!",
+                        timer: 0
                     });
 
                     setTimeout(() => {
                         window.location.reload();
-                    }, 3000);
+                    }, 2000);
                 },
                 error: function (xhr, status, error) {
                     Swal.close(); // 🔥 Fecha o loading mesmo se der erro

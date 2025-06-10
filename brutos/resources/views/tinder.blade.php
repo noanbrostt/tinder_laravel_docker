@@ -399,16 +399,6 @@
         font-size: 13px;
     }
 
-    .fa-circle-info {
-        cursor: pointer;
-        transition: 500ms ease;
-    }
-
-    .fa-circle-info:hover {
-        transform: scale(1.1);
-        color: #fff;
-    }
-
     .fa-forward {
         color: #f7e707;
     }
@@ -421,7 +411,7 @@
         font-size: 19px;
         position: absolute;
         right: 7px;
-        top: 9px;
+        top: 6px;
         cursor: pointer;
         padding: 5px;
         transition: 0.3s;
@@ -487,11 +477,14 @@
         <div class="topbar">
             <div class="topbar-left">
                 <div class="clock">00:00</div>
-                <svg xmlns="http://www.w3.org/2000/svg" 
-                    width="24" height="24" viewBox="0 0 384 512" 
+                <svg
+                    xmlns="http://www.w3.org/2000/svg" 
+                    width="15"
+                    height="15"
                     fill="currentColor" 
-                    style="cursor: pointer;">
-                <path d="M216 0c-12.3 0-23.3 7-28.4 17.9C175.1 53.4 160 98.5 160 128c0 25.3 8.4 46.7 17.4 66.3l-10.9-6.9C149.4 178.5 128 164.6 128 128c0-24.2-16.7-38.3-28.4-43.8c-10.6-5-23.2-2.5-31.3 6.1C24.2 139.5 0 195.8 0 256c0 141.4 114.6 256 256 256s256-114.6 256-256c0-53.7-26.6-108.2-70.6-149.6c-9.2-8.7-23.1-9.9-33.8-3.1c-27.8 17.7-58.4 27.4-92.6 27.4c-21.5 0-42.1-5.4-61.1-14.5C224.6 137.4 216 114.5 216 96V0z"/>
+                    viewBox="0 0 384 512"
+                >
+                    <path d="M153.6 29.9l16-21.3C173.6 3.2 180 0 186.7 0C198.4 0 208 9.6 208 21.3V43.5c0 13.1 5.4 25.7 14.9 34.7L307.6 159C356.4 205.6 384 270.2 384 337.7C384 434 306 512 209.7 512H192C86 512 0 426 0 320v-3.8c0-48.8 19.4-95.6 53.9-130.1l3.5-3.5c4.2-4.2 10-6.6 16-6.6C85.9 176 96 186.1 96 198.6V288c0 35.3 28.7 64 64 64s64-28.7 64-64v-3.9c0-18-7.2-35.3-19.9-48l-38.6-38.6c-24-24-37.5-56.7-37.5-90.7c0-27.7 9-54.8 25.6-76.9z"/>
                 </svg>
             </div>
             <div class="topbar-middle">
@@ -500,16 +493,51 @@
                 <div class="inner-lens"></div>
             </div>
             <div class="topbar-right">
-                <i class="fa fa-signal"></i>
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    width="15"
+                    height="15"
+                    fill="currentColor" 
+                    viewBox="0 0 684 290"
+                >
+                    <path d="M576 0c17.7 0 32 14.3 32 32l0 448c0 17.7-14.3 32-32 32s-32-14.3-32-32l0-448c0-17.7 14.3-32 32-32zM448 96c17.7 0 32 14.3 32 32l0 352c0 17.7-14.3 32-32 32s-32-14.3-32-32l0-352c0-17.7 14.3-32 32-32zM352 224l0 256c0 17.7-14.3 32-32 32s-32-14.3-32-32l0-256c0-17.7 14.3-32 32-32s32 14.3 32 32zM192 288c17.7 0 32 14.3 32 32l0 160c0 17.7-14.3 32-32 32s-32-14.3-32-32l0-160c0-17.7 14.3-32 32-32zM96 416l0 64c0 17.7-14.3 32-32 32s-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32s32 14.3 32 32z"/>
+                </svg>
                 73%
-                <i class="fa fa-battery-three-quarters"></i>
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 566 312"                    
+                    width="15"
+                    height="15"
+                    fill="currentColor"
+                    viewBox="0 0 384 512"
+                >
+                    <path d="M464 160c8.8 0 16 7.2 16 16l0 160c0 8.8-7.2 16-16 16L80 352c-8.8 0-16-7.2-16-16l0-160c0-8.8 7.2-16 16-16l384 0zM80 96C35.8 96 0 131.8 0 176L0 336c0 44.2 35.8 80 80 80l384 0c44.2 0 80-35.8 80-80l0-16c17.7 0 32-14.3 32-32l0-64c0-17.7-14.3-32-32-32l0-16c0-44.2-35.8-80-80-80L80 96zm368 96L96 192l0 128 352 0 0-128z"/>
+                </svg>
             </div>
         </div>
         <nav class="navbar">
             <img src="data:image/png;base64,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"
                 alt="Tinder Plansul">
-            <i class="fa fa-question-circle" data-intro='Se quiser ver esse tour novamente, só clicar aqui.'
-                data-step="5" data-position="right"></i>
+            <svg
+                class="fa-question-circle"
+                onclick="showTutorial();"
+                xmlns="http://www.w3.org/2000/svg" 
+                width="32" height="32" viewBox="0 0 512 512" 
+                fill="currentColor" 
+                data-intro="Se quiser ver esse tour novamente, só clicar aqui."
+                data-step="5" 
+                data-position="right" 
+                style="cursor: pointer;">
+            <path d="M256 8C119.03 8 8 119.03 8 256s111.03 248 248 248 
+                    248-111.03 248-248S392.97 8 256 8zm0 110c23.196 0 
+                    41.887 6.798 55.922 20.02 13.772 12.914 21.078 30.382 
+                    21.078 50.015 0 25.706-13.316 42.863-33.179 58.266-17.645 
+                    13.533-23.821 22.33-23.821 40.699 0 9.007-7.163 16.25-16 
+                    16.25s-16-7.243-16-16.25c0-26.847 13.158-46.327 35.167-63.016 
+                    17.371-13.456 21.833-20.672 21.833-34.199 0-21.68-16.293-36.766-43.083-36.766 
+                    -19.24 0-33.343 5.906-44.833 18.774-6.25 7.017-17.06 7.64-24.084 1.42
+                    -7.017-6.25-7.64-17.059-1.42-24.084C200.338 133.413 224.07 118 256 118zm0 
+                    270c-13.255 0-24-10.745-24-24s10.745-24 
+                    24-24 24 10.745 24 24-10.745 24-24 24z"/>
+            </svg>
         </nav>
         <div class="person">
             <figure class="photo"
@@ -536,18 +564,59 @@
             <div class="command passar"
                 data-intro='Esse botão (>>) serve para "Passar" alguém, isso jogará a pessoa para o fim da fila!'
                 data-step="2" data-position="top">
-                <i class="fa-solid fa-forward"></i>
+                <svg 
+                    class="fa-forward"
+                    style="margin-right: -3px;"
+                    xmlns="http://www.w3.org/2000/svg" 
+                    viewBox="0 0 512 512"
+                    width="32"
+                    height="32"
+                    fill="currentColor" 
+                >
+                    <path d="M52.5 440.6c-9.5 7.9-22.8 9.7-34.1 4.4S0 428.4 0 416L0 96C0 83.6 7.2 72.3 18.4 67s24.5-3.6 34.1 4.4L224 214.3l0 41.7 0 41.7L52.5 440.6zM256 352l0-96 0-128 0-32c0-12.4 7.2-23.7 18.4-29s24.5-3.6 34.1 4.4l192 160c7.3 6.1 11.5 15.1 11.5 24.6s-4.2 18.5-11.5 24.6l-192 160c-9.5 7.9-22.8 9.7-34.1 4.4s-18.4-16.6-18.4-29l0-64z"/>
+                </svg>
             </div>
             <div class="command coracao"
                 data-intro='Esse botão (♡) serve para "Gostar" de alguém, isso dará um coração pra ela, e se a pessoa também gostar de você, é um Match!'
                 data-step="3" data-position="top">
-                <i class="fa-solid fa-heart"></i>
+                <svg
+                    class="fa-heart"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 512 512"
+                    width="32"
+                    height="32"
+                    fill="currentColor" 
+
+                >
+                    <path d="M47.6 300.4L228.3 469.1c7.5 7 17.4 10.9 27.7 10.9s20.2-3.9 27.7-10.9L464.4 300.4c30.4-28.3 47.6-68 47.6-109.5v-5.8c0-69.9-50.5-129.5-119.4-141C347 36.5 300.6 51.4 268 84L256 96 244 84c-32.6-32.6-79-47.5-124.6-39.9C50.5 55.6 0 115.2 0 185.1v5.8c0 41.5 17.2 81.2 47.6 109.5z"/>
+                </svg>
             </div>
         </div>
         <footer>
-            <i class="fa fa-reorder"></i>
-            <i class="fa fa-square-o"></i>
-            <i class="fa fa-chevron-left"></i>
+        <svg xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 448 512"
+            width="15"
+            height="15"
+            fill="currentColor" 
+        >
+            <path d="M0 96C0 78.3 14.3 64 32 64l384 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 128C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32l384 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 288c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32L32 448c-17.7 0-32-14.3-32-32s14.3-32 32-32l384 0c17.7 0 32 14.3 32 32z"/>
+        </svg>
+        <svg xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 448 512"
+            width="15"
+            height="15"
+            fill="currentColor" 
+        >
+            <path d="M384 80c8.8 0 16 7.2 16 16l0 320c0 8.8-7.2 16-16 16L64 432c-8.8 0-16-7.2-16-16L48 96c0-8.8 7.2-16 16-16l320 0zM64 32C28.7 32 0 60.7 0 96L0 416c0 35.3 28.7 64 64 64l320 0c35.3 0 64-28.7 64-64l0-320c0-35.3-28.7-64-64-64L64 32z"/>
+        </svg>
+        <svg xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 320 512"
+            width="15"
+            height="15"
+            fill="currentColor" 
+        >
+            <path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l192 192c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256 246.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-192 192z"/>
+        </svg>
         </footer>
     </div>
 </div>
@@ -797,9 +866,9 @@
         $('.personal').removeClass('alto');
     }
 
-    $('.fa-question-circle').on('click', function () {
+    function showTutorial(params) {
         intro.start();
-    });
+    }
     // Fim da biblioteca do tutorial
 
 

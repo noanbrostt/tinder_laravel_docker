@@ -383,6 +383,26 @@
 
     }
 
+    #redirectInscricao {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    @media screen and (max-width: 640px) {
+        div.dt-buttons {
+            display: contents;
+        }
+
+        /* li.acoes {
+            width: calc(100vw - 80px);
+        }
+        span.spanAcoes {
+            width: 100%;
+            justify-content: center;
+            gap: 10px;
+        } */
+    }
 </style>
 
 <div class="header">
@@ -390,8 +410,18 @@
         <img src="{{ asset('img/logo-plansul.png')}}" alt="Logo" />
         <img src="{{ asset('img/logo-tinder-white.png') }}" alt="Logo" />
     </span>
-    <h1>Validação de Candidatos</h1>
-    <button id="redirectInscricao" onClick="window.location.href = '/inscricao';">Tela de Inscrição <i class="fa-solid fa-arrow-right"></i></button>
+    <h1 style="text-align: center;">Validação de Candidatos</h1>
+    <button id="redirectInscricao" onClick="window.location.href = '/inscricao';">
+        Tela de Inscrição
+        <svg xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 448 512"
+            width="22"
+            height="22"
+            fill="currentColor"
+        >
+            <path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/>
+        </svg>
+    </button>
 </div>
 
 <div id="loader" class="loader-container">
@@ -412,11 +442,16 @@
     <tbody></tbody>
 </table>
 
+
+<!-- CSS -->
+<!-- <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.1/css/responsive.dataTables.min.css"> -->
 <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css">
 
+<!-- JS -->
 <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+<!-- <script src="https://cdn.datatables.net/responsive/2.4.1/js/dataTables.responsive.min.js"></script> -->
 
 <script>
     $(document).ready(function() {
@@ -430,6 +465,7 @@
 
         const tabela = $('#tabela').DataTable({
             dom: 'Bfrtip',
+            // responsive: true,
             order: [[2, 'asc']], // Coluna de status (índice começa em 0)
             columnDefs: [
                 { width: "10%", targets: 0 }, // matrícula
@@ -448,7 +484,17 @@
             autoWidth: false, // Importante para permitir que o width funcione
             buttons: [{
                 extend: 'excelHtml5',
-                text: '<i class="fa-solid fa-file-excel"></i>',
+                text: `
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 384 512"
+                        width="22"
+                        height="22"
+                        fill="currentColor"
+                        style="margin: -5px;"
+                    >
+                        <path d="M64 0C28.7 0 0 28.7 0 64L0 448c0 35.3 28.7 64 64 64l256 0c35.3 0 64-28.7 64-64l0-288-128 0c-17.7 0-32-14.3-32-32L224 0 64 0zM256 0l0 128 128 0L256 0zM155.7 250.2L192 302.1l36.3-51.9c7.6-10.9 22.6-13.5 33.4-5.9s13.5 22.6 5.9 33.4L221.3 344l46.4 66.2c7.6 10.9 5 25.8-5.9 33.4s-25.8 5-33.4-5.9L192 385.8l-36.3 51.9c-7.6 10.9-22.6 13.5-33.4 5.9s-13.5-22.6-5.9-33.4L162.7 344l-46.4-66.2c-7.6-10.9-5-25.8 5.9-33.4s25.8-5 33.4 5.9z"/>
+                    </svg>
+                `,
                 titleAttr: 'Exportar para Excel',
                 exportOptions: {
                     columns: ':not(:last-child)'
@@ -550,7 +596,7 @@
                         const pointerEvents = isRecusado ? 'pointer-events: none; opacity: 0.5;' : '';
 
                         return `
-                            <span style="display: flex; scale: 1.5; ${pointerEvents}">
+                            <span style="display: flex; scale: 1.5; ${pointerEvents}" class="spanAcoes">
                             <!-- Ícone de Aprovar (Check Circle) -->
                             <svg xmlns="http://www.w3.org/2000/svg" 
                                 class="btn-aprovar ${colorAprovar} ${disableClass}" 
