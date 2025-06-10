@@ -37,10 +37,10 @@ Route::middleware(['web'])
         Route::post('/validar/atualizar', [ValidarInscricao::class, 'atualizarInscricao'])->name('validar.atualizar');
         Route::get('/validar/contarUsuariosPorStatus', [ValidarInscricao::class, 'contarUsuariosPorStatus'])->name('validar.contarUsuariosPorStatus');
 
-        Route::get('/matches', [InteracoesController::class, 'listarMatches']);
         Route::get('/tinder', [InteracoesController::class, 'index'])->name('tinder');
         Route::post('/interacoes', [InteracoesController::class, 'store'])->name('reagir');
-        
+        Route::get('/listarLikes', [InteracoesController::class, 'listarLikes'])->name('lista');
+
         Route::get('/matchs', function () {
             return view('matchs');
         });

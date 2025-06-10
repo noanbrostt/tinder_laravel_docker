@@ -169,6 +169,13 @@
 </div>
 
 <script>
+  $(document).ready(function() {
+
+    ChamadaAjaxTotaisLikes();
+
+  })
+
+
     function zoomNaFoto(img) {
          // Cria a div de fundo escuro
         const overlay = document.createElement('div');
@@ -190,6 +197,25 @@
         // Adiciona a overlay no body
         document.body.appendChild(overlay);
     }
+
+
+    function ChamadaAjaxTotaisLikes() {
+        $.ajax({
+            url: "{{ route('lista') }}", 
+            type: 'GET', // Métod
+            dataType: 'json', // Espera uma resposta JSON
+            success: function(data) {
+                // Requisição bem-sucedida
+                console.log(data);
+            },
+            error: function(xhr, status, error) {
+                // Ocorreu um erro na requisição
+                console.error('Requisição AJAX para totais: ', status, error);
+                console.error('Resposta de erro:', xhr.responseText);
+            }
+        });
+    }
+
 
 </script>
 
