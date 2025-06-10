@@ -7,7 +7,8 @@
 <style>
     body {
         background: linear-gradient(191.42deg, var(--bg-orange) 5.12%, var(--bg-blue) 107.11%);
-        height: 100vh;
+        height: 100dvh;
+        min-height: 100vh;
         width: 100vw;
         font-family: "Roboto", sans-serif;
         overflow: hidden;
@@ -859,10 +860,6 @@
 
 
 
-
-
-
-
     let usuarios = @json($usuarios);
     console.log("todosPerfis:", usuarios.original);
 
@@ -879,7 +876,7 @@
     function exibirProximoPerfil() {
         if (filaAtual.length === 0) {
             Swal.fire({
-                title: 'Perfis finalizados!',
+                title: 'Acabaram as pessoas!',
                 // text: 'Reiniciando a fila com os que você passou...',
                 icon: 'info',
                 confirmButtonText: 'Ok'
@@ -888,6 +885,8 @@
                 $('.age').html('');
                 $('.intention').html('');
                 $('.about').html('');
+
+                $('.smartphone').css('pointer-events', 'none');
             });
             return;
         }
