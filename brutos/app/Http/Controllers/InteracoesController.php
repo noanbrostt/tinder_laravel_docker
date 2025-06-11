@@ -113,7 +113,7 @@ class InteracoesController extends Controller
             ->whereIn('i.matricula_origem', $interacoesFeitas)
             ->where('i.matricula_destino', $matriculaMinha)
             ->whereIn('i.id_tipo_interacao', [1])
-            ->select('u.nome', 'u.idade', 'u.de_sobre', 'u.matricula')
+            ->select('u.nome', 'u.idade','u.login', 'u.de_sobre', 'u.matricula')
             ->distinct()
             ->get();
     
@@ -221,7 +221,7 @@ class InteracoesController extends Controller
             ->join('public.tipo_intencao as ti', 'u.id_tipo_intencao', '=', 'ti.id_tipo_intencao')
             ->where('i.matricula_origem', $matriculaMinha)
             ->where('i.id_tipo_interacao', 1)
-            ->select('u.matricula', 'u.nome', 'u.idade', 'ti.no_tipo_intencao AS intencao', 'u.de_sobre')
+            ->select('u.matricula', 'u.login','u.nome', 'u.idade', 'ti.no_tipo_intencao AS intencao', 'u.de_sobre')
             ->get();
     
         $likesRecebidos = DB::connection('tinder2')
@@ -230,7 +230,7 @@ class InteracoesController extends Controller
             ->join('public.tipo_intencao as ti', 'u.id_tipo_intencao', '=', 'ti.id_tipo_intencao')
             ->where('i.matricula_destino', $matriculaMinha)
             ->where('i.id_tipo_interacao', 1)
-            ->select('u.matricula', 'u.nome', 'u.idade', 'ti.no_tipo_intencao AS intencao', 'u.de_sobre')
+            ->select('u.matricula', 'u.login','u.nome', 'u.idade', 'ti.no_tipo_intencao AS intencao', 'u.de_sobre')
             ->get();
     
         return view('matchs', compact('likesFeitos', 'likesRecebidos', 'listarMatches'));
