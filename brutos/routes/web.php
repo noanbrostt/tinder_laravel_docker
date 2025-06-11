@@ -39,11 +39,8 @@ Route::middleware(['web'])
 
         Route::get('/tinder', [InteracoesController::class, 'index'])->name('tinder');
         Route::post('/interacoes', [InteracoesController::class, 'store'])->name('reagir');
-        Route::get('/listarLikes', [InteracoesController::class, 'listarLikes'])->name('lista');
-
-        Route::get('/matchs', function () {
-            return view('matchs');
-        });
+        
+        Route::get('/matchs', [InteracoesController::class, 'listarLikes'])->name('listarLikes');
     });
 
 
