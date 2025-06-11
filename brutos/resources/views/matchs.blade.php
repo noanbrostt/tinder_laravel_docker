@@ -71,7 +71,6 @@
         transition: .3s ease;
         overflow: hidden;
         position: relative;
-        cursor: pointer;
 
         &:hover {
             max-height: 500px;
@@ -85,6 +84,7 @@
         object-fit: cover;
         background: #eee;
         transition: .3s;
+        cursor: pointer;
 
         &:hover {
             transform: scale(1.4);
@@ -130,6 +130,15 @@
         justify-content: flex-start;
         width: 100%;
         gap: 20px;
+    }
+
+    .irParaPessoa {
+        transition: .3s ease;
+        cursor: pointer;
+
+        &:hover {
+            transform: scale(1.2);
+        }
     }
 
     @media (max-width: 480px) {
@@ -221,12 +230,13 @@
                     $nomeFormatado = $primeiro . ($ultimo ? ' ' . $ultimo : '');
                 @endphp
 
-                <div class="user-card" onclick="zoomNaFoto(this.querySelector('img'));">
+                <div class="user-card">
                     <div class="user-preview">
                         <img
                             src="storage/fotos/{{ $match->matricula }}.jpg?v=${new Date().getTime()}"
                             alt="Foto de {{ $nomeFormatado }}"
                             class="user-photo"
+                            onclick="zoomNaFoto(this);"
                         >
                         <div class="user-info">
                             <strong>{{ $nomeFormatado }}</strong>
@@ -257,18 +267,29 @@
                     $nomeFormatado = $primeiro . ($ultimo ? ' ' . $ultimo : '');
                 @endphp
 
-                <div class="user-card" onclick="zoomNaFoto(this.querySelector('img'));">
+                <div class="user-card">
                     <div class="user-preview">
                         <img
                             src="storage/fotos/{{ $likeRecebido->matricula }}.jpg?v=${new Date().getTime()}"
                             alt="Foto de {{ $nomeFormatado }}"
                             class="user-photo"
+                            onclick="zoomNaFoto(this);"
                         >
                         <div class="user-info">
                             <strong>{{ $nomeFormatado }}</strong>
                             <small>Matrícula: {{ $likeRecebido->matricula }}</small>
                             <small>Idade: {{ $likeRecebido->idade }} anos</small>
                         </div>
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 448 512"
+                            width="32"
+                            height="32"
+                            fill="currentColor"
+                            class="irParaPessoa"
+                            onclick="irParaPessoa('{{ $likeRecebido->matricula }}');"
+                        >
+                            <path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/>
+                        </svg>
                     </div>
                     <div class="user-extra">
                         <p><strong>Intenção:</strong> {{ $likeRecebido->intencao }}</p>
@@ -292,12 +313,13 @@
                     $nomeFormatado = $primeiro . ($ultimo ? ' ' . $ultimo : '');
                 @endphp
 
-                <div class="user-card" onclick="zoomNaFoto(this.querySelector('img'));">
+                <div class="user-card">
                     <div class="user-preview">
                         <img
                             src="storage/fotos/{{ $likeFeito->matricula }}.jpg?v=${new Date().getTime()}"
                             alt="Foto de {{ $nomeFormatado }}"
                             class="user-photo"
+                            onclick="zoomNaFoto(this);"
                         >
                         <div class="user-info">
                             <strong>{{ $nomeFormatado }}</strong>
@@ -317,19 +339,6 @@
 </div>
 
 <script>
-    $(document).ready(function() {
-
-        let feitos = @json($likesFeitos);
-        console.log(feitos);
-        
-        let recebidos = @json($likesRecebidos);
-        console.log(recebidos);
-        
-        let matchs = @json($likesFeitos);
-        console.log(matchs);
-    });
-
-
     function zoomNaFoto(img) {
          // Cria a div de fundo escuro
         const overlay = document.createElement('div');
@@ -350,6 +359,11 @@
 
         // Adiciona a overlay no body
         document.body.appendChild(overlay);
+    }
+
+    function irParaPessoa(matricula) {
+        sessionStorage.setItem('matricula_alvo', matricula);
+        window.location.href = '/tinder';
     }
 
 </script>
