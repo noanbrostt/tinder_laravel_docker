@@ -598,16 +598,12 @@
                 data-step="1" data-position="left">
                 <div class="personal">
                     <div class="name-age">
-                        <h2 class="name">Lorem</h2>
-                        <h2 class="age">26</h2>
+                        <h2 class="name"></h2>
+                        <h2 class="age"></h2>
                     </div>
                     <div class="data">
-                        <p class="intention">Intenção: Amizade</p>
-                        <p class="about">
-                            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ab, quasi cum a voluptatibus eius
-                            eum temporibus? Voluptate quidem odio consectetur ea veniam debitis repellat aspernatur,
-                            molestiae reiciendis eaque quod perspiciatis. Lorem Ipsum d
-                        </p>
+                        <p class="intention"></p>
+                        <p class="about"></p>
                     </div>
                 </div>
             </figure>
@@ -949,12 +945,16 @@
                 icon: 'info',
                 confirmButtonText: 'Ok'
             }).then(() => {
-                $('.name').html('');
-                $('.age').html('');
-                $('.intention').html('');
-                $('.about').html('');
+                $('.name').html('Luizinho,');
+                $('.age').html('55');
+                $('.intention').html('Intenção: Dar presentes');
+                $('.about').html('Supervisor dos Desenvolvedores, mas trabalho só uma vez por ano');
 
-                $('.smartphone').css('pointer-events', 'none');
+                $('.commands').css('pointer-events', 'none');
+
+                document.querySelector(".photo").style.background = `
+                    url('storage/fotos/luizinho_de_pe.jpg?v=${new Date().getTime()}') center center/cover
+                `;
             });
             return;
         }
