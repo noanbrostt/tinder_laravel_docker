@@ -544,8 +544,19 @@
                         });
                     },
                     success: function (response) {
-                        // Redireciona para a página de inscrição
-                        window.location.href = response.redirect;
+                        // Define a data/hora limite: 12/06/2025 às 07:40
+                        const limite = new Date('2025-06-12T07:40:00');
+                    
+                        // Pega o horário atual do cliente
+                        const agora = new Date();
+                    
+                        // Compara se é superior
+                        if (agora > limite) {
+                            window.location.href = '/tinder';
+                        } else {
+                            // Redireciona normalmente
+                            window.location.href = response.redirect;
+                        }
                     },
                     error: function (error) {
                         Swal.close();

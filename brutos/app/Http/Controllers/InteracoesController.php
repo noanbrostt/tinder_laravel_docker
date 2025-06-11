@@ -19,8 +19,8 @@ class InteracoesController extends Controller
     protected $adm = [677, 1097, 1110, 15, 255, 572, 574, 676, 15264]; // perfis com permissões (devs,coordenadores,gerentes)
 
 
-    public function index(){ // Traz a lista de usuarios aprovados
-     
+    public function index() {
+        // Traz a lista de usuarios aprovados
         $usr = session('dados'); // pega as infos do user logado
     
         if (!$usr) { // se não estiver logado 
@@ -30,19 +30,24 @@ class InteracoesController extends Controller
             ], 401);
         }
     
-        $funcoesPermitidas = $this->adm;
+        // Verifica se a data e hora atual é superior 
+        $dataLimite = \Carbon\Carbon::createFromFormat('d/m/Y H:i', '12/06/2025 07:40');
+        $agora = \Carbon\Carbon::now();
     
-        if (!in_array($usr->co_funcao, $funcoesPermitidas)) {
-            return response()->json([
-                'status' => 'erro',
-                'mensagem' => 'Acesso negado. Sua função não permite acessar esta área.'
-            ], 403);
+        if ($agora->lessThan($dataLimite)) {
+            // Se ainda não passou da data/hora limite, valida a função
+            $funcoesPermitidas = $this->adm;
+    
+            if (!in_array($usr->co_funcao, $funcoesPermitidas)) {
+                 return redirect()->route('login');
+            }
         }
-
-          $usuarios = $this->listarInteracoes();
-      
-          return view('tinder', compact('usuarios'));
+    
+        $usuarios = $this->listarInteracoes();
+    
+        return view('tinder', compact('usuarios'));
     }
+
 
     public function store(Request $request){ // Salva ou atualiza a interação
     
