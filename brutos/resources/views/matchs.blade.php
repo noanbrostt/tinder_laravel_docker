@@ -166,25 +166,29 @@
 
 </style>
 
-<!-- Meio 1 de barrar celulares -->
+<!-- Meio 1 de barrar celulares (JS + URL contendo "plansul") -->
 <script>
-    // Detecta mobile antes de renderizar o conteúdo
-    if (window.innerWidth <= 768) {
+    const isMobile = window.innerWidth <= 768;
+    const urlContemPlansul = window.location.href.includes('plansul');
+
+    if (isMobile || urlContemPlansul) {
         $('body').remove();
-        alert("Esta página não pode ser acessada por dispositivos móveis.");
+        alert("Esta página não pode ser acessada por dispositivos móveis ou com o endereço contendo 'plansul'.");
         window.location.href = '/';
     }
 </script>
 
-<!-- Meio 2 de barrar celulares -->
+<!-- Meio 2 de barrar no backend (PHP + URL) -->
 @php
-    $isMobile = preg_match('/Mobile|Android|iPhone|iPad|iPod/i', request()->header('User-Agent'));
+    $userAgent = request()->header('User-Agent');
+    $isMobile = preg_match('/Mobile|Android|iPhone|iPad|iPod/i', $userAgent);
+    $urlContemPlansul = str_contains(request()->fullUrl(), 'plansul');
 @endphp
 
-@if ($isMobile)
+@if ($isMobile || $urlContemPlansul)
     <script>
         $('body').remove();
-        alert("Esta página não pode ser acessada por dispositivos móveis.");
+        alert("Esta página não pode ser acessada por dispositivos móveis ou com o endereço contendo 'plansul'.");
         window.location.href = "{{ url('/') }}";
     </script>
 @endif
