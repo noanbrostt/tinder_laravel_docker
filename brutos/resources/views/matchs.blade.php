@@ -240,7 +240,7 @@
                         >
                         <div class="user-info">
                             <strong>{{ $nomeFormatado }}</strong>
-                            <small>Matrícula: {{ $match->matricula }}</small>
+                            <small>Matrícula: {{ $match->login }}</small>
                             <small>Idade: {{ $match->idade }} anos</small>
                         </div>
                     </div>
@@ -277,7 +277,7 @@
                         >
                         <div class="user-info">
                             <strong>{{ $nomeFormatado }}</strong>
-                            <small>Matrícula: {{ $likeRecebido->matricula }}</small>
+                            <small>Matrícula: {{ $likeRecebido->login }}</small>
                             <small>Idade: {{ $likeRecebido->idade }} anos</small>
                         </div>
                         <svg xmlns="http://www.w3.org/2000/svg"
@@ -323,7 +323,7 @@
                         >
                         <div class="user-info">
                             <strong>{{ $nomeFormatado }}</strong>
-                            <small>Matrícula: {{ $likeFeito->matricula }}</small>
+                            <small>Matrícula: {{ $likeFeito->login }}</small>
                             <small>Idade: {{ $likeFeito->idade }} anos</small>
                         </div>
                     </div>

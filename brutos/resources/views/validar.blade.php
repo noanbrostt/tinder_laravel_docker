@@ -766,13 +766,6 @@
             type: 'GET', // Método HTTP GET
             dataType: 'json', // Espera uma resposta JSON
             success: function(data) {
-                // Requisição bem-sucedida
-                console.log('--- Totais de Usuários por Status (via AJAX) ---');
-                console.log('Aprovados:', data.aprovados);
-                console.log('Pendentes (Em revisão):', data.pendentes);
-                console.log('Recusados:', data.recusados);
-                console.log('-------------------------------------------');
-
                 $('#contador').append(`<span class="text-success">Aprovados: ${data.aprovados}</span>`);
                 $('#contador').append(`<span class="text-warning">Em revisão: ${data.pendentes}</span>`);
                 $('#contador').append(`<span class="text-danger">Recusados: ${data.recusados}</span>`);
