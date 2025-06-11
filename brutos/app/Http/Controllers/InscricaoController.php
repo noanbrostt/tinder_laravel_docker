@@ -40,10 +40,11 @@ class InscricaoController extends Controller{
         }
         
         $matricula = $dados->matricula ?? null;
+        $login = $dados->login ?? null;
         $nome = $dados->nome ?? null;
         $dtnascimento = $dados->dtnascimento ?? null;
         
-        if (!$matricula || !$nome || !$dtnascimento) {
+        if (!$matricula || !$nome || !$dtnascimento || !$login) {
             return response()->json([
                 'error' => 'Dados obrigatórios estão incompletos.'
             ], 400);
@@ -80,6 +81,7 @@ class InscricaoController extends Controller{
         // 🗂 Inserir dados na tabela usuario
         DB::connection('tinder2')->table('public.usuario')->insert([
             'matricula' => $matricula,
+            'login'=> $login,
             'nome' => $nome,
             'idade' => $idade,
             'de_sobre' => $request->input('sobre'),
