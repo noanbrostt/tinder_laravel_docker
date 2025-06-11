@@ -233,8 +233,7 @@ class InteracoesController extends Controller
             ->select('u.matricula', 'u.nome', 'u.idade', 'ti.no_tipo_intencao AS intencao', 'u.de_sobre')
             ->get();
     
-        return response()->json(compact('likesFeitos', 'likesRecebidos', 'listarMatches'));
+        return view('matchs', compact('likesFeitos', 'likesRecebidos', 'listarMatches'));
     }
-
 
 }

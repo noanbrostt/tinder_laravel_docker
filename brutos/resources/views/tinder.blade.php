@@ -1,6 +1,6 @@
 @extends('main')
 
-@section('title', 'Login')
+@section('title', 'Tinder')
 
 @section('conteudo')
 
@@ -214,15 +214,25 @@
 
     .navbar {
         display: flex;
-        justify-content: space-around;
+        justify-content: space-between;
         align-items: baseline;
-        padding: 10px 0;
+        padding: 10px 12px;
         width: 100%;
         height: 45px;
 
         img {
             width: 140px;
             margin-top: -5px;
+        }
+
+        svg {
+            position: relative;
+            top: -3px;
+            transition: .3s ease;
+
+            &:hover {
+                transform: scale(1.2);
+            }
         }
     }
 
@@ -417,16 +427,8 @@
 
     .fa-question-circle {
         font-size: 19px;
-        position: absolute;
-        right: 7px;
-        top: 6px;
         cursor: pointer;
-        padding: 5px;
-        transition: 0.3s;
-
-        &:hover {
-            transform: scale(1.2);
-        }
+        padding: 4px;
     }
 
     @keyframes flutuar {
@@ -475,6 +477,29 @@
 
 </style>
 
+<!-- Meio 1 de barrar celulares -->
+<script>
+    // Detecta mobile antes de renderizar o conteúdo
+    if (window.innerWidth <= 768) {
+        $('body').remove();
+        alert("Esta página não pode ser acessada por dispositivos móveis.");
+        window.location.href = '/';
+    }
+</script>
+
+<!-- Meio 2 de barrar celulares -->
+@php
+    $isMobile = preg_match('/Mobile|Android|iPhone|iPad|iPod/i', request()->header('User-Agent'));
+@endphp
+
+@if ($isMobile)
+    <script>
+        alert("Esta página não pode ser acessada por dispositivos móveis.");
+        window.location.href = "{{ url('/') }}";
+    </script>
+@endif
+
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/intro.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/introjs.min.css" />
 
@@ -520,6 +545,20 @@
             </div>
         </div>
         <nav class="navbar">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 640 512"
+                width="32" height="32"
+                fill="currentColor" 
+                data-intro="Aqui você checa todas suas interações."
+                data-step="2"
+                data-position="left" 
+                style="cursor: pointer;"
+                class="matchs"
+                onclick="window.location.href = '/matchs';"
+            >
+                <path d="M208 352c114.9 0 208-78.8 208-176S322.9 0 208 0S0 78.8 0 176c0 38.6 14.7 74.3 39.6 103.4c-3.5 9.4-8.7 17.7-14.2 24.7c-4.8 6.2-9.7 11-13.3 14.3c-1.8 1.6-3.3 2.9-4.3 3.7c-.5 .4-.9 .7-1.1 .8l-.2 .2s0 0 0 0s0 0 0 0C1 327.2-1.4 334.4 .8 340.9S9.1 352 16 352c21.8 0 43.8-5.6 62.1-12.5c9.2-3.5 17.8-7.4 25.2-11.4C134.1 343.3 169.8 352 208 352zM448 176c0 112.3-99.1 196.9-216.5 207C255.8 457.4 336.4 512 432 512c38.2 0 73.9-8.7 104.7-23.9c7.5 4 16 7.9 25.2 11.4c18.3 6.9 40.3 12.5 62.1 12.5c6.9 0 13.1-4.5 15.2-11.1c2.1-6.6-.2-13.8-5.8-17.9c0 0 0 0 0 0s0 0 0 0l-.2-.2c-.2-.2-.6-.4-1.1-.8c-1-.8-2.5-2-4.3-3.7c-3.6-3.3-8.5-8.1-13.3-14.3c-5.5-7-10.7-15.4-14.2-24.7c24.9-29 39.6-64.7 39.6-103.4c0-92.8-84.9-168.9-192.6-175.5c.4 5.1 .6 10.3 .6 15.5z"/>
+            </svg>
+
             <img src="data:image/png;base64,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"
                 alt="Tinder Plansul">
             <svg
@@ -549,9 +588,7 @@
             <figure class="photo"
                 data-intro='Bem-vindo, arraste a foto para à esquerda para "Passar" alguém, e arraste para à direita para "Gostar" de alguém.'
                 data-step="1" data-position="left">
-                <div class="personal"
-                    data-intro='E ao passar o mouse em qualquer um desses elementos, a descrição da pessoa expandirá.'
-                    data-step="4" data-position="right">
+                <div class="personal">
                     <div class="name-age">
                         <h2 class="name">Lorem</h2>
                         <h2 class="age">26</h2>
@@ -570,7 +607,7 @@
         <div class="commands">
             <div class="command passar"
                 data-intro='Esse botão (>>) serve para "Passar" alguém, isso jogará a pessoa para o fim da fila!'
-                data-step="2" data-position="top">
+                data-step="3" data-position="top">
                 <svg 
                     class="fa-forward"
                     style="margin-right: -3px;"
@@ -585,7 +622,7 @@
             </div>
             <div class="command coracao"
                 data-intro='Esse botão (♡) serve para "Gostar" de alguém, isso dará um coração pra ela, e se a pessoa também gostar de você, é um Match!'
-                data-step="3" data-position="top">
+                data-step="4" data-position="top">
                 <svg
                     class="fa-heart"
                     xmlns="http://www.w3.org/2000/svg"
@@ -820,9 +857,9 @@
                 limparClasses();
                 $('.coracao').addClass('pulsar');
 
-            } else if (currentStep.element && currentStep.element.classList.contains('personal')) {
+            } else if (currentStep.element && currentStep.element.classList.contains('matchs')) {
                 limparClasses();
-                $('.personal').addClass('alto');
+                $('.matchs').addClass('pulsar');
 
             } else {
                 limparClasses();
@@ -850,7 +887,7 @@
     function limparClasses() {
         $('.photo').removeClass('flutuar');
         $('.command').removeClass('pulsar');
-        $('.personal').removeClass('alto');
+        $('.matchs').removeClass('pulsar');
     }
 
     function showTutorial(params) {
@@ -886,7 +923,7 @@
                 $('.intention').html('');
                 $('.about').html('');
 
-                $('.smartphone').css('pointer-events', 'none');
+                // $('.smartphone').css('pointer-events', 'none');
             });
             return;
         }
@@ -945,7 +982,5 @@
     }
 
 </script>
-
-
 
 @endsection
