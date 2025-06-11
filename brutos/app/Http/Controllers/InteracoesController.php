@@ -115,10 +115,11 @@ class InteracoesController extends Controller
         $matches = DB::connection('tinder2') // Matches: pessoas também curtiram de volta
             ->table('public.interacao as i')
             ->join('public.usuario as u', 'i.matricula_origem', '=', 'u.matricula')
+            ->join('public.tipo_intencao as ti', 'u.id_tipo_intencao', '=', 'ti.id_tipo_intencao')
             ->whereIn('i.matricula_origem', $interacoesFeitas)
             ->where('i.matricula_destino', $matriculaMinha)
             ->whereIn('i.id_tipo_interacao', [1])
-            ->select('u.nome', 'u.idade','u.login', 'u.de_sobre', 'u.matricula')
+            ->select('u.nome', 'u.idade','u.login', 'u.de_sobre', 'u.matricula', 'ti.no_tipo_intencao AS intencao')
             ->distinct()
             ->get();
     

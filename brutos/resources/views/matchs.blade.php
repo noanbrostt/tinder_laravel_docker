@@ -265,7 +265,6 @@
             </svg>
         </h2>
         <div class="user-list">
-
             @foreach ($listarMatches as $match)
                 @php
                     $nomes = explode(' ', strtolower($match->nome));
