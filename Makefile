@@ -35,3 +35,9 @@ prod-down-apagatudosemdonaouseisso:
 prod-migrate-database:
 	docker exec tinder-app-prod php artisan migrate --force
 	docker exec tinder-app-prod php artisan db:seed --force
+
+prod-backup-database:
+	docker exec -t tinder-postgres-prod pg_dumpall -c -U tinder_user > backup/backup_tinder.sql
+
+prod-image-prune:
+	docker image rm tinder_plansul_app:latest tinder_plansul_nginx:latest
