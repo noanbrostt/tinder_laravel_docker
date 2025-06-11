@@ -183,6 +183,7 @@
 
 @if ($isMobile)
     <script>
+        $('body').remove();
         alert("Esta página não pode ser acessada por dispositivos móveis.");
         window.location.href = "{{ url('/') }}";
     </script>
