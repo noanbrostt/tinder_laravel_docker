@@ -179,7 +179,7 @@ class InteracoesController extends Controller
         $interacoesDeslike = collect(); // coleção vazia por padrão
     
         // 🔍 2. Executa apenas se a primeira lista estiver vazia
-        if ($semInteracoes->isEmpty()) {
+
             $interacoesDeslike = DB::connection('tinder2')
                 ->table('public.interacao as i')
                 ->join('public.usuario as u', 'i.matricula_destino', '=', 'u.matricula')
@@ -193,7 +193,7 @@ class InteracoesController extends Controller
                     $user->tipo = 'dislike';
                     return $user;
                 });
-        }
+
     
         // 🔗 Junta as listas
         $resultado = $semInteracoes->merge($interacoesDeslike);
