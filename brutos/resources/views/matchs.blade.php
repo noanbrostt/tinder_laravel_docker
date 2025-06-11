@@ -48,12 +48,49 @@
         font-size: 1.3rem;
         color: var(--bg-blue-light);
         margin-bottom: 1rem;
+        cursor: pointer;
+        padding: 6px 32px;
+        margin-inline: -32px;
+        position: sticky;
+        top: 0px;
+        background-color: white;
+        z-index: 2;
+
+        &:hover {
+            background-color: #f9286d40;
+        }
     }
 
+    .section-title {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+        font-size: 1.2rem;
+        margin: 0;
+    }
+
+    .section-title .chevron {
+        transition: transform 0.3s ease;
+    }
+
+    .section.open .section-title .chevron {
+        transform: rotate(180deg);
+    }
+
+
     .user-list {
+        max-height: 0;
+        overflow: hidden;
         display: flex;
         flex-wrap: wrap;
         gap: 15px;
+        transition: all 0.5s ease;
+    }
+
+    .section.open .user-list {
+        max-height: fit-content; 
+        max-height: -moz-fit-content; 
     }
 
     .user-card {
@@ -218,8 +255,15 @@
         Seus Matchs 💘
         <span class="espaco" style="width: 32px;"></span>
     </h1>
-    <div class="section" style="{{ $listarMatches->count() == 0 ? 'margin-bottom: -20px;' : '' }}">
-        <h2>{{ $listarMatches->count() }} Matchs</h2>
+    <div class="section" style="{{ $listarMatches->count() == 0 ? 'margin-bottom: -10px;' : '' }}">
+        <h2 class="section-title" onclick="toggleSection(this)">
+            {{ $listarMatches->count() }} Matchs
+            <svg class="chevron" xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 448 512"
+                width="22" height="22" fill="currentColor">
+                <path d="M207.029 381.476l-184-184c-9.373-9.373-9.373-24.569 0-33.941l22.627-22.627c9.357-9.357 24.522-9.375 33.901-.04L224 284.118l144.443-143.25c9.379-9.335 24.544-9.317 33.901.04l22.627 22.627c9.373 9.373 9.373 24.569 0 33.941l-184 184c-9.373 9.372-24.569 9.372-33.942 0z"/>
+            </svg>
+        </h2>
         <div class="user-list">
 
             @foreach ($listarMatches as $match)
@@ -255,8 +299,15 @@
     </div>
 
     <hr>
-    <div class="section" style="{{ $likesRecebidos->count() == 0 ? 'margin-bottom: -20px;' : '' }}">
-        <h2>{{ $likesRecebidos->count() }} Curtiram você</h2>
+    <div class="section" style="{{ $likesRecebidos->count() == 0 ? 'margin-bottom: -10px;' : '' }}">
+        <h2 class="section-title" onclick="toggleSection(this)">
+            {{ $likesRecebidos->count() }} Curtiram você
+            <svg class="chevron" xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 448 512"
+                width="22" height="22" fill="currentColor">
+                <path d="M207.029 381.476l-184-184c-9.373-9.373-9.373-24.569 0-33.941l22.627-22.627c9.357-9.357 24.522-9.375 33.901-.04L224 284.118l144.443-143.25c9.379-9.335 24.544-9.317 33.901.04l22.627 22.627c9.373 9.373 9.373 24.569 0 33.941l-184 184c-9.373 9.372-24.569 9.372-33.942 0z"/>
+            </svg>
+        </h2>
         <div class="user-list">
 
             @foreach ($likesRecebidos as $likeRecebido)
@@ -301,8 +352,15 @@
         </div>
     </div>
     <hr>
-    <div class="section" style="{{ $likesFeitos->count() == 0 ? 'margin-bottom: -20px;' : '' }}">
-        <h2>{{ $likesFeitos->count() }} Curtidos por você</h2>
+    <div class="section" style="{{ $likesFeitos->count() == 0 ? 'margin-bottom: -10px;' : '' }}">
+        <h2 class="section-title" onclick="toggleSection(this)">
+            {{ $likesFeitos->count() }} Curtidos por você
+            <svg class="chevron" xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 448 512"
+                width="22" height="22" fill="currentColor">
+                <path d="M207.029 381.476l-184-184c-9.373-9.373-9.373-24.569 0-33.941l22.627-22.627c9.357-9.357 24.522-9.375 33.901-.04L224 284.118l144.443-143.25c9.379-9.335 24.544-9.317 33.901.04l22.627 22.627c9.373 9.373 9.373 24.569 0 33.941l-184 184c-9.373 9.372-24.569 9.372-33.942 0z"/>
+            </svg>
+        </h2>
         <div class="user-list">
 
             @foreach ($likesFeitos as $likeFeito)
@@ -364,6 +422,17 @@
     function irParaPessoa(matricula) {
         sessionStorage.setItem('matricula_alvo', matricula);
         window.location.href = '/tinder';
+    }
+
+    function toggleSection(clickedTitle) {
+        const section = clickedTitle.closest('.section');
+        const allSections = document.querySelectorAll('.section');
+
+        allSections.forEach(s => {
+        if (s !== section) s.classList.remove('open');
+        });
+
+        section.classList.toggle('open');
     }
 
 </script>
