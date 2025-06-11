@@ -403,6 +403,15 @@
             gap: 10px;
         } */
     }
+
+    #contador {
+        font-weight: bolder;
+        font-size: 20px;
+        display: flex;
+        justify-content: space-around;
+        margin-block: -20px 20px;
+        padding-inline: 10%;
+    }
 </style>
 
 <div class="header">
@@ -423,6 +432,8 @@
         </svg>
     </button>
 </div>
+
+<div id="contador"></div>
 
 <div id="loader" class="loader-container">
     <div class="spinner"></div>
@@ -761,6 +772,10 @@
                 console.log('Pendentes (Em revisão):', data.pendentes);
                 console.log('Recusados:', data.recusados);
                 console.log('-------------------------------------------');
+
+                $('#contador').append(`<span class="text-success">Aprovados: ${data.aprovados}</span>`);
+                $('#contador').append(`<span class="text-warning">Em revisão: ${data.pendentes}</span>`);
+                $('#contador').append(`<span class="text-danger">Recusados: ${data.recusados}</span>`);
             },
             error: function(xhr, status, error) {
                 // Ocorreu um erro na requisição
