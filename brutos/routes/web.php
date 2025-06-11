@@ -41,6 +41,10 @@ Route::middleware(['web'])
         Route::post('/interacoes', [InteracoesController::class, 'store'])->name('reagir');
         
         Route::get('/matchs', [InteracoesController::class, 'listarLikes'])->name('listarLikes');
+
+        Route::get('/forbidden', function () {
+            return view('forbidden');
+        });
     });
 
 
