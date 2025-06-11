@@ -30,8 +30,8 @@
         align-items: center;
         margin: auto;
         border-radius: 15px;
-        width: clamp(290px, 49vh, 360px);
-        height: clamp(580px, 98vh, 720px);
+        width: 340px;
+        height: 730px;
         border: 8px solid black;
     }
 
@@ -216,9 +216,10 @@
         display: flex;
         justify-content: space-between;
         align-items: baseline;
-        padding: 10px 12px;
+        padding: 10px 0;
         width: 100%;
         height: 45px;
+        scale: 0.9;
 
         img {
             width: 140px;
@@ -237,10 +238,12 @@
     }
 
     .person {
-        width: 99%;
+        width: fit-content;
+        width: -moz-fit-content;
         height: 100%;
         background: #d6d5d5;
         border-radius: 10px;
+        aspect-ratio: 9 / 16;
     }
 
     .photo {
@@ -377,7 +380,7 @@
         display: flex;
         justify-content: space-around;
         align-items: center;
-        height: 100px;
+        height: 88px;
     }
 
     .command {
@@ -385,10 +388,10 @@
         align-items: center;
         justify-content: center;
         background: #fff;
-        height: 60px;
-        width: 60px;
+        height: 48px;
+        width: 48px;
         border-radius: 50%;
-        font-size: 2rem;
+        font-size: 1.8rem;
         box-shadow: 0 2px 6px 0 rgba(112, 125, 134, 0.14);
         transition: 500ms ease;
         cursor: pointer;
@@ -618,8 +621,8 @@
                     style="margin-right: -3px;"
                     xmlns="http://www.w3.org/2000/svg" 
                     viewBox="0 0 512 512"
-                    width="32"
-                    height="32"
+                    width="28"
+                    height="28"
                     fill="currentColor" 
                 >
                     <path d="M52.5 440.6c-9.5 7.9-22.8 9.7-34.1 4.4S0 428.4 0 416L0 96C0 83.6 7.2 72.3 18.4 67s24.5-3.6 34.1 4.4L224 214.3l0 41.7 0 41.7L52.5 440.6zM256 352l0-96 0-128 0-32c0-12.4 7.2-23.7 18.4-29s24.5-3.6 34.1 4.4l192 160c7.3 6.1 11.5 15.1 11.5 24.6s-4.2 18.5-11.5 24.6l-192 160c-9.5 7.9-22.8 9.7-34.1 4.4s-18.4-16.6-18.4-29l0-64z"/>
@@ -632,8 +635,8 @@
                     class="fa-heart"
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 512 512"
-                    width="32"
-                    height="32"
+                    width="28"
+                    height="28"
                     fill="currentColor" 
 
                 >
@@ -901,17 +904,40 @@
     // Fim da biblioteca do tutorial
 
 
-
     let usuarios = @json($usuarios);
-    console.log("todosPerfis:", usuarios.original);
-
     let todosPerfis = usuarios.original; // Recebido da Controller
     let filaAtual = [];
     let perfilAtualIndex = 0;
 
     $(document).ready(function () {
-        embaralhar(todosPerfis);
-        filaAtual = [...todosPerfis];
+        const matriculaAlvo = sessionStorage.getItem('matricula_alvo');
+
+        if (matriculaAlvo) {
+            const index = todosPerfis.findIndex(u => u.matricula == matriculaAlvo);
+
+            if (index !== -1) {
+                const [perfilAlvo] = todosPerfis.splice(index, 1);
+                embaralharComPrioridade(todosPerfis);
+                filaAtual = [perfilAlvo, ...todosPerfis];
+            } else {
+                embaralharComPrioridade(todosPerfis);
+                filaAtual = [...todosPerfis];
+
+                Swal.fire({
+                    title: 'Pessoa não encontrada!',
+                    text: 'Esse perfil não está disponível agora.',
+                    icon: 'warning',
+                    confirmButtonText: 'Ok'
+                });
+            }
+
+            // Limpa a matrícula para não repetir
+            sessionStorage.removeItem('matricula_alvo');
+        } else {
+            embaralharComPrioridade(todosPerfis);
+            filaAtual = [...todosPerfis];
+        }
+
         exibirProximoPerfil();
     });
 
@@ -928,7 +954,7 @@
                 $('.intention').html('');
                 $('.about').html('');
 
-                // $('.smartphone').css('pointer-events', 'none');
+                $('.smartphone').css('pointer-events', 'none');
             });
             return;
         }
@@ -954,8 +980,6 @@
 
     function reagir(tipo) {
         const perfil = filaAtual[0];
-
-        console.log(filaAtual);
         
         // Envia para o back-end imediatamente
         $.post("{{ route('reagir') }}", {
@@ -979,6 +1003,20 @@
         exibirProximoPerfil();
     }
 
+    function embaralharComPrioridade(array) {
+        // Separa os perfis por tipo
+        const semInteracao = array.filter(p => p.tipo === 'sem_interacao');
+        const outros = array.filter(p => p.tipo !== 'sem_interacao');
+
+        // Embaralha cada grupo
+        embaralhar(semInteracao);
+        embaralhar(outros);
+        
+        // Junta, com os 'sem_interacao' vindo primeiro
+        return [...semInteracao, ...outros];
+    }
+
+    // Função embaralhadora padrão (mantém sua lógica)
     function embaralhar(array) {
         for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
