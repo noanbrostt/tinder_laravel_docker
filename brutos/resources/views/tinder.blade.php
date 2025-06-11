@@ -953,7 +953,7 @@
                 $('.commands').css('pointer-events', 'none');
 
                 document.querySelector(".photo").style.background = `
-                    url('storage/fotos/luizinho_de_pe.jpg?v=${new Date().getTime()}') center center/cover
+                    url('img/luizinho_de_pe.jpg') center center/cover
                 `;
             });
             return;
