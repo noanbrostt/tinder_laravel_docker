@@ -256,6 +256,20 @@ class InteracoesController extends Controller
             ->where('i.id_tipo_interacao', 1)
             ->select('u.matricula', 'u.login','u.nome', 'u.idade', 'ti.no_tipo_intencao AS intencao', 'u.de_sobre')
             ->get();
+
+
+        // Extrai as matrículas dos matches (como uma Collection de IDs)
+        $matriculasMatches = collect($listarMatches)->pluck('matricula');
+
+        // Remove os usuários que já são matches
+        $likesFeitos = $likesFeitos->reject(function ($like) use ($matriculasMatches) {
+            return $matriculasMatches->contains($like->matricula);
+        });
+
+        $likesRecebidos = $likesRecebidos->reject(function ($like) use ($matriculasMatches) {
+            return $matriculasMatches->contains($like->matricula);
+        });
+
     
         return view('matchs', compact('likesFeitos', 'likesRecebidos', 'listarMatches'));
     }
