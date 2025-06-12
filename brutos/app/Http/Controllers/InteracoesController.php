@@ -204,19 +204,20 @@ class InteracoesController extends Controller
     
         // 🔍 2. Executa apenas se a primeira lista estiver vazia
 
-            $interacoesDeslike = DB::connection('tinder2')
-                ->table('public.interacao as i')
-                ->join('public.usuario as u', 'i.matricula_destino', '=', 'u.matricula')
-                ->join('public.tipo_intencao as ti', 'u.id_tipo_intencao', '=', 'ti.id_tipo_intencao')
-                ->where('i.matricula_origem', $matriculaMinha)
-                ->where('i.id_tipo_interacao', 2)
-                ->select('u.matricula', 'u.nome', 'u.idade', 'ti.no_tipo_intencao AS intencao', 'u.de_sobre')
-                ->distinct()
-                ->get()
-                ->map(function ($user) {
-                    $user->tipo = 'dislike';
-                    return $user;
-                });
+        $interacoesDeslike = DB::connection('tinder2')
+            ->table('public.interacao as i')
+            ->join('public.usuario as u', 'i.matricula_destino', '=', 'u.matricula')
+            ->join('public.tipo_intencao as ti', 'u.id_tipo_intencao', '=', 'ti.id_tipo_intencao')
+            ->where('i.matricula_origem', $matriculaMinha)
+            ->where('i.id_tipo_interacao', 2)
+            ->where('u.id_status_usuario', 2)
+            ->select('u.matricula', 'u.nome', 'u.idade', 'ti.no_tipo_intencao AS intencao', 'u.de_sobre')
+            ->distinct()
+            ->get()
+            ->map(function ($user) {
+                $user->tipo = 'dislike';
+                return $user;
+            });
 
     
         // 🔗 Junta as listas
