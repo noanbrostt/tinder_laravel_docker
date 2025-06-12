@@ -97,13 +97,27 @@ class AuthController extends Controller {
         $possuiCadastro = $cadastro ? true : false;
         
         $funcoesAdm = $this->adm;
+
+        $cadastroAprovado = DB::connection('tinder2')
+            ->table('public.usuario')
+            ->where('public.usuario.matricula', session('matricula'))
+            ->where('id_status_usuario', '2')
+            ->first();
+
+        $possuiCadastroAprovado = (bool) $cadastroAprovado;
         
-        $rota = 'inscricao';
         
         if (in_array($dados->co_funcao, $funcoesAdm)) {
+            // Se for adulto responsável
             $rota = 'validar';
+        } else if ($possuiCadastroAprovado) {
+            // Se ja tiver um cadastro aprovado
+            $rota = 'tinder';
+        } else {
+            // Se ainda não está aprovado e é operador/staff
+            $rota = 'inscricao';
         }
-
+        
         // Armazena na sessão
         session([
             'matricula' => $matricula,
