@@ -773,7 +773,7 @@
                         .classList.remove("events-none");
                 }, 140);
             }, transitionDuration);
-            // exibirProximoPerfil();
+
         }, transitionDuration);
     }
 
@@ -965,13 +965,15 @@
 
         if (perfil.intencao == 'Outros') perfil.intencao+= ' ( ͡° ͜ʖ ͡°)';
 
-        document.querySelector(".photo").style.background = `
-            url('storage/fotos/${perfil.matricula}.jpg?v=${new Date().getTime()}') center center/cover
-        `;
-        $('.name').html(nomeFormatado+',');
-        $('.age').html(perfil.idade);
-        $('.intention').html('Intenção: '+perfil.intencao);
-        $('.about').html(perfil.de_sobre);
+        setTimeout(() => {
+            document.querySelector(".photo").style.background = `
+                url('storage/fotos/${perfil.matricula}.jpg?v=${new Date().getTime()}') center center/cover
+            `;
+            $('.name').html(nomeFormatado+',');
+            $('.age').html(perfil.idade);
+            $('.intention').html('Intenção: '+perfil.intencao);
+            $('.about').html(perfil.de_sobre);
+        }, 100);
     }
 
     function reagir(tipo) {
