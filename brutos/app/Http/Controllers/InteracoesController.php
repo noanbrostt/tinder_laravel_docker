@@ -29,19 +29,36 @@ class InteracoesController extends Controller
                 'mensagem' => 'Sessão expirada. Por favor, faça login novamente.'
             ], 401);
         }
-    
-        // Verifica se a data e hora atual é superior 
-        $dataLimite = \Carbon\Carbon::createFromFormat('d/m/Y H:i', '12/06/2025 07:40');
-        $agora = \Carbon\Carbon::now();
-    
-        if ($agora->lessThan($dataLimite)) {
-            // Se ainda não passou da data/hora limite, valida a função
-            $funcoesPermitidas = $this->adm;
-    
-            if (!in_array($usr->co_funcao, $funcoesPermitidas)) {
-                 return redirect()->route('login');
-            }
+
+
+        $cadastro = DB::connection('tinder2')
+            ->table('public.usuario')
+            ->where('public.usuario.matricula', session('matricula'))
+            ->where('id_status_usuario', '2')
+            ->first();
+
+        $possuiCadastro = (bool) $cadastro;
+
+        // Para acessar o Tinder precisa ter cadastro ou ser coordenador
+        if (!$possuiCadastro && !in_array($usr->co_funcao, $this->adm)) {
+            return response()->json([
+                'status' => 'erro',
+                'mensagem' => 'Se quiser brincar é só fazer seu cadastro.'
+            ], 401);
         }
+    
+        // // Verifica se a data e hora atual é superior 
+        // $dataLimite = \Carbon\Carbon::createFromFormat('d/m/Y H:i', '12/06/2025 07:40');
+        // $agora = \Carbon\Carbon::now();
+    
+        // if ($agora->lessThan($dataLimite)) {
+        //     // Se ainda não passou da data/hora limite, valida a função
+        //     $funcoesPermitidas = $this->adm;
+    
+        //     if (!in_array($usr->co_funcao, $funcoesPermitidas)) {
+        //          return redirect()->route('login');
+        //     }
+        // }
     
         $usuarios = $this->listarInteracoes();
     
