@@ -60,7 +60,8 @@ class InteracoesController extends Controller
         //     }
         // }
     
-        $usuarios = $this->listarInteracoes();
+        $usuarios = $this->listarInteracoes()->getData(true);
+        $usuarios = $this->embaralharComPrioridade($usuarios);
     
         return view('tinder', compact('usuarios'));
     }
@@ -258,5 +259,20 @@ class InteracoesController extends Controller
     
         return view('matchs', compact('likesFeitos', 'likesRecebidos', 'listarMatches'));
     }
+
+    function embaralharComPrioridade(array $usuarios): array
+    {
+        // Separa os perfis por tipo
+        $semInteracao = array_filter($usuarios, fn($p) => $p['tipo'] === 'sem_interacao');
+        $outros = array_filter($usuarios, fn($p) => $p['tipo'] !== 'sem_interacao');
+
+        // Embaralha os dois grupos
+        shuffle($semInteracao);
+        shuffle($outros);
+
+        // Junta os 'sem_interacao' primeiro
+        return array_merge($semInteracao, $outros);
+    }
+
 
 }

@@ -900,8 +900,7 @@
     // Fim da biblioteca do tutorial
 
 
-    let usuarios = @json($usuarios);
-    let todosPerfis = usuarios.original; // Recebido da Controller
+    let todosPerfis = @json($usuarios);
     let filaAtual = [];
     let perfilAtualIndex = 0;
 
@@ -913,10 +912,8 @@
 
             if (index !== -1) {
                 const [perfilAlvo] = todosPerfis.splice(index, 1);
-                embaralharComPrioridade(todosPerfis);
                 filaAtual = [perfilAlvo, ...todosPerfis];
             } else {
-                embaralharComPrioridade(todosPerfis);
                 filaAtual = [...todosPerfis];
 
                 Swal.fire({
@@ -930,7 +927,6 @@
             // Limpa a matrícula para não repetir
             sessionStorage.removeItem('matricula_alvo');
         } else {
-            embaralharComPrioridade(todosPerfis);
             filaAtual = [...todosPerfis];
         }
 
@@ -1001,27 +997,6 @@
 
         // Próximo
         exibirProximoPerfil();
-    }
-
-    function embaralharComPrioridade(array) {
-        // Separa os perfis por tipo
-        const semInteracao = array.filter(p => p.tipo === 'sem_interacao');
-        const outros = array.filter(p => p.tipo !== 'sem_interacao');
-
-        // Embaralha cada grupo
-        embaralhar(semInteracao);
-        embaralhar(outros);
-        
-        // Junta, com os 'sem_interacao' vindo primeiro
-        return [...semInteracao, ...outros];
-    }
-
-    // Função embaralhadora padrão (mantém sua lógica)
-    function embaralhar(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-        }
     }
 
 </script>
