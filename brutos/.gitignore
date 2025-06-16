@@ -5,6 +5,7 @@
 /public/storage
 /storage/*.key
 /storage/pail
+/storage/app/public/TERMO-ACEITE-CONDICOES-TINDER-PLANSUL.pdf
 /vendor
 .env
 .env.backup
